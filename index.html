@@ -151,18 +151,6 @@
       color: rgba(255,255,255,.85);
       margin-left:8px;
     }
-    .sessionBox{
-      margin-top:12px;
-      border:1px dashed rgba(255,255,255,.18);
-      border-radius: 14px;
-      padding:12px;
-      background: rgba(0,0,0,.14);
-    }
-    .copy{
-      display:flex; gap:8px; align-items:center; flex-wrap:wrap;
-      margin-top:8px;
-    }
-    .copy button{padding:8px 10px; border-radius:12px}
   </style>
 </head>
 <body>
@@ -177,7 +165,7 @@
             <div class="sub">Login / Signup (verification-first)</div>
           </div>
         </div>
-        <div class="pill" title="Apps Script URL">https://script.google.com/macros/s/AKfycbwjb9bNfCBQmSMNDIfRuOfbiID5ZVj3zaJk5MojYtV482pWPnmOX_4xKol5PiGo2A6EWQ/exec</div>
+        <div class="pill" title="API URL">https://closing-coalition-api.thomaslancheros06.workers.dev</div>
       </div>
 
       <div class="tabs" role="tablist" aria-label="Auth tabs">
@@ -194,44 +182,37 @@
           </div>
           <div>
             <label>Derived login email</label>
-            <input id="derivedEmail" class="mono" readonly placeholder="firstlast.ail@gmail.com" />
+            <input id="derivedEmail" class="mono" readonly placeholder="firstlast.ail@gmail.comm" />
           </div>
         </div>
 
-        <div id="panel-login" class="panel">
+        <div id="panel-login">
           <label for="password">Password</label>
           <input id="password" type="password" autocomplete="current-password" placeholder="Password" />
           <div class="row">
             <button class="primary" id="btnLogin" onclick="doLogin()">Login</button>
             <button id="btnLogout" onclick="doLogout()" style="display:none;">Logout</button>
-            <span class="small" id="sessionHint"></span>
           </div>
-          <div class="hint">
-            After verification, login is <b>name + password</b> only.
-          </div>
+          <div class="hint">After verification, login is <b>name + password</b> only.</div>
         </div>
 
-        <div id="panel-signup" class="panel" style="display:none;">
+        <div id="panel-signup" style="display:none;">
           <label for="password2">Create password</label>
           <input id="password2" type="password" autocomplete="new-password" placeholder="At least 6 characters" />
           <div class="row">
             <button class="primary" id="btnSignup" onclick="doSignup()">Send verification code</button>
           </div>
-          <div class="hint">
-            First time only: you must have access to the derived Gmail inbox to get the code.
-          </div>
+          <div class="hint">First time only: you must have access to the derived Gmail inbox to get the code.</div>
         </div>
 
-        <div id="panel-verify" class="panel" style="display:none;">
+        <div id="panel-verify" style="display:none;">
           <label for="code">Verification code</label>
           <input id="code" inputmode="numeric" pattern="[0-9]*" maxlength="6" placeholder="6-digit code" />
           <div class="row">
             <button class="primary" id="btnVerify" onclick="doVerify()">Verify code</button>
             <button id="btnResend" onclick="doResend()">Resend code</button>
           </div>
-          <div class="hint">
-            Code expires automatically (default 15 minutes).
-          </div>
+          <div class="hint">Code expires automatically (default 15 minutes).</div>
         </div>
 
         <div id="status" class="status">
@@ -239,39 +220,25 @@
           <div class="msg" id="statusMsg"></div>
           <div class="small" id="statusMeta" style="margin-top:6px;"></div>
         </div>
-
-        <div class="sessionBox">
-          <div class="small"><b>Session</b> (token stored locally)</div>
-          <div class="copy">
-            <input id="token" class="mono" readonly placeholder="No token" style="flex:1; min-width: 260px;" />
-            <button onclick="copyToken()">Copy</button>
-            <button onclick="checkMe()">Check</button>
-            <span class="small" id="meResult"></span>
-          </div>
-        </div>
-
       </div>
     </section>
 
     <aside class="card right">
       <div class="top">
         <div>
-          <h2>How this works</h2>
-          <div class="sub">Strict format, simple flow</div>
+          <h2>Why it failed</h2>
+          <div class="sub">Your screenshot is a CORS block</div>
         </div>
-        <span class="badge">v1</span>
+        <span class="badge">CORS</span>
       </div>
       <div class="pad">
         <ul>
-          <li><b>Username:</b> must be “First Last”. We strip punctuation and spaces to build the Gmail.</li>
-          <li><b>Derived email:</b> <span class="mono">firstlast.ail@gmail.com</span> (must exist + you must control it).</li>
-          <li><b>First time:</b> click <b>Send verification code</b> → check inbox → <b>Verify</b>.</li>
-          <li><b>After verified:</b> use <b>Login</b> (password only).</li>
-          <li><b>Security:</b> passwords are hashed in Sheets; token expires server-side.</li>
+          <li>GitHub Pages origin is blocked because Apps Script doesn’t send <span class="mono">Access-Control-Allow-Origin</span>.</li>
+          <li>Fix: call a proxy that adds CORS headers (Cloudflare Worker).</li>
+          <li>Paste your Worker URL into <span class="mono">API_URL</span> in this HTML.</li>
         </ul>
-
         <div class="hint" style="margin-top:14px;">
-          If anything fails, it’s usually: wrong name format, wrong inbox, or expired code.
+          Your Apps Script stays private. The worker just forwards requests + adds CORS.
         </div>
       </div>
     </aside>
@@ -279,7 +246,7 @@
   </div>
 
 <script>
-const API_URL = "https://closing-coalition-api.thomaslancheros06.workers.dev/";
+const API_URL = "https://closing-coalition-api.thomaslancheros06.workers.dev";
 
 const els = {
   username: () => document.getElementById('username'),
@@ -291,10 +258,7 @@ const els = {
   statusTitle: () => document.getElementById('statusTitle'),
   statusMsg: () => document.getElementById('statusMsg'),
   statusMeta: () => document.getElementById('statusMeta'),
-  token: () => document.getElementById('token'),
   btnLogout: () => document.getElementById('btnLogout'),
-  sessionHint: () => document.getElementById('sessionHint'),
-  meResult: () => document.getElementById('meResult'),
 };
 
 function normalizeNameToEmail(username) {
@@ -304,7 +268,7 @@ function normalizeNameToEmail(username) {
     .replace(/[^a-z\s]/g, "")
     .replace(/\s+/g, "");
   if (!clean) return "";
-  return `${clean}.ail@gmail.com`;
+  return `${clean}.ail@gmail.comm`;
 }
 
 function showStatus(kind, title, msg, meta="") {
@@ -363,25 +327,17 @@ function getUsername() {
 
 function requireName() {
   const u = getUsername();
-  if (!u) {
-    showStatus("bad","Missing name","Enter your name as First Last.");
-    return null;
-  }
+  if (!u) { showStatus("bad","Missing name","Enter your name as First Last."); return null; }
   const derived = normalizeNameToEmail(u);
-  if (!derived) {
-    showStatus("bad","Invalid name","Use letters and spaces only (First Last).");
-    return null;
-  }
+  if (!derived) { showStatus("bad","Invalid name","Use letters and spaces only (First Last)."); return null; }
   return { username: u, derived };
 }
 
 async function doSignup() {
   const r = requireName(); if (!r) return;
   const password = (els.password2().value || "").trim();
-  if (password.length < 6) {
-    showStatus("bad","Password too short","Use at least 6 characters.");
-    return;
-  }
+  if (password.length < 6) { showStatus("bad","Password too short","Use at least 6 characters."); return; }
+
   setBusy(true);
   showStatus("warn","Sending code…",`Sending a verification code to ${r.derived}`);
   try {
@@ -395,13 +351,10 @@ async function doSignup() {
     }
   } catch (e) {
     showStatus("bad","Network error", String(e && e.message ? e.message : e));
-  } finally {
-    setBusy(false);
-  }
+  } finally { setBusy(false); }
 }
 
 async function doResend() {
-  const r = requireName(); if (!r) return;
   const p = (els.password2().value || "").trim();
   if (p.length < 6) {
     showStatus("warn","Need password","Enter your password in the First-time tab to resend a code.");
@@ -415,10 +368,8 @@ async function doResend() {
 async function doVerify() {
   const r = requireName(); if (!r) return;
   const code = (els.code().value || "").trim();
-  if (!/^[0-9]{6}$/.test(code)) {
-    showStatus("bad","Invalid code","Enter the 6-digit code from your email.");
-    return;
-  }
+  if (!/^[0-9]{6}$/.test(code)) { showStatus("bad","Invalid code","Enter the 6-digit code from your email."); return; }
+
   setBusy(true);
   showStatus("warn","Verifying…","Checking your code.");
   try {
@@ -426,38 +377,30 @@ async function doVerify() {
     if (out.ok) {
       showStatus("good","Verified", out.message || "Account verified. You can now login.");
       uiShow("login");
-      els.password().focus();
+      document.getElementById("password").focus();
     } else {
       showStatus("bad","Verify failed", out.error || "Invalid or expired code");
     }
   } catch (e) {
     showStatus("bad","Network error", String(e && e.message ? e.message : e));
-  } finally {
-    setBusy(false);
-  }
+  } finally { setBusy(false); }
 }
 
 function setToken(token) {
   if (token) {
     localStorage.setItem("cc_token", token);
-    els.token().value = token;
     els.btnLogout().style.display = "inline-block";
-    els.sessionHint().textContent = "Session active";
   } else {
     localStorage.removeItem("cc_token");
-    els.token().value = "";
     els.btnLogout().style.display = "none";
-    els.sessionHint().textContent = "";
   }
 }
 
 async function doLogin() {
   const r = requireName(); if (!r) return;
   const password = (els.password().value || "").trim();
-  if (!password) {
-    showStatus("bad","Missing password","Enter your password.");
-    return;
-  }
+  if (!password) { showStatus("bad","Missing password","Enter your password."); return; }
+
   setBusy(true);
   showStatus("warn","Logging in…","Checking credentials.");
   try {
@@ -470,50 +413,14 @@ async function doLogin() {
     }
   } catch (e) {
     showStatus("bad","Network error", String(e && e.message ? e.message : e));
-  } finally {
-    setBusy(false);
-  }
-}
-
-async function checkMe() {
-  const token = localStorage.getItem("cc_token");
-  els.meResult().textContent = "";
-  if (!token) {
-    els.meResult().textContent = "No token";
-    return;
-  }
-  try {
-    const out = await api("me", { token });
-    if (out.ok) {
-      els.meResult().textContent = `OK • ${out.loginEmail || ""}`;
-      showStatus("good","Session valid","Token is valid.", `Expires: ${out.expires_at || ""}`);
-    } else {
-      els.meResult().textContent = "Invalid/expired";
-      showStatus("bad","Session invalid", out.error || "Invalid token");
-      setToken(null);
-    }
-  } catch (e) {
-    els.meResult().textContent = "Error";
-    showStatus("bad","Network error", String(e && e.message ? e.message : e));
-  }
+  } finally { setBusy(false); }
 }
 
 async function doLogout() {
   const token = localStorage.getItem("cc_token");
   setToken(null);
-  if (token) {
-    try { await api("logout", { token }); } catch(_e) {}
-  }
+  if (token) { try { await api("logout", { token }); } catch(_e) {} }
   showStatus("good","Logged out","Session cleared.");
-}
-
-function copyToken() {
-  const t = els.token().value || "";
-  if (!t) return;
-  navigator.clipboard.writeText(t).then(() => {
-    els.meResult().textContent = "Copied";
-    setTimeout(() => els.meResult().textContent = "", 1200);
-  });
 }
 
 function refreshDerived() {
@@ -524,17 +431,7 @@ function refreshDerived() {
 
 els.username().addEventListener("input", refreshDerived);
 els.username().addEventListener("blur", refreshDerived);
-
-(function boot() {
-  refreshDerived();
-  const token = localStorage.getItem("cc_token");
-  if (token) {
-    els.token().value = token;
-    els.btnLogout().style.display = "inline-block";
-    els.sessionHint().textContent = "Session loaded";
-    checkMe();
-  }
-})();
+refreshDerived();
 </script>
 </body>
 </html>
