@@ -5,433 +5,576 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Closing Coalition — Login</title>
   <style>
-    :root {
-      --bg: #0b1220;
-      --bg2: #070b14;
+    :root{
+      --bg1:#071423;
+      --bg2:#0a1a2b;
       --card: rgba(255,255,255,.06);
-      --ink: rgba(255,255,255,.92);
-      --muted: rgba(255,255,255,.68);
-      --line: rgba(255,255,255,.14);
-      --brand: #5eead4;
-      --brand2: #60a5fa;
-      --good: #34d399;
-      --bad: #fb7185;
-      --warn: #fbbf24;
-      --shadow: 0 16px 60px rgba(0,0,0,.45);
-      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace;
-      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
-      --r: 18px;
+      --card2: rgba(255,255,255,.08);
+      --line: rgba(255,255,255,.10);
+      --text:#eaf2ff;
+      --muted: rgba(234,242,255,.72);
+      --muted2: rgba(234,242,255,.52);
+      --accent:#4fd1c5;
+      --accent2:#2dd4bf;
+      --danger:#ff5a7a;
+      --ok:#22c55e;
+      --shadow: 0 18px 60px rgba(0,0,0,.55);
+      --r:18px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
     }
     *{box-sizing:border-box}
     html,body{height:100%}
     body{
       margin:0;
-      font-family: var(--sans);
-      color: var(--ink);
+      font-family:var(--sans);
+      color:var(--text);
       background:
-        radial-gradient(1200px 700px at 20% 10%, rgba(96,165,250,.22), transparent 55%),
-        radial-gradient(900px 600px at 85% 25%, rgba(94,234,212,.18), transparent 55%),
-        linear-gradient(180deg, var(--bg), var(--bg2));
+        radial-gradient(1200px 700px at 20% 20%, rgba(79,209,197,.22), transparent 55%),
+        radial-gradient(1200px 700px at 80% 15%, rgba(45,212,191,.18), transparent 55%),
+        radial-gradient(900px 600px at 70% 80%, rgba(99,102,241,.16), transparent 55%),
+        linear-gradient(180deg, var(--bg1), var(--bg2));
       display:flex;
       align-items:center;
       justify-content:center;
       padding:24px;
     }
-    .wrap{width:min(980px, 100%); display:grid; grid-template-columns: 1.1fr .9fr; gap:18px}
-    @media (max-width: 920px){ .wrap{grid-template-columns:1fr;} }
+    .wrap{width:min(980px, 100%); display:grid; grid-template-columns: 1fr; gap:18px;}
+    @media (min-width: 920px){ .wrap{grid-template-columns: 1.05fr .95fr;} }
+
     .card{
+      background: linear-gradient(180deg, var(--card2), var(--card));
       border:1px solid var(--line);
-      background: linear-gradient(180deg, var(--card), rgba(255,255,255,.04));
       border-radius: var(--r);
       box-shadow: var(--shadow);
       overflow:hidden;
     }
-    .pad{padding:18px}
-    .top{
-      display:flex; align-items:center; justify-content:space-between; gap:12px;
-      padding:18px; border-bottom:1px solid var(--line);
-      background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.02));
+    .head{
+      padding:18px 18px 12px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      border-bottom:1px solid var(--line);
     }
-    .brand{display:flex; align-items:center; gap:12px}
-    .logo{
-      width:42px; height:42px; border-radius:14px;
-      background: radial-gradient(16px 16px at 30% 30%, rgba(255,255,255,.9), rgba(255,255,255,0) 60%),
-                  linear-gradient(135deg, rgba(94,234,212,.95), rgba(96,165,250,.9));
-      box-shadow: 0 10px 24px rgba(0,0,0,.35);
+    .brand{
+      display:flex; gap:12px; align-items:center;
     }
-    h1{font-size:18px; margin:0; letter-spacing:.2px}
-    .sub{font-size:12px; color:var(--muted); margin-top:2px}
-    .pill{
-      font-family:var(--mono);
-      font-size:12px;
-      color: rgba(255,255,255,.86);
-      border:1px solid var(--line);
-      background: rgba(0,0,0,.18);
-      padding:8px 10px;
-      border-radius: 999px;
-      max-width: 56ch;
-      overflow:hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
+    .dot{
+      width:40px; height:40px;
+      border-radius:12px;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.35), rgba(255,255,255,.06) 42%, rgba(79,209,197,.22) 100%),
+                  linear-gradient(180deg, rgba(79,209,197,.55), rgba(45,212,191,.12));
+      border:1px solid rgba(255,255,255,.14);
     }
-    .tabs{display:flex; gap:8px; padding:12px 18px; border-bottom:1px solid var(--line)}
+    .title{font-weight:800; letter-spacing:.2px; line-height:1.05}
+    .sub{font-size:12px; color:var(--muted2); margin-top:2px}
+
+    .tabs{
+      display:flex;
+      gap:10px;
+      padding:12px 18px 0;
+    }
     .tab{
       flex:1;
       border:1px solid var(--line);
       background: rgba(0,0,0,.18);
-      color: rgba(255,255,255,.85);
+      color: var(--muted);
       padding:10px 12px;
       border-radius: 14px;
-      cursor:pointer;
       font-weight:700;
-      letter-spacing:.2px;
+      cursor:pointer;
+      user-select:none;
+      text-align:center;
+      transition: all .15s ease;
     }
-    .tab[aria-selected="true"]{
-      background: linear-gradient(135deg, rgba(94,234,212,.22), rgba(96,165,250,.18));
-      border-color: rgba(94,234,212,.35);
-      color: rgba(255,255,255,.95);
+    .tab.active{
+      background: linear-gradient(180deg, rgba(79,209,197,.26), rgba(0,0,0,.20));
+      color: var(--text);
+      border-color: rgba(79,209,197,.35);
     }
-    .grid{display:grid; grid-template-columns:1fr 1fr; gap:12px}
-    @media (max-width: 560px){ .grid{grid-template-columns:1fr;} }
-    label{display:block; font-size:12px; color:var(--muted); margin: 10px 0 6px}
+
+    .body{padding:16px 18px 18px}
+    .grid{display:grid; grid-template-columns:1fr; gap:12px}
+    .row2{display:grid; grid-template-columns:1fr; gap:12px}
+    @media (min-width: 520px){ .row2{grid-template-columns: 1fr 1fr;} }
+
+    label{display:block; font-size:12px; color:var(--muted2); margin:0 0 6px}
     input{
       width:100%;
-      background: rgba(0,0,0,.22);
-      color: var(--ink);
-      border:1px solid var(--line);
-      border-radius: 14px;
       padding:12px 12px;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: rgba(0,0,0,.18);
+      color: var(--text);
       outline:none;
       font-size:14px;
     }
-    input:focus{border-color: rgba(94,234,212,.45); box-shadow: 0 0 0 4px rgba(94,234,212,.12)}
-    .row{display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin-top:12px}
+    input:focus{border-color: rgba(79,209,197,.45); box-shadow:0 0 0 4px rgba(79,209,197,.10)}
+    .pill{
+      font-family: var(--mono);
+      font-size: 12px;
+      padding: 12px;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: rgba(0,0,0,.12);
+      color: var(--text);
+      overflow:hidden;
+      white-space:nowrap;
+      text-overflow:ellipsis;
+    }
+
+    .actions{display:flex; gap:10px; margin-top:6px; flex-wrap:wrap}
     button{
-      border:1px solid var(--line);
-      background: rgba(0,0,0,.22);
-      color: rgba(255,255,255,.92);
-      padding:11px 14px;
-      border-radius: 14px;
+      border:none;
       cursor:pointer;
-      font-weight:800;
-      letter-spacing:.2px;
-    }
-    button.primary{
-      border-color: rgba(94,234,212,.35);
-      background: linear-gradient(135deg, rgba(94,234,212,.28), rgba(96,165,250,.20));
-    }
-    button:disabled{opacity:.55; cursor:not-allowed}
-    .hint{font-size:12px; color:var(--muted); margin-top:10px; line-height:1.35}
-    .status{
-      margin-top:14px;
-      border:1px solid var(--line);
+      padding:12px 14px;
       border-radius: 14px;
-      padding:12px 12px;
+      font-weight:800;
+      color: var(--text);
+      background: linear-gradient(180deg, rgba(79,209,197,.35), rgba(0,0,0,.18));
+      border:1px solid rgba(79,209,197,.28);
+      transition: transform .05s ease, filter .15s ease;
+      min-width: 160px;
+    }
+    button:active{transform: translateY(1px)}
+    button.secondary{
       background: rgba(0,0,0,.18);
+      border:1px solid var(--line);
+      color: var(--muted);
+      min-width: 120px;
+    }
+    button:disabled{
+      opacity:.55;
+      cursor:not-allowed;
+    }
+
+    .msg{
+      margin-top:12px;
+      padding:12px;
+      border-radius: 14px;
+      border:1px solid var(--line);
+      background: rgba(0,0,0,.14);
+      color: var(--muted);
       display:none;
     }
-    .status.show{display:block}
-    .status.good{border-color: rgba(52,211,153,.35)}
-    .status.bad{border-color: rgba(251,113,133,.40)}
-    .status.warn{border-color: rgba(251,191,36,.38)}
-    .status .title{font-weight:900; margin-bottom:6px}
-    .status .msg{font-size:13px; color: rgba(255,255,255,.86)}
-    .small{font-size:12px; color:var(--muted)}
-    .mono{font-family:var(--mono)}
-    .right h2{margin:0 0 8px; font-size:16px}
-    .right ul{margin:10px 0 0 18px; padding:0; color:rgba(255,255,255,.85)}
-    .right li{margin:8px 0; color:rgba(255,255,255,.82); line-height:1.3}
-    .badge{
-      display:inline-block;
+    .msg.show{display:block}
+    .msg.ok{border-color: rgba(34,197,94,.35); color: rgba(220,255,233,.92)}
+    .msg.err{border-color: rgba(255,90,122,.35); color: rgba(255,220,228,.92)}
+    .hint{
+      margin-top:10px;
       font-size:12px;
-      padding:4px 10px;
-      border-radius:999px;
+      color: var(--muted2);
+      line-height:1.35;
+    }
+
+    .side{
+      padding:18px;
+    }
+    .side h3{margin:0 0 10px; font-size:16px}
+    .side p{margin:0; color: var(--muted); font-size:13px; line-height:1.55}
+    .divider{height:1px; background: var(--line); margin:14px 0}
+    .statusRow{
+      display:flex; justify-content:space-between; align-items:center;
+      gap:12px;
+      padding:10px 12px;
+      border:1px solid var(--line);
+      border-radius: 14px;
+      background: rgba(0,0,0,.12);
+      font-size:13px;
+      color: var(--muted);
+    }
+    .badge{
+      font-size:12px;
+      font-weight:800;
+      padding:6px 10px;
+      border-radius: 999px;
       border:1px solid var(--line);
       background: rgba(0,0,0,.18);
-      color: rgba(255,255,255,.85);
-      margin-left:8px;
+      color: var(--muted);
     }
+    .badge.ok{border-color: rgba(34,197,94,.35); color: rgba(220,255,233,.92)}
   </style>
 </head>
 <body>
   <div class="wrap">
 
-    <section class="card">
-      <div class="top">
+    <!-- MAIN -->
+    <div class="card">
+      <div class="head">
         <div class="brand">
-          <div class="logo" aria-hidden="true"></div>
+          <div class="dot"></div>
           <div>
-            <h1>Closing Coalition</h1>
+            <div class="title">Closing Coalition</div>
             <div class="sub">Login / Signup (verification-first)</div>
           </div>
         </div>
-        <div class="pill" title="API URL">https://closing-coalition-api.thomaslancheros06.workers.dev</div>
       </div>
 
-      <div class="tabs" role="tablist" aria-label="Auth tabs">
-        <button class="tab" id="tab-login" aria-selected="true" onclick="uiShow('login')">Login</button>
-        <button class="tab" id="tab-signup" aria-selected="false" onclick="uiShow('signup')">First-time</button>
-        <button class="tab" id="tab-verify" aria-selected="false" onclick="uiShow('verify')">Verify</button>
+      <div class="tabs">
+        <div class="tab" data-tab="login">Login</div>
+        <div class="tab active" data-tab="first">First-time</div>
+        <div class="tab" data-tab="verify">Verify</div>
       </div>
 
-      <div class="pad">
+      <div class="body">
         <div class="grid">
-          <div>
-            <label for="username">Name (First Last)</label>
-            <input id="username" autocomplete="name" placeholder="First Last" />
-          </div>
-          <div>
-            <label>Derived login email</label>
-            <input id="derivedEmail" class="mono" readonly placeholder="firstlast.ail@gmail.comm" />
-          </div>
-        </div>
 
-        <div id="panel-login">
-          <label for="password">Password</label>
-          <input id="password" type="password" autocomplete="current-password" placeholder="Password" />
-          <div class="row">
-            <button class="primary" id="btnLogin" onclick="doLogin()">Login</button>
-            <button id="btnLogout" onclick="doLogout()" style="display:none;">Logout</button>
-          </div>
-          <div class="hint">After verification, login is <b>name + password</b> only.</div>
-        </div>
+          <div class="row2">
+            <div>
+              <label for="name">Name (First Last)</label>
+              <input id="name" autocomplete="name" placeholder="First Last" />
+            </div>
 
-        <div id="panel-signup" style="display:none;">
-          <label for="password2">Create password</label>
-          <input id="password2" type="password" autocomplete="new-password" placeholder="At least 6 characters" />
-          <div class="row">
-            <button class="primary" id="btnSignup" onclick="doSignup()">Send verification code</button>
+            <div>
+              <label>Derived login email</label>
+              <div id="derived" class="pill">—</div>
+            </div>
           </div>
-          <div class="hint">First time only: you must have access to the derived Gmail inbox to get the code.</div>
-        </div>
 
-        <div id="panel-verify" style="display:none;">
-          <label for="code">Verification code</label>
-          <input id="code" inputmode="numeric" pattern="[0-9]*" maxlength="6" placeholder="6-digit code" />
-          <div class="row">
-            <button class="primary" id="btnVerify" onclick="doVerify()">Verify code</button>
-            <button id="btnResend" onclick="doResend()">Resend code</button>
+          <div id="loginBlock" style="display:none">
+            <label for="loginPass">Password</label>
+            <input id="loginPass" type="password" autocomplete="current-password" placeholder="Enter password" />
+            <div class="actions">
+              <button id="btnLogin">Login</button>
+              <button id="btnLogout" class="secondary" style="display:none">Logout</button>
+            </div>
           </div>
-          <div class="hint">Code expires automatically (default 15 minutes).</div>
-        </div>
 
-        <div id="status" class="status">
-          <div class="title" id="statusTitle">Status</div>
-          <div class="msg" id="statusMsg"></div>
-          <div class="small" id="statusMeta" style="margin-top:6px;"></div>
+          <div id="firstBlock">
+            <label for="firstPass">Create password</label>
+            <input id="firstPass" type="password" autocomplete="new-password" placeholder="Create a password" />
+            <div class="actions">
+              <button id="btnSignup">Send verification code</button>
+            </div>
+            <div class="hint">
+              The verification code is sent to your derived inbox: <span style="font-family:var(--mono); color:rgba(234,242,255,.85)">firstlast.ail@gmail.com</span>
+            </div>
+          </div>
+
+          <div id="verifyBlock" style="display:none">
+            <label for="code">Verification code</label>
+            <input id="code" inputmode="numeric" autocomplete="one-time-code" placeholder="6-digit code" />
+            <div class="actions">
+              <button id="btnVerify">Verify code</button>
+              <button id="btnResend" class="secondary">Resend</button>
+            </div>
+          </div>
+
+          <div id="msg" class="msg"></div>
+
         </div>
       </div>
-    </section>
+    </div>
 
-    <aside class="card right">
-      <div class="top">
-        <div>
-          <h2>Why it failed</h2>
-          <div class="sub">Your screenshot is a CORS block</div>
+    <!-- SIDE -->
+    <div class="card">
+      <div class="side">
+        <h3>Account status</h3>
+
+        <div class="statusRow">
+          <span>Session</span>
+          <span id="sessBadge" class="badge">Not logged in</span>
         </div>
-        <span class="badge">CORS</span>
-      </div>
-      <div class="pad">
-        <ul>
-          <li>GitHub Pages origin is blocked because Apps Script doesn’t send <span class="mono">Access-Control-Allow-Origin</span>.</li>
-          <li>Fix: call a proxy that adds CORS headers (Cloudflare Worker).</li>
-          <li>Paste your Worker URL into <span class="mono">API_URL</span> in this HTML.</li>
-        </ul>
-        <div class="hint" style="margin-top:14px;">
-          Your Apps Script stays private. The worker just forwards requests + adds CORS.
+
+        <div class="divider"></div>
+
+        <p>
+          First time: create a password, send a verification code, then verify.<br/>
+          After that: login with password.
+        </p>
+
+        <div class="divider"></div>
+
+        <div class="statusRow">
+          <span>Derived email</span>
+          <span id="derivedMini" class="badge">—</span>
+        </div>
+
+        <div class="hint" style="margin-top:12px;">
+          If you don’t control the derived inbox, you won’t receive the code.
         </div>
       </div>
-    </aside>
+    </div>
 
   </div>
 
 <script>
-const API_URL = "https://closing-coalition-api.thomaslancheros06.workers.dev";
+  /**********************
+   * CONFIG
+   **********************/
+  const API_URL = "https://closing-coalition-api.thomaslancheros06.workers.dev"; // <-- YOUR WORKER URL
 
-const els = {
-  username: () => document.getElementById('username'),
-  derived: () => document.getElementById('derivedEmail'),
-  password: () => document.getElementById('password'),
-  password2: () => document.getElementById('password2'),
-  code: () => document.getElementById('code'),
-  status: () => document.getElementById('status'),
-  statusTitle: () => document.getElementById('statusTitle'),
-  statusMsg: () => document.getElementById('statusMsg'),
-  statusMeta: () => document.getElementById('statusMeta'),
-  btnLogout: () => document.getElementById('btnLogout'),
-};
+  /**********************
+   * UI
+   **********************/
+  const $ = (id) => document.getElementById(id);
 
-function normalizeNameToEmail(username) {
-  const clean = String(username || "")
-    .trim()
-    .toLowerCase()
-    .replace(/[^a-z\s]/g, "")
-    .replace(/\s+/g, "");
-  if (!clean) return "";
-  return `${clean}.ail@gmail.comm`;
-}
+  const tabs = Array.from(document.querySelectorAll(".tab"));
+  const nameEl = $("name");
+  const derivedEl = $("derived");
+  const derivedMini = $("derivedMini");
 
-function showStatus(kind, title, msg, meta="") {
-  const box = els.status();
-  box.className = "status show " + (kind || "");
-  els.statusTitle().textContent = title || "Status";
-  els.statusMsg().textContent = msg || "";
-  els.statusMeta().textContent = meta || "";
-}
+  const loginBlock = $("loginBlock");
+  const firstBlock = $("firstBlock");
+  const verifyBlock = $("verifyBlock");
 
-function clearStatus() {
-  const box = els.status();
-  box.className = "status";
-  els.statusTitle().textContent = "Status";
-  els.statusMsg().textContent = "";
-  els.statusMeta().textContent = "";
-}
+  const loginPass = $("loginPass");
+  const firstPass = $("firstPass");
+  const codeEl = $("code");
 
-function setBusy(isBusy) {
-  for (const id of ["btnLogin","btnSignup","btnVerify","btnResend"]) {
-    const b = document.getElementById(id);
-    if (b) b.disabled = !!isBusy;
+  const btnLogin = $("btnLogin");
+  const btnLogout = $("btnLogout");
+  const btnSignup = $("btnSignup");
+  const btnVerify = $("btnVerify");
+  const btnResend = $("btnResend");
+
+  const msg = $("msg");
+  const sessBadge = $("sessBadge");
+
+  const LS_TOKEN = "cc_token";
+  const LS_EXPIRES = "cc_expires_at";
+
+  function setMsg(type, text){
+    msg.className = "msg show " + (type === "ok" ? "ok" : type === "err" ? "err" : "");
+    msg.textContent = text || "";
   }
-}
+  function clearMsg(){
+    msg.className = "msg";
+    msg.textContent = "";
+  }
 
-async function api(action, payload={}) {
-  const res = await fetch(API_URL, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ action, ...payload })
+  function normalizeName(raw){
+    return String(raw || "").trim().replace(/\s+/g, " ");
+  }
+
+  function derivedEmailFromName(name){
+    // letters/spaces only, remove spaces, lowercase
+    const clean = normalizeName(name)
+      .toLowerCase()
+      .replace(/[^a-z\s]/g, "")
+      .replace(/\s+/g, "");
+    return clean ? `${clean}.ail@gmail.com` : "";
+  }
+
+  function setLoading(btn, loading){
+    btn.disabled = !!loading;
+    btn.dataset._old = btn.dataset._old || btn.textContent;
+    btn.textContent = loading ? "Working..." : btn.dataset._old;
+  }
+
+  function setTab(tab){
+    tabs.forEach(t => t.classList.toggle("active", t.dataset.tab === tab));
+    clearMsg();
+
+    loginBlock.style.display = (tab === "login") ? "" : "none";
+    firstBlock.style.display = (tab === "first") ? "" : "none";
+    verifyBlock.style.display = (tab === "verify") ? "" : "none";
+  }
+
+  tabs.forEach(t => t.addEventListener("click", () => setTab(t.dataset.tab)));
+
+  function getToken(){
+    return localStorage.getItem(LS_TOKEN) || "";
+  }
+  function setSession(token, expiresAt){
+    if (!token){
+      localStorage.removeItem(LS_TOKEN);
+      localStorage.removeItem(LS_EXPIRES);
+      return;
+    }
+    localStorage.setItem(LS_TOKEN, token);
+    if (expiresAt) localStorage.setItem(LS_EXPIRES, expiresAt);
+  }
+
+  function updateSessionUI(){
+    const token = getToken();
+    if (token){
+      sessBadge.textContent = "Logged in";
+      sessBadge.classList.add("ok");
+      btnLogout.style.display = "";
+    } else {
+      sessBadge.textContent = "Not logged in";
+      sessBadge.classList.remove("ok");
+      btnLogout.style.display = "none";
+    }
+  }
+
+  function updateDerived(){
+    const email = derivedEmailFromName(nameEl.value);
+    derivedEl.textContent = email || "—";
+    derivedMini.textContent = email ? email.split("@")[0] : "—";
+  }
+
+  nameEl.addEventListener("input", updateDerived);
+  updateDerived();
+  updateSessionUI();
+
+  /**********************
+   * API
+   **********************/
+  async function api(action, payload){
+    const res = await fetch(API_URL, {
+      method: "POST",
+      headers: { "Content-Type":"application/json" },
+      body: JSON.stringify({ action, ...payload })
+    });
+
+    const text = await res.text();
+    let data;
+    try { data = JSON.parse(text); }
+    catch { throw new Error(text || "Invalid response"); }
+
+    if (!data || data.ok !== true){
+      const err = (data && (data.error || data.detail)) ? (data.error + (data.detail ? ` — ${data.detail}` : "")) : "Request failed";
+      throw new Error(err);
+    }
+    return data;
+  }
+
+  /**********************
+   * ACTIONS
+   **********************/
+  btnSignup.addEventListener("click", async () => {
+    clearMsg();
+
+    const username = normalizeName(nameEl.value);
+    const password = String(firstPass.value || "");
+
+    if (!username){
+      setMsg("err", "Enter your name (First Last).");
+      return;
+    }
+    if (password.length < 6){
+      setMsg("err", "Password must be at least 6 characters.");
+      return;
+    }
+
+    setLoading(btnSignup, true);
+    try{
+      await api("signup", { username, password });
+      setMsg("ok", "Verification code sent. Go to Verify.");
+      setTab("verify");
+      codeEl.focus();
+    } catch(e){
+      setMsg("err", e.message || "Signup failed.");
+    } finally {
+      setLoading(btnSignup, false);
+    }
   });
-  return res.json();
-}
 
-function uiShow(which) {
-  const panels = {
-    login: document.getElementById("panel-login"),
-    signup: document.getElementById("panel-signup"),
-    verify: document.getElementById("panel-verify"),
-  };
-  for (const k in panels) panels[k].style.display = (k === which) ? "block" : "none";
+  btnResend.addEventListener("click", async () => {
+    clearMsg();
 
-  const tabs = {
-    login: document.getElementById("tab-login"),
-    signup: document.getElementById("tab-signup"),
-    verify: document.getElementById("tab-verify"),
-  };
-  for (const k in tabs) tabs[k].setAttribute("aria-selected", k === which ? "true" : "false");
+    const username = normalizeName(nameEl.value);
+    const password = String(firstPass.value || "");
 
-  clearStatus();
-}
-
-function getUsername() {
-  return (els.username().value || "").trim();
-}
-
-function requireName() {
-  const u = getUsername();
-  if (!u) { showStatus("bad","Missing name","Enter your name as First Last."); return null; }
-  const derived = normalizeNameToEmail(u);
-  if (!derived) { showStatus("bad","Invalid name","Use letters and spaces only (First Last)."); return null; }
-  return { username: u, derived };
-}
-
-async function doSignup() {
-  const r = requireName(); if (!r) return;
-  const password = (els.password2().value || "").trim();
-  if (password.length < 6) { showStatus("bad","Password too short","Use at least 6 characters."); return; }
-
-  setBusy(true);
-  showStatus("warn","Sending code…",`Sending a verification code to ${r.derived}`);
-  try {
-    const out = await api("signup", { username: r.username, password });
-    if (out.ok) {
-      showStatus("good","Code sent", out.message || "Check your inbox for the code.", `To: ${out.loginEmail || r.derived}`);
-      uiShow("verify");
-      els.code().focus();
-    } else {
-      showStatus("bad","Signup failed", out.error || "Unknown error");
+    if (!username){
+      setMsg("err", "Enter your name (First Last).");
+      return;
     }
-  } catch (e) {
-    showStatus("bad","Network error", String(e && e.message ? e.message : e));
-  } finally { setBusy(false); }
-}
-
-async function doResend() {
-  const p = (els.password2().value || "").trim();
-  if (p.length < 6) {
-    showStatus("warn","Need password","Enter your password in the First-time tab to resend a code.");
-    uiShow("signup");
-    els.password2().focus();
-    return;
-  }
-  await doSignup();
-}
-
-async function doVerify() {
-  const r = requireName(); if (!r) return;
-  const code = (els.code().value || "").trim();
-  if (!/^[0-9]{6}$/.test(code)) { showStatus("bad","Invalid code","Enter the 6-digit code from your email."); return; }
-
-  setBusy(true);
-  showStatus("warn","Verifying…","Checking your code.");
-  try {
-    const out = await api("verify", { username: r.username, code });
-    if (out.ok) {
-      showStatus("good","Verified", out.message || "Account verified. You can now login.");
-      uiShow("login");
-      document.getElementById("password").focus();
-    } else {
-      showStatus("bad","Verify failed", out.error || "Invalid or expired code");
+    if (password.length < 6){
+      setMsg("err", "Enter your password (same one you created).");
+      return;
     }
-  } catch (e) {
-    showStatus("bad","Network error", String(e && e.message ? e.message : e));
-  } finally { setBusy(false); }
-}
 
-function setToken(token) {
-  if (token) {
-    localStorage.setItem("cc_token", token);
-    els.btnLogout().style.display = "inline-block";
-  } else {
-    localStorage.removeItem("cc_token");
-    els.btnLogout().style.display = "none";
-  }
-}
-
-async function doLogin() {
-  const r = requireName(); if (!r) return;
-  const password = (els.password().value || "").trim();
-  if (!password) { showStatus("bad","Missing password","Enter your password."); return; }
-
-  setBusy(true);
-  showStatus("warn","Logging in…","Checking credentials.");
-  try {
-    const out = await api("login", { username: r.username, password });
-    if (out.ok) {
-      setToken(out.token);
-      showStatus("good","Logged in", "Access granted.", `Email: ${out.loginEmail || r.derived} • Expires: ${out.expires_at || ""}`);
-    } else {
-      showStatus("bad","Login failed", out.error || "Invalid login");
+    setLoading(btnResend, true);
+    try{
+      await api("signup", { username, password });
+      setMsg("ok", "Verification code re-sent.");
+    } catch(e){
+      setMsg("err", e.message || "Resend failed.");
+    } finally {
+      setLoading(btnResend, false);
     }
-  } catch (e) {
-    showStatus("bad","Network error", String(e && e.message ? e.message : e));
-  } finally { setBusy(false); }
-}
+  });
 
-async function doLogout() {
-  const token = localStorage.getItem("cc_token");
-  setToken(null);
-  if (token) { try { await api("logout", { token }); } catch(_e) {} }
-  showStatus("good","Logged out","Session cleared.");
-}
+  btnVerify.addEventListener("click", async () => {
+    clearMsg();
 
-function refreshDerived() {
-  const u = getUsername();
-  const d = normalizeNameToEmail(u);
-  els.derived().value = d || "";
-}
+    const username = normalizeName(nameEl.value);
+    const code = String(codeEl.value || "").trim();
 
-els.username().addEventListener("input", refreshDerived);
-els.username().addEventListener("blur", refreshDerived);
-refreshDerived();
+    if (!username){
+      setMsg("err", "Enter your name (First Last).");
+      return;
+    }
+    if (!/^\d{6}$/.test(code)){
+      setMsg("err", "Enter the 6-digit code.");
+      return;
+    }
+
+    setLoading(btnVerify, true);
+    try{
+      await api("verify", { username, code });
+      setMsg("ok", "Verified. You can now login.");
+      setTab("login");
+      loginPass.focus();
+    } catch(e){
+      setMsg("err", e.message || "Verification failed.");
+    } finally {
+      setLoading(btnVerify, false);
+    }
+  });
+
+  btnLogin.addEventListener("click", async () => {
+    clearMsg();
+
+    const username = normalizeName(nameEl.value);
+    const password = String(loginPass.value || "");
+
+    if (!username){
+      setMsg("err", "Enter your name (First Last).");
+      return;
+    }
+    if (!password){
+      setMsg("err", "Enter your password.");
+      return;
+    }
+
+    setLoading(btnLogin, true);
+    try{
+      const out = await api("login", { username, password });
+      setSession(out.token, out.expires_at);
+      updateSessionUI();
+      setMsg("ok", "Logged in.");
+      // Optional redirect:
+      // window.location.href = "app.html";
+    } catch(e){
+      setMsg("err", e.message || "Login failed.");
+    } finally {
+      setLoading(btnLogin, false);
+    }
+  });
+
+  btnLogout.addEventListener("click", async () => {
+    clearMsg();
+    const token = getToken();
+    setLoading(btnLogout, true);
+    try{
+      if (token){
+        // best-effort
+        await api("logout", { token }).catch(()=>{});
+      }
+      setSession("", "");
+      updateSessionUI();
+      setMsg("ok", "Logged out.");
+    } finally {
+      setLoading(btnLogout, false);
+    }
+  });
+
+  // On load, validate token silently (best effort)
+  (async () => {
+    const token = getToken();
+    if (!token) return;
+    try{
+      await api("me", { token });
+      updateSessionUI();
+    } catch {
+      setSession("", "");
+      updateSessionUI();
+    }
+  })();
 </script>
 </body>
 </html>
