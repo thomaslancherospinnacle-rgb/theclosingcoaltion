@@ -537,6 +537,9 @@
       setSession(out.token, out.expires_at);
       updateSessionUI();
       setMsg("ok", "Logged in.");
+      
+      window.location.href = "home.html";
+
       // Optional redirect:
       // window.location.href = "app.html";
     } catch(e){
