@@ -126,6 +126,37 @@
 
   canvas{ max-width: 420px; }
 </style>
+    <script>
+    const API_URL = "https://closing-coalition-api.thomaslancheros06.workers.dev";
+    const LS_TOKEN = "cc_token";
+    const LS_EXPIRES = "cc_expires_at";
+    
+    function goLogin() { window.location.href = "index.html"; }
+    
+    async function api(action, payload){
+      const res = await fetch(API_URL, {
+        method: "POST",
+        headers: { "Content-Type":"application/json" },
+        body: JSON.stringify({ action, ...payload })
+      });
+      const data = await res.json().catch(() => null);
+      if (!data || data.ok !== true) throw new Error("Not authorized");
+      return data;
+    }
+    
+    (async () => {
+      const token = localStorage.getItem(LS_TOKEN);
+      if (!token) return goLogin();
+    
+      try {
+        await api("me", { token }); // validates session on backend
+      } catch {
+        localStorage.removeItem(LS_TOKEN);
+        localStorage.removeItem(LS_EXPIRES);
+        goLogin();
+      }
+    })();
+  </script>
 </head>
 <body>
   <div class="wrap">
