@@ -1,0 +1,1308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>The Closing Coalition Mobile Practice Test</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg1:#a78bfa;   /* violet-400 */
+    --bg2:#60a5fa;   /* blue-400 */
+
+    --card:#ffffffcc; /* glass */
+    --text:#0f172a;  /* slate-900 */
+    --muted:#475569; /* slate-600 */
+
+    --ring:#22d3ee;  /* cyan-400 */
+    --good:#16a34a;  /* green-600 */
+    --bad:#dc2626;   /* red-600 */
+
+    --btn1:#7c3aed;  /* violet-600 */
+    --btn2:#06b6d4;  /* cyan-500 */
+
+    --choice-bg: rgba(241, 245, 255, 0.92);
+    --choice-text:#1e3a8a;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --card:#0b1224cc;
+      --text:#f8fafc;
+      --muted:#94a3b8;
+      --btn1:#8b5cf6;
+      --btn2:#22d3ee;
+      --choice-bg: #0e172acc;
+      --choice-text:#f8fafc;
+    }
+    body{background:#0b1020;}
+  }
+
+  *{box-sizing:border-box}
+  body{
+    margin:0; min-height:100svh; color:var(--text);
+    font-family: Inter, ui-rounded, system-ui, -apple-system, "Segoe UI", Roboto, Arial, "Noto Sans", sans-serif;
+    font-size:16px; line-height:1.5;
+    background: linear-gradient(135deg, var(--bg1), var(--bg2));
+    background-attachment: fixed;
+    display:flex; align-items:flex-start; justify-content:center;
+  }
+  .wrap{ width:min(1200px, 96vw); padding:20px; }
+
+  .card{ background:var(--card); backdrop-filter:saturate(140%) blur(12px);
+    border:1px solid #ffffff40; border-radius:24px; padding:20px; box-shadow:0 20px 40px rgba(0,0,0,.15);
+  }
+
+  /* Topbar */
+  .top{ display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:14px; }
+  .brand{ font-weight:900; letter-spacing:.2px; font-size:20px; }
+  .tabs{ display:flex; gap:8px; flex-wrap:wrap; }
+  .tab{ appearance:none; border:0; padding:10px 14px; border-radius:9999px; font-weight:800; cursor:pointer; color:white;
+    background: linear-gradient(135deg, #6366f1, #06b6d4); opacity:.85; box-shadow:0 8px 18px rgba(0,0,0,.12);
+  }
+  .tab[aria-selected="true"]{ outline:3px solid var(--ring); outline-offset:2px; opacity:1; }
+
+  /* Sections */
+  .section{ display:none; }
+  .section.active{ display:block; }
+
+  header.card{ display:flex; gap:14px; flex-wrap:wrap; align-items:center; margin-bottom:16px; }
+
+  input[type="file"], input[type="number"], select, textarea{
+    font-size:14px; color:var(--text); border:1px solid #ffffff70; background:#ffffffb3;
+    border-radius:12px; padding:8px 12px; box-shadow: inset 0 1px 0 rgba(255,255,255,.6);
+  }
+  input[type="number"]{ width:6.5rem; }
+  label{ font-weight:700; font-size:14px; }
+  textarea{ width:100%; }
+
+  .btn{
+    appearance:none; border:0; border-radius:9999px; padding:10px 14px; font-weight:800; cursor:pointer;
+    transition: transform .05s ease, box-shadow .2s ease, filter .2s ease; color:white; white-space:nowrap;
+    box-shadow:0 10px 20px rgba(0,0,0,.15);
+  }
+  .btn:active{ transform: translateY(1px) scale(.99); }
+  .btn[disabled]{ opacity:.55; cursor:not-allowed; box-shadow:none; }
+  .btn-primary{ background:linear-gradient(135deg, var(--btn1), var(--btn2)); }
+  .btn-secondary{ background:linear-gradient(135deg, #64748b, #0ea5e9); }
+  .btn-outline{ color:var(--text); background:transparent; border:2px solid #ffffff88; }
+  .row{ display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+
+  #quizPanel{ margin-top:12px; }
+  #qCounter{ font-size:16px; font-weight:900; letter-spacing:.2px; }
+  #timer{ font-weight:900; }
+  .muted{ color:var(--muted); }
+
+  .choices{ display:grid; gap:10px; grid-template-columns: 1fr; margin:12px 0; }
+  @media (min-width:700px){ .choices{ grid-template-columns: 1fr 1fr; } }
+
+  .choice{ position:relative; display:flex; align-items:center; gap:12px; padding:12px 14px; border-radius:16px; border:1px solid #ffffff7a;
+    background:var(--choice-bg); color:var(--choice-text); box-shadow: 0 6px 14px rgba(0,0,0,.08);
+    transition: box-shadow .25s ease, transform .05s ease, background .2s ease, border .2s ease; }
+  .choice:hover{ box-shadow: 0 10px 22px rgba(0,0,0,.12); }
+  .choice input{ position:absolute; inset:0; opacity:0; cursor:pointer; }
+  .choice span{ font-weight:800; color:inherit; }
+  .choice.selected{ outline:3px solid var(--ring); outline-offset:2px; }
+
+  .status{ margin-top:6px; min-height:1.4em; font-weight:800; }
+  .ok{ color:var(--good); }
+  .bad{ color:var(--bad); }
+
+  .badge{ display:inline-flex; align-items:center; gap:8px; padding:6px 10px; border-radius:9999px; font-size:12px; font-weight:900;
+    background:#ffffffcc; border:1px solid #ffffff7a; }
+
+  details summary{ cursor:pointer; }
+  pre{ background:#00000020; padding:12px; border-radius:12px; overflow:auto; }
+
+  table{ width:100%; border-collapse:collapse; }
+  th, td{ text-align:left; padding:8px 10px; border-bottom:1px solid #ffffff44; }
+  th{ font-size:12px; text-transform:uppercase; letter-spacing:.06em; opacity:.9; }
+
+  .pill{ display:inline-block; padding:2px 8px; border-radius:999px; font-size:12px; font-weight:800; }
+  .pill.easy{ background:#86efac; }
+  .pill.medium{ background:#fde68a; }
+  .pill.hard{ background:#fca5a5; }
+
+  canvas{ max-width: 420px; }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="top">
+      <div class="brand">⚡ The Closing Coalition <span class="muted" style="font-weight:600">Mobile Practice Test</span></div>
+      <div class="tabs" role="tablist">
+        <button class="tab" role="tab" aria-selected="true" data-tab="home">Home</button>
+        <button class="tab" role="tab" aria-selected="false" data-tab="study">Study</button>
+        <button class="tab" role="tab" aria-selected="false" data-tab="review">Review</button>
+        <button class="tab" role="tab" aria-selected="false" data-tab="history">History</button>
+        <button class="tab" role="tab" aria-selected="false" data-tab="settings">Settings</button>
+      </div>
+    </div>
+
+    <!-- HOME -->
+    <section class="section active" id="home">
+      <header class="card">
+        <!-- You can hide this file input if you don't want uploads at all -->
+        <input type="file" id="fileInput" accept=".csv" style="display:none;" />
+        <div class="row">
+          <label for="timeLimit">Time (min):</label>
+          <input type="number" id="timeLimit" min="0" step="1" value="0" />
+        </div>
+        <div class="row">
+          <label for="diffFilter">Difficulty:</label>
+          <select id="diffFilter">
+            <option value="all" selected>All</option>
+            <option value="easy">Easy</option>
+            <option value="medium">Medium</option>
+            <option value="hard">Hard</option>
+          </select>
+        </div>
+        <button id="startBtn" class="btn btn-primary">Start</button>
+        <button id="saveMissedBtn" class="btn btn-secondary" disabled>Save Missed</button>
+        <span class="badge">The Closing Coalition • Life & Health Prep</span>
+      </header>
+
+      <div class="card">
+        <div class="row" style="justify-content:space-between; align-items:flex-end; gap:20px;">
+          <div>
+            <div style="font-weight:900; font-size:18px;">Welcome to The Closing Coalition Mobile Practice Test</div>
+            <div class="muted">
+              Tap <strong>Start</strong> to begin your life insurance prep session
+              using the built-in 100-question bank. Use the difficulty filter and optional timer
+              to simulate your real exam.
+            </div>
+          </div>
+          <div class="muted" style="font-size:13px;">
+            Keyboard (desktop): <strong>1–4</strong> choose · <strong>Enter</strong> submit · <strong>→</strong> next
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- STUDY -->
+    <section class="section" id="study">
+      <div class="card" id="quizPanel" style="display:none;">
+        <div class="row" style="justify-content:space-between;">
+          <div><strong id="qCounter">Question 0/0</strong></div>
+          <div><strong id="timer" class="muted">No timer</strong></div>
+        </div>
+        <div id="questionText" style="margin-top:10px; font-size:22px; font-weight:900;"></div>
+        <div class="row muted" id="qMeta" style="gap:8px;"></div>
+        <div class="choices" id="choices"></div>
+        <div class="row">
+          <button id="submitBtn" class="btn btn-primary" disabled>Submit</button>
+          <button id="nextBtn" class="btn btn-outline" disabled>Next</button>
+          <button id="finishBtn" class="btn btn-outline" style="margin-left:auto;">Finish</button>
+        </div>
+        <div class="status" id="feedback"></div>
+      </div>
+    </section>
+
+    <!-- REVIEW -->
+    <section class="section" id="review">
+      <div class="card">
+        <div class="row" style="justify-content:space-between; align-items:center;">
+          <div style="font-weight:900; font-size:18px;">Session Summary</div>
+          <div class="row">
+            <button id="retakeMissedBtn" class="btn btn-secondary" disabled>Retake Missed</button>
+            <button id="downloadMissedBtn" class="btn btn-outline" disabled>Download Missed CSV</button>
+          </div>
+        </div>
+        <div class="row" style="gap:20px; flex-wrap:wrap; margin-top:10px;">
+          <div class="card" style="flex:1; min-width:250px;">
+            <div id="stats"></div>
+          </div>
+          <div class="card" style="flex:1; min-width:250px;">
+            <canvas id="summaryChart" width="420" height="300" aria-label="Summary chart"></canvas>
+          </div>
+        </div>
+        <div style="margin-top:14px; overflow:auto;">
+          <table id="reviewTable">
+            <thead>
+              <tr>
+                <th>#</th><th>Question</th><th>Your Answer</th><th>Correct</th><th>Result</th><th>Explanation</th><th>Difficulty</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- HISTORY -->
+    <section class="section" id="history">
+      <div class="card">
+        <div style="font-weight:900; font-size:18px;">Past Sessions</div>
+        <div class="muted" style="margin:6px 0 10px;">Stored in your browser only.</div>
+        <div id="historyList"></div>
+        <div class="row" style="margin-top:10px;">
+          <button id="clearHistoryBtn" class="btn btn-outline">Clear History</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- SETTINGS -->
+    <section class="section" id="settings">
+      <div class="card">
+        <div style="font-weight:900; font-size:18px;">Settings</div>
+        <div class="muted" style="margin:6px 0 10px;">Toggles apply to future sessions.</div>
+        <div class="row" style="align-items:center;">
+          <label><input type="checkbox" id="showExplanationOnCorrect" /> Show explanation even when correct</label>
+          <label><input type="checkbox" id="spacedMode" /> Spaced Repetition bias (experimental)</label>
+        </div>
+      </div>
+      <div class="card" style="margin-top:14px;">
+        <details>
+          <summary><strong>Question Bank</strong></summary>
+          <div class="muted" style="margin-top:8px;">
+            This app uses a built-in practice bank for The Closing Coalition.
+            If you ever want to extend it, add more entries to the
+            <code>builtInBank</code> array in the script.
+          </div>
+        </details>
+      </div>
+    </section>
+  </div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script>
+(function(){
+  // ---------- SPA TABS ----------
+  const sections = {
+    home: document.getElementById('home'),
+    study: document.getElementById('study'),
+    review: document.getElementById('review'),
+    history: document.getElementById('history'),
+    settings: document.getElementById('settings'),
+  };
+  const tabBtns = [...document.querySelectorAll('.tab')];
+  function activate(tab){
+    for(const k in sections){ sections[k].classList.toggle('active', k===tab); }
+    tabBtns.forEach(b=> b.setAttribute('aria-selected', String(b.dataset.tab===tab)) )
+  }
+  tabBtns.forEach(b=> b.addEventListener('click', ()=> activate(b.dataset.tab)) );
+
+  // ---------- Built-in Question Bank ----------
+  // TODO: Replace this placeholder array with your full 100-question set.
+// ---------- Built-in Question Bank ----------
+const builtInBank = [
+    {
+      question: "What type of risk has only two possible outcomes—loss or no loss—and is insurable?",
+      correct: "Pure risk",
+      wrongs: ["Speculative risk", "Investment risk", "Moral hazard"],
+      explanation: "Only pure risk has potential for loss or no loss and is insurable.",
+      difficulty: "easy"
+    },
+    {
+      question: "The law of large numbers allows insurers to:",
+      correct: "Predict loss by pooling similar risks",
+      wrongs: ["Eliminate risk entirely", "Guarantee profit for policyholders", "Invest premiums in stocks"],
+      explanation: "With a large group of homogeneous exposures, insurers can predict loss experience.",
+      difficulty: "medium"
+    },
+    {
+      question: "What type of risk has only two possible outcomes\u2014loss or no loss\u2014and is insurable?",
+      correct: "Pure risk",
+      wrongs: ["Speculative risk", "Investment risk", "Moral hazard"],
+      explanation: "Only pure risk has potential for loss or no loss and is insurable.",
+      difficulty: "easy"
+    },
+    {
+      question: "The law of large numbers allows insurers to:",
+      correct: "Predict loss by pooling similar risks",
+      wrongs: ["Eliminate risk entirely", "Guarantee profit for policyholders", "Invest premiums in stocks"],
+      explanation: "With a large group of homogeneous exposures, insurers can predict loss experience.",
+      difficulty: "medium"
+    },
+    {
+      question: "Insurable interest in life insurance must exist:",
+      correct: "At policy inception",
+      wrongs: ["At the time of claim only", "Throughout the life of the policy", "Only for term policies"],
+      explanation: "Insurable interest is required when a policy is purchased; after issue, it is not necessary.",
+      difficulty: "easy"
+    },
+    {
+      question: "Which of the following is an example of a moral hazard?",
+      correct: "An applicant lies about their health history",
+      wrongs: ["A home is located in a flood zone", "An insured forgets to lock their car", "A factory stores flammable chemicals"],
+      explanation: "Moral hazards are associated with dishonesty or character defects that increase the chance of loss.",
+      difficulty: "easy"
+    },
+    {
+      question: "Which need is best addressed by family income replacement life insurance?",
+      correct: "Maintaining survivors\u2019 standard of living",
+      wrongs: ["Funding a child\u2019s vacation", "Buying a new car next year", "Paying small emergency bills only"],
+      explanation: "Income replacement life insurance is designed to help survivors maintain their lifestyle after the insured\u2019s death.",
+      difficulty: "easy"
+    },
+    {
+      question: "Which type of business life insurance covers a key executive whose death would harm the company?",
+      correct: "Key person insurance",
+      wrongs: ["Group term insurance", "Credit life insurance", "Industrial life insurance"],
+      explanation: "Key person insurance protects the business against the financial loss caused by the death of a key employee.",
+      difficulty: "easy"
+    },
+    {
+      question: "A buy-sell agreement funded by life insurance is primarily designed to:",
+      correct: "Provide money for surviving owners to purchase a deceased owner\u2019s interest",
+      wrongs: ["Pay the business\u2019s utility bills", "Fund employees\u2019 retirement benefits", "Pay off the key person\u2019s mortgage"],
+      explanation: "Buy-sell agreements use life insurance to fund the purchase of a deceased owner\u2019s share of the business.",
+      difficulty: "medium"
+    },
+    {
+      question: "Term life insurance is best described as providing:",
+      correct: "Pure death benefit protection for a specified period",
+      wrongs: ["Lifetime coverage with cash value", "Guaranteed income for retirement", "Coverage that builds equity in real estate"],
+      explanation: "Term life offers temporary coverage with no cash value, providing pure death benefit protection.",
+      difficulty: "easy"
+    },
+    {
+      question: "Which type of life insurance combines permanent protection with a guaranteed cash value?",
+      correct: "Whole life insurance",
+      wrongs: ["Level term insurance", "Decreasing term insurance", "Credit life insurance"],
+      explanation: "Whole life is permanent coverage that builds guaranteed cash value over time.",
+      difficulty: "easy"
+    },
+    {
+      question: "A flexible-premium policy with an adjustable death benefit and cash value tied to insurer\u2019s general account is:",
+      correct: "Universal life insurance",
+      wrongs: ["Variable universal life", "Renewable term life", "Industrial life"],
+      explanation: "Universal life offers flexible premiums and an adjustable death benefit with interest-sensitive cash value.",
+      difficulty: "medium"
+    },
+    {
+      question: "Variable life insurance differs from whole life because its cash value:",
+      correct: "Is invested in separate accounts with no guaranteed return",
+      wrongs: ["Is invested only in bonds", "Is always guaranteed by the insurer", "Cannot lose value"],
+      explanation: "Variable life invests in separate accounts such as stocks and bonds, so returns are not guaranteed.",
+      difficulty: "medium"
+    },
+    {
+      question: "Which policy type allows the policyowner to change the coverage and premium within certain limits?",
+      correct: "Adjustable life",
+      wrongs: ["Straight whole life", "Renewable term", "Credit life"],
+      explanation: "Adjustable life allows changes to face amount, premium, and coverage period within policy limits.",
+      difficulty: "medium"
+    },
+    {
+      question: "What is the primary feature of a decreasing term policy?",
+      correct: "Death benefit decreases over the policy term while premium usually stays level",
+      wrongs: ["Death benefit and premium both increase each year", "Premium decreases while death benefit stays level", "Cash value steadily increases"],
+      explanation: "Decreasing term has a declining death benefit, often used to match a decreasing debt such as a mortgage.",
+      difficulty: "easy"
+    },
+    {
+      question: "Which policy is most suitable to cover a mortgage that declines over time?",
+      correct: "Decreasing term life insurance",
+      wrongs: ["Increasing term life insurance", "Single premium whole life", "Level term life insurance"],
+      explanation: "Decreasing term matches a declining obligation like a mortgage balance.",
+      difficulty: "easy"
+    },
+    {
+      question: "Which life insurance policy is characterized by a single, lump-sum premium payment?",
+      correct: "Single premium whole life",
+      wrongs: ["Annual renewable term", "Level premium term", "Limited pay whole life"],
+      explanation: "Single premium whole life is fully paid up with one lump-sum premium.",
+      difficulty: "medium"
+    },
+    {
+      question: "Limited-pay whole life policies are designed so that:",
+      correct: "Premiums are paid for a limited time, but coverage lasts a lifetime",
+      wrongs: ["Coverage ends when premiums stop", "Premiums are due for life but coverage is temporary", "No cash value ever accumulates"],
+      explanation: "Limited-pay whole life is fully paid up after a set period, yet remains in force for the insured\u2019s lifetime.",
+      difficulty: "medium"
+    },
+    {
+      question: "Which policy feature allows the insurer to assume that the insured\u2019s statements are true without further investigation?",
+      correct: "Doctrine of utmost good faith",
+      wrongs: ["Law of large numbers", "Doctrine of subrogation", "Doctrine of indemnity"],
+      explanation: "Utmost good faith means both parties rely on each other\u2019s truthful representations.",
+      difficulty: "medium"
+    },
+    {
+      question: "In a life insurance policy, consideration is defined as:",
+      correct: "The premium and statements in the application",
+      wrongs: ["The agent\u2019s commission", "The insurer\u2019s investment income", "The policy loan interest"],
+      explanation: "The insured\u2019s consideration is the premium and application; the insurer\u2019s is the promise to pay.",
+      difficulty: "easy"
+    },
+    {
+      question: "A contract that is one-sided, where only the insurer is legally bound, is called:",
+      correct: "Unilateral contract",
+      wrongs: ["Aleatory contract", "Adhesion contract", "Conditional contract"],
+      explanation: "In a unilateral contract, only one party\u2014the insurer\u2014makes an enforceable promise.",
+      difficulty: "easy"
+    },
+    {
+      question: "A conditional receipt given at application generally provides coverage:",
+      correct: "Only if the applicant is found insurable as applied for",
+      wrongs: ["Immediately, regardless of insurability", "Only after policy delivery", "Only after first-year premiums are paid"],
+      explanation: "Coverage under a conditional receipt begins when the applicant meets the company\u2019s underwriting requirements.",
+      difficulty: "medium"
+    },
+    {
+      question: "Which underwriting source provides the insurer with the most detailed information about the applicant\u2019s health?",
+      correct: "Attending Physician\u2019s Statement (APS)",
+      wrongs: ["MIB report", "Consumer investigative report", "Agent\u2019s report"],
+      explanation: "An APS is obtained directly from the applicant\u2019s doctor and includes detailed medical history.",
+      difficulty: "medium"
+    },
+    {
+      question: "What is the purpose of the Medical Information Bureau (MIB)?",
+      correct: "To share medical information among member insurers to prevent fraud",
+      wrongs: ["To determine insurance premiums for each insurer", "To pay claims on behalf of insurers", "To provide medical treatment to insureds"],
+      explanation: "The MIB helps insurers detect fraud and adverse selection by sharing coded medical information.",
+      difficulty: "medium"
+    },
+    {
+      question: "Which risk classification would typically be charged the lowest premiums?",
+      correct: "Preferred",
+      wrongs: ["Standard", "Substandard", "Rated"],
+      explanation: "Preferred risks have better-than-average health and lifestyle, qualifying for lower premiums.",
+      difficulty: "easy"
+    },
+    {
+      question: "A backdated life insurance policy is primarily used to:",
+      correct: "Save age and obtain a lower premium",
+      wrongs: ["Extend the contestable period", "Increase the policy\u2019s cash value immediately", "Avoid evidence of insurability"],
+      explanation: "Backdating allows the applicant to be issued at a younger age for a lower premium, within legal limits.",
+      difficulty: "medium"
+    },
+    {
+      question: "The free-look provision allows the policyowner to:",
+      correct: "Return the policy for a full refund within a specified period",
+      wrongs: ["Suspend premiums for one year", "Change the insured without proof of insurability", "Increase coverage automatically"],
+      explanation: "The free-look period gives the owner the right to examine and return the policy for a full refund.",
+      difficulty: "easy"
+    },
+    {
+      question: "The incontestability clause prevents the insurer from voiding coverage after:",
+      correct: "The policy has been in force for a specified period, usually two years",
+      wrongs: ["The first premium is paid", "The insured reaches age 65", "Any claim occurs"],
+      explanation: "After the contestable period, the insurer cannot void the policy for misstatements, except fraud where allowed by law.",
+      difficulty: "medium"
+    },
+    {
+      question: "The misstatement of age provision allows the insurer to:",
+      correct: "Adjust benefits to what the premium would have purchased at the correct age",
+      wrongs: ["Cancel the policy and keep all premiums", "Increase premiums retroactively with interest", "Deny claims automatically"],
+      explanation: "If age is misstated, the insurer adjusts the death benefit to the correct amount based on actual age.",
+      difficulty: "medium"
+    },
+    {
+      question: "The grace period in a life insurance policy is designed to:",
+      correct: "Prevent unintentional lapse by allowing late premium payment",
+      wrongs: ["Guarantee dividends", "Increase the policy loan value", "Extend the incontestability period"],
+      explanation: "The grace period provides extra time to pay premiums before coverage lapses.",
+      difficulty: "easy"
+    },
+    {
+      question: "A policy that has lapsed for nonpayment of premium can be reinstated if the owner:",
+      correct: "Provides evidence of insurability and pays back premiums with interest",
+      wrongs: ["Pays one current premium only", "Signs a new application with no underwriting", "Proves financial hardship"],
+      explanation: "Reinstatement usually requires proof of insurability and payment of back premiums plus interest.",
+      difficulty: "medium"
+    },
+    {
+      question: "Which nonforfeiture option provides coverage for the longest possible period?",
+      correct: "Extended term insurance",
+      wrongs: ["Cash surrender value", "Reduced paid-up insurance", "Automatic premium loan"],
+      explanation: "Extended term uses the full cash value to buy term coverage for the original face amount for as long as possible.",
+      difficulty: "hard"
+    },
+    {
+      question: "Which nonforfeiture option uses the cash value to purchase a smaller, fully paid permanent policy?",
+      correct: "Reduced paid-up insurance",
+      wrongs: ["Extended term insurance", "Cash surrender value", "Automatic premium loan"],
+      explanation: "Reduced paid-up uses cash value to buy a lower face amount that is fully paid-up for life.",
+      difficulty: "medium"
+    },
+    {
+      question: "Which dividend option allows policyowners to purchase small amounts of paid-up additional insurance?",
+      correct: "Paid-up additions",
+      wrongs: ["Cash option", "Reduced premium", "One-year term"],
+      explanation: "Paid-up additions use dividends to buy extra paid-up life insurance, increasing death benefit and cash value.",
+      difficulty: "medium"
+    },
+    {
+      question: "Under which dividend option does the insurer keep the dividend and credit it with interest?",
+      correct: "Accumulation at interest",
+      wrongs: ["Cash option", "Paid-up additions", "Reduced paid-up"],
+      explanation: "Accumulation at interest leaves dividends on deposit with the insurer, earning interest for the policyowner.",
+      difficulty: "medium"
+    },
+    {
+      question: "Which dividend option immediately reduces the out-of-pocket premium the policyowner must pay?",
+      correct: "Reduction of premium",
+      wrongs: ["Paid-up additions", "One-year term", "Cash surrender"],
+      explanation: "The reduction of premium option uses the dividend toward the next premium due.",
+      difficulty: "easy"
+    },
+    {
+      question: "The automatic premium loan provision, if elected, prevents a lapse by:",
+      correct: "Using available cash value to pay overdue premiums",
+      wrongs: ["Extending the grace period indefinitely", "Waiving all future premiums", "Borrowing from the agent\u2019s commission"],
+      explanation: "Automatic premium loans draw from cash value to cover unpaid premiums before lapse occurs.",
+      difficulty: "medium"
+    },
+    {
+      question: "The waiver of premium rider typically waives premiums when the insured:",
+      correct: "Becomes totally disabled as defined in the policy",
+      wrongs: ["Reaches retirement age", "Has any minor injury", "Is unemployed for 30 days"],
+      explanation: "Waiver of premium waives payments if the insured is totally disabled after a waiting period.",
+      difficulty: "easy"
+    },
+    {
+      question: "The accidental death benefit rider pays an additional benefit if death:",
+      correct: "Is caused by an accident within a specified time frame",
+      wrongs: ["Occurs from any cause after age 65", "Is due to suicide within two years", "Results from sickness only"],
+      explanation: "Accidental death riders pay an extra benefit if death is the direct result of accidental injury.",
+      difficulty: "medium"
+    },
+    {
+      question: "A guaranteed insurability rider allows the insured to:",
+      correct: "Purchase additional coverage at specified ages without evidence of insurability",
+      wrongs: ["Increase coverage any time without cost", "Change beneficiaries at will", "Reduce premiums during disability"],
+      explanation: "Guaranteed insurability lets the insured buy more coverage at option dates without new medical evidence.",
+      difficulty: "hard"
+    },
+    {
+      question: "The cost-of-living rider typically adjusts the policy\u2019s:",
+      correct: "Death benefit based on changes in an inflation index",
+      wrongs: ["Premium based solely on age", "Cash value to match stock returns", "Interest rate on policy loans"],
+      explanation: "Cost-of-living riders increase coverage periodically to help offset inflation.",
+      difficulty: "medium"
+    },
+    {
+      question: "An accelerated death benefit rider allows the insured to:",
+      correct: "Receive part of the death benefit while living under certain conditions",
+      wrongs: ["Avoid all premium payments permanently", "Increase the policy face amount without underwriting", "Change the contract law in their state"],
+      explanation: "Accelerated benefits pay out a portion of the death benefit if the insured is terminally or chronically ill, as defined in the rider.",
+      difficulty: "medium"
+    },
+    {
+      question: "Under a return of premium rider on term life, if the insured outlives the term:",
+      correct: "Some or all premiums paid may be returned",
+      wrongs: ["The policy automatically converts to whole life at no cost", "Coverage continues with no new premiums ever", "All premiums are forfeited"],
+      explanation: "Return of premium riders refund eligible premiums if the insured survives the term, subject to rider conditions.",
+      difficulty: "hard"
+    },
+    {
+      question: "Which settlement option provides a series of payments for a specific number of years?",
+      correct: "Fixed period",
+      wrongs: ["Lump sum", "Life only", "Joint and survivor"],
+      explanation: "The fixed-period option pays proceeds in equal installments over a chosen time period.",
+      difficulty: "easy"
+    },
+    {
+      question: "Which settlement option provides income for the beneficiary\u2019s life, regardless of how long they live?",
+      correct: "Life income",
+      wrongs: ["Fixed amount", "Interest only", "Cash refund"],
+      explanation: "Life income settlement options provide payments for as long as the beneficiary lives.",
+      difficulty: "medium"
+    },
+    {
+      question: "Under the interest-only settlement option, the insurer:",
+      correct: "Pays interest periodically and holds the principal intact",
+      wrongs: ["Pays out principal and interest together as an annuity", "Returns premiums only, with no interest", "Guarantees the principal is never paid"],
+      explanation: "With interest-only, the insurer pays interest to the beneficiary while holding the principal for later distribution.",
+      difficulty: "medium"
+    },
+    {
+      question: "The straight life annuity option provides payments:",
+      correct: "For as long as the annuitant lives, then stops at death",
+      wrongs: ["For a guaranteed minimum period only", "To beneficiaries after the annuitant\u2019s death regardless of option", "Until the cash value is depleted, regardless of lifespan"],
+      explanation: "A straight life annuity pays for the annuitant\u2019s lifetime, with no payments to beneficiaries after death.",
+      difficulty: "medium"
+    },
+    {
+      question: "In a fixed annuity, the insurer bears which risk?",
+      correct: "Investment risk",
+      wrongs: ["Mortality risk", "Owner\u2019s contribution risk", "Insurable interest risk"],
+      explanation: "In a fixed annuity, the insurer guarantees a fixed rate and thus bears the investment risk.",
+      difficulty: "medium"
+    },
+    {
+      question: "Which annuity type offers payments that vary with the performance of underlying separate account investments?",
+      correct: "Variable annuity",
+      wrongs: ["Fixed annuity", "Deferred income annuity", "Immediate fixed annuity"],
+      explanation: "Variable annuities invest in separate accounts, so payment amounts can fluctuate with investment performance.",
+      difficulty: "medium"
+    },
+    {
+      question: "An immediate annuity begins income payments:",
+      correct: "Within one year of purchase",
+      wrongs: ["After at least ten years", "Only at the annuitant\u2019s retirement age of 65", "After the policy builds sufficient cash value"],
+      explanation: "Immediate annuities are purchased with a single premium and start paying income within 12 months.",
+      difficulty: "easy"
+    },
+    {
+      question: "A deferred annuity is primarily used to:",
+      correct: "Accumulate funds for future income",
+      wrongs: ["Provide immediate death benefits only", "Guarantee life insurance coverage for children", "Pay short-term medical expenses"],
+      explanation: "Deferred annuities accumulate value over time, with income payments starting at a later date.",
+      difficulty: "easy"
+    },
+    {
+      question: "Which party in an annuity receives income payments during the payout phase?",
+      correct: "Annuitant",
+      wrongs: ["Beneficiary", "Policyowner only", "Producer"],
+      explanation: "The annuitant is the person whose life expectancy the payments are based on.",
+      difficulty: "easy"
+    },
+    {
+      question: "Life insurance death benefits paid as a lump sum to a named beneficiary are generally:",
+      correct: "Received income tax free",
+      wrongs: ["Fully taxable as ordinary income", "Subject to automatic capital gains tax", "Taxable only if the insured is under age 59\u00bd"],
+      explanation: "In most cases, life insurance death proceeds paid as a lump sum to an individual are not subject to federal income tax.",
+      difficulty: "medium"
+    },
+    {
+      question: "Interest paid on life insurance death proceeds left on deposit with the insurer is:",
+      correct: "Taxable as ordinary income to the beneficiary",
+      wrongs: ["Tax-free forever", "Taxed only as capital gains", "Taxed only at the corporate rate"],
+      explanation: "While the death benefit itself is usually tax free, any interest earned is taxable income.",
+      difficulty: "medium"
+    },
+    {
+      question: "Premiums for personally owned individual life insurance are generally:",
+      correct: "Not tax deductible",
+      wrongs: ["Fully tax deductible", "Tax deductible up to a small limit", "Tax deductible only if the owner itemizes"],
+      explanation: "Premiums for personal life insurance are considered a personal expense and are not tax deductible.",
+      difficulty: "easy"
+    },
+    {
+      question: "Policy loans from a life insurance policy are generally:",
+      correct: "Not taxable as long as the policy remains in force",
+      wrongs: ["Always taxed as capital gains", "Taxable as ordinary income immediately", "Tax deductible for the policyowner"],
+      explanation: "Policy loans are not taxable distributions unless the policy lapses or is surrendered with an outstanding loan.",
+      difficulty: "medium"
+    },
+    {
+      question: "If the owner surrenders a life insurance policy for its cash value, any amount received above total premiums paid is:",
+      correct: "Taxable as ordinary income",
+      wrongs: ["Tax-free return of basis only", "Taxable as capital gains only", "Always tax-free if held over 10 years"],
+      explanation: "The gain upon surrender (cash value minus cost basis) is taxed as ordinary income.",
+      difficulty: "hard"
+    },
+    {
+      question: "A policy is considered a Modified Endowment Contract (MEC) primarily when:",
+      correct: "It fails the 7-pay test by being overfunded",
+      wrongs: ["It has no cash value", "It is a term policy only", "The insured is over age 70"],
+      explanation: "If premiums exceed limits under the 7-pay test, the policy becomes a MEC with less favorable tax treatment.",
+      difficulty: "hard"
+    },
+    {
+      question: "Distributions from a MEC are taxed on a:",
+      correct: "Last-in, first-out (LIFO) basis",
+      wrongs: ["First-in, first-out (FIFO) basis", "Tax-free basis", "Capital gains basis only"],
+      explanation: "MEC withdrawals are taxable to the extent of gain (LIFO), before returning basis.",
+      difficulty: "hard"
+    },
+    {
+      question: "Group life insurance is typically written as:",
+      correct: "Annual renewable term insurance",
+      wrongs: ["Straight whole life", "Variable universal life", "Single premium whole life"],
+      explanation: "Most group life plans use annually renewable term coverage for simplicity and low cost.",
+      difficulty: "easy"
+    },
+    {
+      question: "Under contributory group life plans, what percentage of eligible employees typically must participate?",
+      correct: "At least 75%",
+      wrongs: ["At least 25%", "Exactly 50%", "100% of employees"],
+      explanation: "Most contributory group plans require a high participation rate (commonly 75%) to reduce adverse selection.",
+      difficulty: "medium"
+    },
+    {
+      question: "In group life insurance, the policy is owned by the:",
+      correct: "Employer or sponsoring organization",
+      wrongs: ["Each individual employee", "Insurance agent", "Insured\u2019s beneficiary"],
+      explanation: "The employer or sponsor holds the master contract; employees receive certificates of coverage.",
+      difficulty: "easy"
+    },
+    {
+      question: "A qualified retirement plan must meet IRS requirements primarily to:",
+      correct: "Receive favorable tax treatment",
+      wrongs: ["Guarantee investment returns", "Eliminate all vesting requirements", "Avoid all reporting obligations"],
+      explanation: "Qualified plans follow IRS rules to allow tax-deductible contributions and tax-deferred growth.",
+      difficulty: "medium"
+    },
+    {
+      question: "Contributions to a traditional qualified plan are generally:",
+      correct: "Tax deductible to the employer and sometimes the employee",
+      wrongs: ["Always after-tax only", "Tax deductible only after retirement", "Tax deductible for beneficiaries only"],
+      explanation: "Qualified plan contributions usually reduce taxable income when made, subject to limits.",
+      difficulty: "medium"
+    },
+    {
+      question: "A Section 1035 exchange allows a policyowner to:",
+      correct: "Exchange one life policy for another without immediate tax consequences",
+      wrongs: ["Avoid all future taxes permanently", "Transfer policies between unrelated owners tax free", "Convert a policy into real estate"],
+      explanation: "1035 exchanges permit certain like-kind exchanges of life and annuity contracts on a tax-deferred basis.",
+      difficulty: "hard"
+    },
+    {
+      question: "Which beneficiary designation takes precedence if no contingent beneficiary is named?",
+      correct: "Primary beneficiary",
+      wrongs: ["Insured\u2019s estate automatically", "Insurer\u2019s choice", "State insurance department"],
+      explanation: "The primary beneficiary has first rights to the policy proceeds upon the insured\u2019s death.",
+      difficulty: "easy"
+    },
+    {
+      question: "A revocable beneficiary designation means the policyowner may:",
+      correct: "Change the beneficiary at any time, subject to policy rules",
+      wrongs: ["Never change the beneficiary", "Change only with the insurer\u2019s CEO approval", "Change only upon court order"],
+      explanation: "Revocable beneficiaries can be changed without their consent.",
+      difficulty: "easy"
+    },
+    {
+      question: "If no beneficiary is living at the insured\u2019s death, proceeds typically:",
+      correct: "Are paid to the insured\u2019s estate",
+      wrongs: ["Are forfeited to the insurer", "Must be donated to charity", "Are paid to the insurance agent"],
+      explanation: "If no beneficiary survives, the policy usually defaults to the insured\u2019s estate.",
+      difficulty: "medium"
+    },
+    {
+      question: "The spendthrift clause in a life insurance policy is designed to:",
+      correct: "Protect proceeds from the beneficiary\u2019s creditors",
+      wrongs: ["Guarantee dividends", "Increase the face amount automatically", "Eliminate all income taxes on benefits"],
+      explanation: "Spendthrift provisions restrict the beneficiary\u2019s ability to assign or otherwise pledge proceeds, protecting them from creditors.",
+      difficulty: "hard"
+    },
+    {
+      question: "Stranger-originated life insurance (STOLI) arrangements are generally viewed as:",
+      correct: "Against public policy and often prohibited",
+      wrongs: ["A standard underwriting practice", "Fully encouraged by regulators", "A form of preferred risk classification"],
+      explanation: "STOLI policies are initiated for investors\u2019 benefit rather than true insurable interest and are often disallowed.",
+      difficulty: "hard"
+    },
+    {
+      question: "Industrial (home service) life insurance is typically characterized by:",
+      correct: "Small face amounts and frequent premium collection",
+      wrongs: ["Large face amounts only", "Single premium payments", "Employer-paid group coverage"],
+      explanation: "Industrial life policies usually have small death benefits and premiums collected weekly or monthly at the home.",
+      difficulty: "medium"
+    },
+    {
+      question: "Credit life insurance is most often used to:",
+      correct: "Pay off a borrower\u2019s loan balance if they die",
+      wrongs: ["Provide permanent protection with cash value", "Fund retirement income", "Provide key person coverage"],
+      explanation: "Credit life is written to cover an outstanding loan, paying the lender if the borrower dies.",
+      difficulty: "easy"
+    },
+    {
+      question: "Which of the following is a primary purpose of life insurance illustration regulations?",
+      correct: "Prevent misleading projections about non-guaranteed elements",
+      wrongs: ["Set universal premium rates", "Control agent commissions", "Eliminate all policy riders"],
+      explanation: "Illustration rules aim to ensure that non-guaranteed values are presented fairly and clearly.",
+      difficulty: "hard"
+    },
+    {
+      question: "The replacement of an existing life insurance policy requires the producer to:",
+      correct: "Provide disclosures and compare old and new coverage fairly",
+      wrongs: ["Cancel the existing policy immediately without notice", "Ignore existing coverage details", "Refuse to discuss surrender charges"],
+      explanation: "Replacement regulations require specific notices and comparisons to protect the consumer.",
+      difficulty: "hard"
+    },
+    {
+      question: "A producer primarily represents which party in a life insurance transaction?",
+      correct: "The insurer",
+      wrongs: ["The applicant only", "The Department of Insurance", "The beneficiary only"],
+      explanation: "Producers are usually agents of the insurer and act on its behalf.",
+      difficulty: "easy"
+    },
+    {
+      question: "Twisting in life insurance refers to:",
+      correct: "Inducing a lapse or surrender of a policy through misrepresentation",
+      wrongs: ["Changing the policy form due to age", "Accurately replacing a policy", "Sharing underwriting information lawfully"],
+      explanation: "Twisting is an unethical practice where a producer misleads a client to replace coverage for the producer\u2019s gain.",
+      difficulty: "hard"
+    },
+    {
+      question: "Rebating occurs when a producer:",
+      correct: "Offers a portion of their commission or something of value as an inducement to buy",
+      wrongs: ["Explains all policy provisions", "Collects premiums on time", "Provides a policy summary"],
+      explanation: "Most states restrict or prohibit rebating to prevent unfair discrimination among policyowners.",
+      difficulty: "hard"
+    },
+    {
+      question: "Under the principle of indemnity, an insured should:",
+      correct: "Not profit from a loss but be restored financially",
+      wrongs: ["Profit substantially from insured events", "Always receive more than the loss amount", "Bear all risk personally"],
+      explanation: "Indemnity aims to restore the insured to the financial position they had before the loss, without profit.",
+      difficulty: "medium"
+    },
+    {
+      question: "A contract of adhesion means that:",
+      correct: "The insured must accept or reject the policy as written by the insurer",
+      wrongs: ["Both parties negotiate every term equally", "The contract can be changed unilaterally by the insured", "The insurer has no obligation to pay claims"],
+      explanation: "In adhesion contracts, ambiguities are usually interpreted in favor of the insured, who did not draft the contract.",
+      difficulty: "medium"
+    },
+    {
+      question: "In a life policy, the owner\u2019s rights typically include all of the following EXCEPT:",
+      correct: "Determining the mortality tables used by the insurer",
+      wrongs: ["Naming or changing beneficiaries", "Taking policy loans", "Assigning the policy as collateral"],
+      explanation: "The owner controls many rights but does not set actuarial assumptions or mortality tables.",
+      difficulty: "hard"
+    },
+    {
+      question: "Which of the following is TRUE about a collateral assignment of a life policy?",
+      correct: "The policy is pledged to a creditor as security for a loan",
+      wrongs: ["All ownership rights transfer permanently", "Beneficiary must approve all claims", "Policy cannot be surrendered"],
+      explanation: "Collateral assignment gives the lender rights up to the loan amount, with remaining benefits payable to the owner or beneficiary.",
+      difficulty: "medium"
+    },
+    {
+      question: "Level term life insurance provides a death benefit that:",
+      correct: "Remains the same for the duration of the term",
+      wrongs: ["Automatically increases each year", "Automatically decreases each year", "Can never be renewed"],
+      explanation: "Level term maintains a constant face amount during the policy term.",
+      difficulty: "easy"
+    },
+    {
+      question: "Annually renewable term life insurance is characterized by:",
+      correct: "Renewal each year with premiums that typically increase",
+      wrongs: ["Level premiums for life", "Decreasing premiums and decreasing coverage", "Guaranteed cash values each year"],
+      explanation: "ART renews yearly and usually has increasing premiums due to the insured\u2019s increasing age.",
+      difficulty: "medium"
+    },
+    {
+      question: "Which of the following statements about whole life cash value is TRUE?",
+      correct: "It grows tax-deferred and can be accessed via policy loans",
+      wrongs: ["It is taxable each year as ordinary income", "It declines over time", "It can never be used as collateral"],
+      explanation: "Whole life cash value accumulates on a tax-deferred basis and can be borrowed against, subject to policy terms.",
+      difficulty: "medium"
+    },
+    {
+      question: "Which life policy combines term insurance on children with permanent coverage on the primary insured?",
+      correct: "Family rider attached to a whole life policy",
+      wrongs: ["Joint life policy only", "Credit life policy", "Industrial policy"],
+      explanation: "Family riders provide term coverage for spouse and children on the base insured\u2019s permanent policy.",
+      difficulty: "medium"
+    },
+    {
+      question: "Joint life policies generally pay the death benefit:",
+      correct: "Upon the first insured\u2019s death",
+      wrongs: ["Only upon the last insured\u2019s death", "In equal installments during both lives", "Only if both insureds die together"],
+      explanation: "Joint life pays at the first death, often used for business buy-sell or income needs.",
+      difficulty: "hard"
+    },
+    {
+      question: "Survivorship life (second-to-die) policies pay the death benefit:",
+      correct: "After the death of the last insured",
+      wrongs: ["At the first insured\u2019s death", "On a monthly basis during both lives", "Only if both insureds die simultaneously"],
+      explanation: "Survivorship life is frequently used for estate planning to pay taxes due at the second death.",
+      difficulty: "hard"
+    },
+    {
+      question: "Which of the following statements about variable universal life (VUL) is TRUE?",
+      correct: "It combines flexible premiums with investment options in separate accounts",
+      wrongs: ["It guarantees fixed interest on cash values", "It cannot be used for retirement accumulation", "It eliminates all investment risk for the policyowner"],
+      explanation: "VUL policies offer flexible premiums and death benefits with cash values invested in separate accounts, so the policyowner bears investment risk.",
+      difficulty: "hard"
+    },
+    {
+      question: "A policy illustration that shows values not guaranteed by the contract must:",
+      correct: "Clearly distinguish between guaranteed and non-guaranteed elements",
+      wrongs: ["Guarantee all projected values", "Exclude any mention of interest rates", "Be approved by the beneficiary"],
+      explanation: "Regulations require that non-guaranteed elements be clearly marked and not misleading.",
+      difficulty: "hard"
+    },
+    {
+      question: "An example of an unfair claim settlement practice is:",
+      correct: "Failing to promptly investigate a claim",
+      wrongs: ["Paying a valid claim quickly", "Requesting reasonable documentation", "Clarifying policy provisions for the insured"],
+      explanation: "Unfair claims practices include unreasonable delays, misrepresentation, or failing to conduct a proper investigation.",
+      difficulty: "hard"
+    },
+    {
+      question: "Which of the following is TRUE regarding participating whole life policies?",
+      correct: "They may pay dividends to policyowners",
+      wrongs: ["They never build cash value", "They are sold only as group policies", "They always guarantee dividends"],
+      explanation: "Participating policies may pay dividends if the insurer\u2019s experience is favorable, but dividends are not guaranteed.",
+      difficulty: "medium"
+    },
+    {
+      question: "Which statement about non-participating whole life policies is CORRECT?",
+      correct: "They do not pay dividends to policyowners",
+      wrongs: ["They always pay annual dividends", "They have no guaranteed cash value", "They are sold only as term riders"],
+      explanation: "Non-participating whole life does not pay dividends; benefits are limited to the guaranteed values in the contract.",
+      difficulty: "medium"
+    },
+    {
+      question: "Which life policy type is MOST likely to lapse if premiums are not paid when due and there is no cash value?",
+      correct: "Term life insurance",
+      wrongs: ["Whole life insurance", "Universal life with high cash value", "Single premium whole life"],
+      explanation: "Term policies provide no cash value and will lapse if premiums are not paid and no grace period or other protection applies.",
+      difficulty: "hard"
+    }
+  ];
+
+
+  // ---------- State ----------
+  let bank=[];           // parsed questions
+  let deck=[];           // session deck
+  let order=[];          // order of indices into deck
+  let pos=0;             // current order index pointer
+  let selected=null;     // current selected option
+  let timerId=null; let endTime=null; let qStart=0;
+  let summaryChart=null; // chart.js instance
+
+  // settings
+  const settings = {
+    showExpOnCorrect: false,
+    spacedMode: false,
+  };
+
+  // ---------- Elements ----------
+  const fileInput = document.getElementById('fileInput');
+  const timeLimit = document.getElementById('timeLimit');
+  const diffFilter = document.getElementById('diffFilter');
+  const startBtn = document.getElementById('startBtn');
+  const saveMissedBtn = document.getElementById('saveMissedBtn');
+  const loadSampleBtn = null; // removed
+  const quizPanel = document.getElementById('quizPanel');
+  const qCounter = document.getElementById('qCounter');
+  const timerEl = document.getElementById('timer');
+  const questionText = document.getElementById('questionText');
+  const qMeta = document.getElementById('qMeta');
+  const choicesEl = document.getElementById('choices');
+  const submitBtn = document.getElementById('submitBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const finishBtn = document.getElementById('finishBtn');
+  const feedback = document.getElementById('feedback');
+
+  const retakeMissedBtn = document.getElementById('retakeMissedBtn');
+  const downloadMissedBtn = document.getElementById('downloadMissedBtn');
+  const statsEl = document.getElementById('stats');
+  const reviewTableBody = document.querySelector('#reviewTable tbody');
+  const historyList = document.getElementById('historyList');
+  const clearHistoryBtn = document.getElementById('clearHistoryBtn');
+  const summaryChartEl = document.getElementById('summaryChart');
+
+  const showExplanationOnCorrect = document.getElementById('showExplanationOnCorrect');
+  const spacedMode = document.getElementById('spacedMode');
+
+  // ---------- Utils ----------
+  function csvParse(text){
+    const rows=[]; let row=[]; let cur=''; let inQuotes=false;
+    for(let i=0;i<text.length;i++){
+      const c=text[i]; const n=text[i+1];
+      if(inQuotes){
+        if(c==='"' && n==='"'){ cur+='"'; i++; }
+        else if(c==='"'){ inQuotes=false; }
+        else cur+=c;
+      }else{
+        if(c==='"') inQuotes=true;
+        else if(c===','){ row.push(cur); cur=''; }
+        else if(c==='\n'){ row.push(cur); rows.push(row); row=[]; cur=''; }
+        else if(c==='\r'){ /* ignore */ }
+        else cur+=c;
+      }
+    }
+    if(cur!=='' || inQuotes || row.length){ row.push(cur); rows.push(row); }
+    return rows.filter(r=> r.some(cell=> (cell??'').trim()!=='') );
+  }
+  function csvEscapeCell(s){ s=String(s??''); const needs=/[",\n\r]/.test(s); return needs? '"'+s.replace(/"/g,'""')+'"': s; }
+  function downloadCSV(rows, filename){
+    const body = rows.map(r=> r.map(csvEscapeCell).join(',')).join('\r\n') + '\r\n';
+    const blob = new Blob([body], {type:'text/csv;charset=utf-8;'});
+    const url = URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download=filename; document.body.appendChild(a); a.click(); setTimeout(()=>{ URL.revokeObjectURL(url); a.remove(); },0);
+  }
+  function nowStamp(){ const d=new Date(); const pad=n=> String(n).padStart(2,'0'); return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}_${pad(d.getHours())}-${pad(d.getMinutes())}-${pad(d.getSeconds())}`; }
+  function shuffle(arr){ const a=arr.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+  const setDisabled=(el,s)=> el && (el.disabled=!!s);
+  const loadJSON=(k,fallback)=>{ try{ const x=JSON.parse(localStorage.getItem(k)||'null'); return x??fallback; }catch{ return fallback; } };
+  const saveJSON=(k,v)=> localStorage.setItem(k, JSON.stringify(v));
+
+  // Difficulty helpers
+  function parseDifficultyFromQuestion(text){
+    const m = /^\s*\[(E|M|H)\]\s*(.*)$/i.exec(text);
+    if(!m) return {difficulty:null, clean:text};
+    const d = {e:'easy', m:'medium', h:'hard'}[m[1].toLowerCase()];
+    return {difficulty:d || null, clean:m[2]};
+  }
+
+  function escapeHTML(s){ return String(s).replace(/[&<>"']/g, c=> ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;'}[c]) ); }
+
+  function hashKey(q){
+    return btoa(unescape(encodeURIComponent(q.question.slice(0,200)+'|'+q.correct))).replace(/=+$/,'');
+  }
+
+  // ---------- Initialize built-in bank ----------
+  bank = builtInBank.map(q => ({
+    question: q.question,
+    correct: q.correct,
+    wrongs: q.wrongs.slice(),
+    explanation: q.explanation || "",
+    difficulty: ['easy','medium','hard'].includes(q.difficulty) ? q.difficulty : null
+  }));
+  setDisabled(startBtn, bank.length===0);
+  setDisabled(saveMissedBtn, bank.length===0);
+  quizPanel.style.display = 'none';
+  feedback.textContent = '';
+
+  // ---------- Persistence for sessions ----------
+  function pushHistory(rec){
+    const key='qf:sessions';
+    const list = loadJSON(key, []);
+    list.unshift(rec);
+    while(list.length>50) list.pop();
+    saveJSON(key, list);
+  }
+  function renderHistory(){
+    const list = loadJSON('qf:sessions', []);
+    if(!list.length){ historyList.innerHTML = '<div class="muted">No past sessions yet.</div>'; return; }
+    historyList.innerHTML = list.map((r,i)=>{
+      return `<div style="display:flex; gap:10px; align-items:center; justify-content:space-between; padding:10px 12px; border:1px solid #ffffff44; border-radius:12px; margin-bottom:8px;">
+        <div><strong>${new Date(r.ts).toLocaleString()}</strong><div class="muted" style="font-size:12px;">${r.total} Q • ${r.correct} correct • ${Math.round(r.percent)}% • avg ${r.avgSecs.toFixed(1)}s</div></div>
+        <div class="pill ${r.diff||'all'}">${(r.diff||'all').toUpperCase()}</div>
+      </div>`
+    }).join('');
+  }
+  renderHistory();
+
+  // ---------- Build deck ----------
+  function resetRuntime(){
+    const want = diffFilter.value;
+    const filtered = bank.filter(q => want==='all' || q.difficulty===want);
+
+    deck = filtered.map((q,idx)=> ({
+      idx, question:q.question, correct:q.correct, wrongs:q.wrongs.slice(), explanation:q.explanation||'',
+      difficulty:q.difficulty||null, status:'unsubmitted', userAnswer:null, timeMs:0
+    }));
+
+    order = [...deck.keys()];
+    if(settings.spacedMode){
+      const stats = loadJSON('qf:stats', {});
+      const weights = order.map(i=>{
+        const key = hashKey(deck[i]);
+        const s = stats[key];
+        let w=1;
+        if(s?.lastResult==='incorrect') w+=2;
+        if(s?.lastSeen && (Date.now()-s.lastSeen) > 3*86400000) w+=1;
+        return w;
+      });
+      order = weightedShuffle(order, weights);
+    } else {
+      order = shuffle(order);
+    }
+
+    pos=0; selected=null; clearFeedback();
+    setDisabled(submitBtn, true); setDisabled(nextBtn, true);
+    quizPanel.style.display = deck.length ? 'block' : 'none';
+    activate('study');
+    render();
+  }
+
+  function weightedShuffle(items, weights){
+    const res=[]; const pool=items.slice(); const w=weights.slice();
+    while(pool.length){
+      const total = w.reduce((a,b)=>a+b,0);
+      let pick = Math.random()*total; let idx=0;
+      while(pick>=w[idx]){ pick-=w[idx]; idx++; }
+      res.push(pool.splice(idx,1)[0]);
+      w.splice(idx,1);
+    }
+    return res;
+  }
+
+  function markSelectedUI(){
+    const nodes = choicesEl.querySelectorAll('.choice');
+    nodes.forEach(n=> n.classList.remove('selected'));
+    const picked = [...nodes].find(n=> n.dataset.value === String(selected));
+    if(picked) picked.classList.add('selected');
+  }
+
+  function render(){
+    if(!deck.length) return;
+    const current = deck[ order[pos] ];
+    qCounter.textContent = `Question ${pos+1}/${deck.length}`;
+
+    qMeta.innerHTML='';
+    if(current.difficulty){
+      const d = document.createElement('span');
+      d.className = `pill ${current.difficulty}`; d.textContent = current.difficulty.toUpperCase();
+      qMeta.appendChild(d);
+    }
+
+    questionText.textContent = current.question;
+
+    choicesEl.innerHTML='';
+    const options = shuffle([ current.correct, ...current.wrongs ]);
+    options.forEach(opt=>{
+      const el=document.createElement('div'); el.className='choice'; el.dataset.value=opt;
+      el.innerHTML = `<input type="radio" name="choice"><span>${opt}</span>`;
+      el.addEventListener('click', ()=>{ selected=opt; setDisabled(submitBtn,false); markSelectedUI(); });
+      choicesEl.appendChild(el);
+    });
+
+    const answered = current.status!=='unsubmitted';
+    setDisabled(submitBtn, answered);
+    setDisabled(nextBtn, !answered);
+    if(answered){
+      feedback.innerHTML = current.status==='correct'
+        ? `<span class="ok">Correct.</span>`
+        : `<span class="bad">Incorrect.</span> Correct answer: <strong>${current.correct}</strong>`;
+      if(current.explanation && (settings.showExpOnCorrect || current.status==='incorrect')){
+        feedback.innerHTML += `<div class="muted" style="margin-top:6px;"><em>Explanation:</em> ${escapeHTML(current.explanation)}</div>`;
+      }
+    } else { clearFeedback(); }
+
+    qStart = performance.now();
+  }
+
+  function clearFeedback(){ feedback.textContent=''; }
+  function advance(){ if(pos < deck.length-1){ pos++; selected=null; render(); } else { endQuiz(); } }
+  function endQuiz(){ clearInterval(timerId); timerId=null; timerEl.textContent='Done'; setDisabled(nextBtn,true); setDisabled(submitBtn,true); buildSummary(); activate('review'); }
+
+  function tickTimer(){
+    if(!endTime) return;
+    const remain=endTime-Date.now();
+    if(remain<=0){ timerEl.textContent='Time up'; timeUp(); return; }
+    const secs=Math.ceil(remain/1000); const m=Math.floor(secs/60); const s=secs%60;
+    timerEl.textContent=`${m}:${String(s).padStart(2,'0')}`;
+  }
+  function timeUp(){ clearInterval(timerId); timerId=null; setDisabled(submitBtn,true); setDisabled(nextBtn,true); endQuiz(); }
+
+  // ---------- Events ----------
+  // File upload still supported if you want to override the built-in bank
+  fileInput.addEventListener('change', async (e)=>{
+    const file=e.target.files?.[0]; bank=[]; setDisabled(startBtn,true); setDisabled(saveMissedBtn,true);
+    if(!file){ quizPanel.style.display='none'; return; }
+    const text = await file.text(); const rows = csvParse(text); const cleaned=[];
+    for(const r of rows){
+      if(r.length < 5) continue;
+      const [qRaw, correct, w1, w2, w3] = r.slice(0,5).map(c=> (c??'').trim());
+      if(!qRaw || !correct) continue;
+      let explanation = (r[5]??'').trim();
+      let difficulty = (r[6]??'').trim().toLowerCase();
+      let qParsed = parseDifficultyFromQuestion(qRaw);
+      if(!difficulty && qParsed.difficulty) difficulty = qParsed.difficulty;
+      const question = qParsed.clean;
+      cleaned.push({ question, correct, wrongs:[w1,w2,w3], explanation, difficulty: ['easy','medium','hard'].includes(difficulty)? difficulty : null });
+    }
+    bank = cleaned; setDisabled(startBtn, bank.length===0); setDisabled(saveMissedBtn, bank.length===0); quizPanel.style.display='none'; feedback.textContent='';
+  });
+
+  startBtn.addEventListener('click', ()=>{
+    if(!bank.length) return; resetRuntime();
+    const mins = parseInt(timeLimit.value,10) || 0;
+    if(mins>0){ endTime = Date.now()+mins*60*1000; tickTimer(); timerId=setInterval(tickTimer, 250); }
+    else { endTime=null; timerEl.textContent='No timer'; clearInterval(timerId); timerId=null; }
+  });
+
+  submitBtn.addEventListener('click', ()=>{
+    const current = deck[ order[pos] ]; if(!current || selected==null) return;
+    current.userAnswer = selected; current.status = (selected===current.correct) ? 'correct' : 'incorrect';
+    current.timeMs += (performance.now()-qStart);
+
+    feedback.innerHTML = current.status==='correct'
+      ? `<span class='ok'>Correct.</span>`
+      : `<span class='bad'>Incorrect.</span> Correct answer: <strong>${current.correct}</strong>`;
+    if(current.explanation && (settings.showExpOnCorrect || current.status==='incorrect')){
+      feedback.innerHTML += `<div class="muted" style="margin-top:6px;"><em>Explanation:</em> ${escapeHTML(current.explanation)}</div>`;
+    }
+
+    const stats = loadJSON('qf:stats', {});
+    const key = hashKey(current);
+    stats[key] = { lastResult: current.status, lastSeen: Date.now() };
+    saveJSON('qf:stats', stats);
+
+    setDisabled(submitBtn,true); setDisabled(nextBtn,false);
+  });
+
+  nextBtn.addEventListener('click', advance);
+  finishBtn.addEventListener('click', endQuiz);
+
+  saveMissedBtn.addEventListener('click', ()=>{
+    if(!bank.length) return;
+    const source = deck.length? deck : bank.map((q,idx)=>({idx, ...q, status:'unsubmitted'}));
+    const missed = source.filter(q=> q.status!=='correct');
+    const rows = missed.map(q=> [q.question, q.correct, q.wrongs?.[0]??'', q.wrongs?.[1]??'', q.wrongs?.[2]??'', q.explanation??'', q.difficulty??''] );
+    const fname = `quizforge_missed_${nowStamp()}.csv`; downloadCSV(rows, fname);
+  });
+
+  clearHistoryBtn.addEventListener('click', ()=>{ localStorage.removeItem('qf:sessions'); renderHistory(); });
+
+  // settings hooks
+  showExplanationOnCorrect.addEventListener('change', ()=>{ settings.showExpOnCorrect = showExplanationOnCorrect.checked; });
+  spacedMode.addEventListener('change', ()=>{ settings.spacedMode = spacedMode.checked; });
+
+  // ---------- Review & Stats ----------
+  function buildSummary(){
+    let correct=0, incorrect=0, total=deck.length, sumMs=0, bestStreak=0, currentStreak=0;
+    const missed=[];
+    deck.forEach(q=>{
+      if(q.status==='correct'){ correct++; currentStreak++; bestStreak=Math.max(bestStreak,currentStreak); }
+      else { incorrect++; currentStreak=0; missed.push(q); }
+      sumMs += q.timeMs||0;
+    });
+    const percent = total? (100*correct/total): 0;
+    const avgSecs = total? (sumMs/total/1000): 0;
+
+    statsEl.innerHTML = `
+      <div><strong>Total:</strong> ${total}</div>
+      <div><strong>Correct:</strong> ${correct}</div>
+      <div><strong>Incorrect:</strong> ${incorrect}</div>
+      <div><strong>Score:</strong> ${percent.toFixed(1)}%</div>
+      <div><strong>Best Streak:</strong> ${bestStreak}</div>
+      <div><strong>Avg time/Q:</strong> ${avgSecs.toFixed(1)}s</div>
+    `;
+
+    setDisabled(retakeMissedBtn, missed.length===0);
+    setDisabled(downloadMissedBtn, false);
+
+    reviewTableBody.innerHTML = '';
+    deck.forEach((q,i)=>{
+      const tr=document.createElement('tr');
+      tr.innerHTML = `
+        <td>${i+1}</td>
+        <td>${escapeHTML(q.question)}</td>
+        <td>${escapeHTML(q.userAnswer??'')}</td>
+        <td>${escapeHTML(q.correct)}</td>
+        <td>${q.status==='correct'? '<span class="ok">✔</span>':'<span class="bad">✖</span>'}</td>
+        <td>${escapeHTML(q.explanation||'')}</td>
+        <td>${q.difficulty? `<span class="pill ${q.difficulty}">${q.difficulty.toUpperCase()}</span>`:''}</td>
+      `;
+      reviewTableBody.appendChild(tr);
+    });
+
+    const data = { labels:['Correct','Incorrect'], datasets:[{ data:[correct,incorrect] }] };
+    if(summaryChart){ summaryChart.destroy(); }
+    summaryChart = new Chart(summaryChartEl, { type:'doughnut', data, options:{ plugins:{ legend:{display:true} } } });
+
+    pushHistory({ ts: Date.now(), total, correct, percent, avgSecs, diff: diffFilter.value });
+    renderHistory();
+
+    retakeMissedBtn.onclick = ()=>{
+      const missedDeck = deck.filter(q=> q.status!=='correct').map(q=> ({...q, status:'unsubmitted', userAnswer:null, timeMs:0}));
+      if(!missedDeck.length) return;
+      deck = missedDeck; order=[...deck.keys()]; order = shuffle(order); pos=0; selected=null; clearFeedback(); activate('study'); quizPanel.style.display='block'; render();
+    };
+    downloadMissedBtn.onclick = ()=>{
+      const rows = deck.filter(q=> q.status!=='correct').map(q=> [q.question, q.correct, q.wrongs?.[0]??'', q.wrongs?.[1]??'', q.wrongs?.[2]??'', q.explanation??'', q.difficulty??''] );
+      const fname = `quizforge_missed_${nowStamp()}.csv`; downloadCSV(rows, fname);
+    };
+  }
+
+  // ---------- Keyboard shortcuts ----------
+  window.addEventListener('keydown', (ev)=>{
+    if(!sections.study.classList.contains('active')) return;
+    const k = ev.key;
+    if(['1','2','3','4'].includes(k)){
+      const idx = Number(k)-1; const nodes=[...choicesEl.querySelectorAll('.choice')];
+      if(nodes[idx]){ nodes[idx].click(); ev.preventDefault(); }
+    } else if(k==='Enter'){
+      if(!submitBtn.disabled){ submitBtn.click(); ev.preventDefault(); }
+    } else if(k==='ArrowRight'){
+      if(!nextBtn.disabled){ nextBtn.click(); ev.preventDefault(); }
+    }
+  });
+
+})();
+</script>
+</body>
+</html>
