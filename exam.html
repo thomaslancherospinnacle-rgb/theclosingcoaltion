@@ -198,7 +198,7 @@
         <div class="brand">
           <div class="dot"></div>
           <div>
-            <div class="title">Closing Coalition — Exam</div>
+            <div class="title"> Coalition — Exam</div>
             <div class="sub">Select exam • select question count • click answers • instant explanation • uploads best result</div>
           </div>
         </div>
@@ -286,7 +286,7 @@
 /**********************
  * CONFIG (REPLACE THIS)
  **********************/
-const CLOUD_FLARE_URL = "https://closing-coalition-api.thomaslancheros06.workers.dev/"; // <-- replace with your Worker URL or API proxy URL
+const CLOUD_FLARE_URL = "https://closing-coalition-api.thomaslancheros06.workers.dev"; // <-- replace with your Worker URL or API proxy URL
 // Expected actions on backend: me, logout, saveExamResult
 
 /**********************
@@ -666,17 +666,6 @@ async function finishExam(){
 
   const score_pct = total ? Math.round((correct / total) * 100) : 0;
   const pct = total ? Math.round((correct / total) * 1000) / 10 : 0;
-
-  // ✅ SAVE BEST RESULT (Sheets)
-  const token = localStorage.getItem("cc_token");
-  if (token) {
-    api("saveBestExam", {
-      token,
-      score_pct,
-      time_sec
-    }).catch(() => {});
-  }
-
   examArea.style.display = "none";
   doneArea.style.display = "";
 
@@ -704,9 +693,12 @@ async function finishExam(){
   uploadPill.className = "badge";
 
   try{
-    // This action must exist in your backend:
-    // handleSaveExamResult({token, pct, time_sec, exam_code})
-    await api("saveExamResult", { token: getToken(), pct, time_sec, exam_code: code });
+    await api("saveBestExam", {
+      token: getToken(),
+      exam: examSelect.value,   // MI or TN
+      score_pct,
+      time_sec
+    });
     uploadPill.textContent = "Saved (if better than previous)";
     uploadPill.className = "badge ok";
   } catch(e){
