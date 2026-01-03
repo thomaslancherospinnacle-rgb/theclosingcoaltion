@@ -1800,7 +1800,7 @@ window.MI_EXAM_QUESTIONS = [
     ]
   },
   {
-    "question": "A medical bill is $4,000 with a $500 deductible and 20% coinsurance. How much does the insured pay under this plan?",
+    "question": "A medical bill is $4,000 with a $500 deductible that has been met and 20% coinsurance. How much does the insured pay under this plan?",
     "correct": "$800",
     "explanation": "After meeting the deductible, the insured pays 20% of the covered costs; the example yields an $800 out-of-pocket share.",
     "difficulty": "hard",
