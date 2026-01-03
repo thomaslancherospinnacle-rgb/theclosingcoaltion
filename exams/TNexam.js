@@ -1,5 +1,5 @@
 window.TN_EXAM_QUESTIONS = [
-{
+  {
     "question": "Which of the following is an unfair trade practice under Tennessee insurance laws that could subject a producer to disciplinary action?",
     "correct": "Promising a prospective client that a specific claim will be paid before underwriting is complete",
     "explanation": "Under Tennessee’s Unfair Trade Practices Act, misrepresentations or false statements about policy coverage are prohibited.  Telling a consumer that a claim will be paid without underwriting is a misrepresentation because the producer does not yet know whether the risk will be accepted.  Offering small promotional gifts within statutory limits, explaining coverage in plain language and declining to write high‑risk business based on sound underwriting are all permitted.",
@@ -8,8 +8,9 @@ window.TN_EXAM_QUESTIONS = [
       "Offering a promotional gift valued at $20 for a referral",
       "Explaining policy benefits in simple terms",
       "Refusing to issue a policy to a high‑risk applicant based on valid underwriting guidelines"
-    ],
-{
+    ]
+  },
+  {
     "question": "Under Tennessee law, how long must an insurance producer maintain client and transaction records after a policy terminates or a transaction is completed?",
     "correct": "At least five years",
     "explanation": "Tennessee regulations require insurers, general agents and producers to keep records used in insurance transactions for at least five years after the policy terminates or the transaction is completed.  These records must be available to the commissioner for market conduct examinations.  Keeping records for three, six or seven years is not sufficient under the Tennessee rules.",
@@ -18,8 +19,9 @@ window.TN_EXAM_QUESTIONS = [
       "Three years",
       "Six years",
       "Seven years"
-    ],
-{
+    ]
+  },
+  {
     "question": "Under Tennessee insurance law, which of the following practices constitutes rebating and is prohibited for producers?",
     "correct": "Refunding part of the producer’s commission to the client as an incentive to buy a policy",
     "explanation": "Rebating occurs when a producer offers or returns any portion of the premium, commission or other valuable consideration to induce the purchase of an insurance policy.  Tennessee law specifically prohibits offering to refund part of the producer’s commission as an inducement.  Adjusting premiums based on the insured’s risk profile is legal underwriting, and giving small promotional items is permitted if their value is within statutory limits.",
@@ -28,8 +30,9 @@ window.TN_EXAM_QUESTIONS = [
       "Offering a client a discount on premiums for maintaining a good driving record",
       "Providing a small promotional item such as a calendar",
       "Adjusting premiums based on the insured’s risk profile"
-    ],
-{
+    ]
+  },
+  {
     "question": "Which statement about the fiduciary responsibilities of Tennessee insurance producers is true?",
     "correct": "Producers must hold clients’ premium funds in a fiduciary (trust) capacity and may not use them for personal expenses",
     "explanation": "Tennessee law requires producers to treat premium funds as trust funds.  Money received for soliciting, negotiating or selling insurance must be held in a fiduciary capacity and cannot be commingled or misappropriated.  This duty applies to all lines of insurance, not just life insurance, and producers must provide an accounting of funds upon request.",
@@ -38,8 +41,9 @@ window.TN_EXAM_QUESTIONS = [
       "Producers may commingle client funds with business funds if records are kept",
       "Fiduciary responsibility applies only to life insurance policies",
       "Producers need not account for client funds unless specifically asked"
-    ],
-{
+    ]
+  },
+  {
     "question": "Which scenario describes the unfair trade practice known as twisting?",
     "correct": "A producer persuades a client to replace an existing policy with a new one by providing misleading information about the current policy",
     "explanation": "Twisting is the practice of inducing a policyholder to replace an existing policy with a new one through misrepresentation.  The agent typically emphasizes perceived deficiencies in the current contract or misstates benefits of the new contract in order to earn a new commission.  Recommending additional coverage or a replacement that truly improves coverage is not twisting.",
@@ -48,8 +52,9 @@ window.TN_EXAM_QUESTIONS = [
       "A producer encourages a client to purchase additional coverage for their home",
       "A producer replaces a policy with one that provides significantly better coverage",
       "A producer suggests moving to another insurer for a better premium rate without misrepresentation"
-    ],
-{
+    ]
+  },
+  {
     "question": "Which of the following is considered misrepresentation and thus an unfair trade practice under Tennessee law?",
     "correct": "Falsely stating that a policy includes coverage that it does not provide",
     "explanation": "Misrepresentation involves providing false or misleading information about a policy’s benefits, conditions or terms.  Claiming a policy covers something when it does not is a clear example.  Offering small promotional gifts, speaking truthfully about a competitor’s policy and recommending additional coverage based on a client’s needs are allowed practices.",
@@ -58,8 +63,9 @@ window.TN_EXAM_QUESTIONS = [
       "Offering a client a promotional gift valued at $15",
       "Providing truthful information about a competitor’s policy",
       "Recommending additional coverage based on a client’s risk profile"
-    ],
-{
+    ]
+  },
+  {
     "question": "After an insurance producer mistakenly records a client’s age incorrectly on a life application, resulting in a lower premium, what will the insurer typically do when the error is discovered?",
     "correct": "Adjust the death benefit to reflect the premium actually paid",
     "explanation": "Life policies contain a misstatement‑of‑age clause.  If the insured’s age was misstated, the insurer will adjust the death benefit to the amount that the paid premium would have purchased at the correct age.  Policies are not cancelled solely for an honest age mistake, and producers are not personally required to pay the difference or bill the client retroactively.",
@@ -68,8 +74,9 @@ window.TN_EXAM_QUESTIONS = [
       "Cancel the policy and refund the premiums",
       "Require the producer to pay the premium difference",
       "Retroactively bill the client for the difference in premiums"
-    ],
-{
+    ]
+  },
+  {
     "question": "Sarah bought a health insurance policy in Tennessee.  Two months later she is diagnosed with a condition she had before purchasing the policy.  Her insurer refuses to pay for treatment, citing a pre‑existing condition clause.  Is this denial valid?",
     "correct": "No, insurers cannot deny claims for pre‑existing conditions once a policy is in effect",
     "explanation": "Under the Affordable Care Act and Tennessee regulations, health insurers cannot deny coverage or charge higher premiums because of a pre‑existing condition.  Once a major medical policy is issued and active, the insurer must cover the insured’s medical needs, even if the condition existed before the effective date.  Coverage may be denied only if the insured failed to disclose the condition fraudulently or the plan is a grandfathered policy not subject to the ACA.",
@@ -78,8 +85,9 @@ window.TN_EXAM_QUESTIONS = [
       "Yes, the denial is valid because the condition existed before the policy was issued",
       "Yes, if Sarah failed to disclose the condition on her application",
       "No, because Tennessee requires a six‑month waiting period before denying such claims"
-    ],
-{
+    ]
+  },
+  {
     "question": "How often must Tennessee insurance producers renew their licenses?",
     "correct": "Every two years",
     "explanation": "Tennessee insurance producers must renew their licenses every two years.  As part of the renewal process, producers must complete the required continuing education credits and file for renewal before the expiration date.  Renewal periods of one, three and five years do not apply.",
@@ -88,8 +96,9 @@ window.TN_EXAM_QUESTIONS = [
       "Every year",
       "Every three years",
       "Every five years"
-    ],
-{
+    ]
+  },
+  {
     "question": "Which of the following would not be considered rebating or an illegal inducement under Tennessee insurance law?",
     "correct": "Providing a client with educational brochures about insurance products",
     "explanation": "Rebating involves offering any value not stated in the policy to induce someone to purchase insurance.  Educational materials that merely describe products are not considered valuable inducements.  Offering discounts, gift cards or waiving the first premium to induce a sale would constitute illegal rebating.",
@@ -98,8 +107,9 @@ window.TN_EXAM_QUESTIONS = [
       "Offering a client a discount on premiums if they purchase a policy",
       "Giving a client a $50 gift card as an incentive to purchase a policy",
       "Waiving the first month’s premium to close a sale"
-    ],
-{
+    ]
+  },
+  {
     "question": "How many continuing education (CE) hours must a licensed Tennessee insurance producer complete every two years?",
     "correct": "Twenty‑four hours, including at least three hours of ethics",
     "explanation": "Tennessee insurance producers must complete 24 hours of continuing education during each two‑year renewal cycle.  At least three of these hours must be in ethics.  Twelve and fifteen hours are insufficient, while 30 hours exceed the statutory requirement.",
@@ -108,8 +118,9 @@ window.TN_EXAM_QUESTIONS = [
       "Twelve hours",
       "Fifteen hours",
       "Thirty hours"
-    ],
-{
+    ]
+  },
+  {
     "question": "What is the free‑look period for life insurance policies in Tennessee?",
     "correct": "Ten days from receipt of the policy",
     "explanation": "In Tennessee, life insurance purchasers have at least 10 days (and sometimes longer under certain policies) to review the policy and cancel it for a full refund without penalty.  Fifteen‑, twenty‑ and thirty‑day periods are longer than the statutory minimum, but the question asks for the minimum period.",
@@ -118,8 +129,9 @@ window.TN_EXAM_QUESTIONS = [
       "Fifteen days",
       "Twenty days",
       "Thirty days"
-    ],
-{
+    ]
+  },
+  {
     "question": "Which of the following is required to obtain an insurance adjuster license in Tennessee?",
     "correct": "Passing a licensing examination",
     "explanation": "To become a licensed insurance adjuster in Tennessee, an applicant must pass the appropriate licensing exam, meet any pre‑licensing education requirements, complete an application and pay the required fees.  A college degree, years of experience or a recommendation from an insurer are not mandated by law.",
@@ -128,8 +140,9 @@ window.TN_EXAM_QUESTIONS = [
       "Holding a bachelor’s degree in business or finance",
       "Having a minimum of three years of insurance experience",
       "Obtaining a recommendation from an insurance company"
-    ],
-{
+    ]
+  },
+  {
     "question": "What penalties may the Tennessee insurance commissioner impose on a producer who engages in unfair or deceptive practices?",
     "correct": "The commissioner may suspend, revoke or refuse the producer’s license and/or impose civil fines",
     "explanation": "If a producer violates Tennessee insurance laws — including committing unfair trade practices — the commissioner may place the producer on probation, suspend or revoke the license, refuse to issue or renew it, and impose civil penalties.  Often the commissioner employs a combination of these remedies to protect consumers and enforce compliance.",
@@ -138,222 +151,217 @@ window.TN_EXAM_QUESTIONS = [
       "Only suspend the producer’s license",
       "Only revoke the license without fines",
       "Only issue a warning with no further consequences"
-    ],
-{
+    ]
+  },
+  {
     "question": "Which of the following is an action the Tennessee Commissioner of Insurance may take upon finding that an insurance producer has violated insurance laws?",
     "correct": "Suspend or revoke the producer’s license (after proper notice and hearing).",
-    "explanation": "The Commissioner has broad authority to enforce the insurance laws. This includes placing a producer on probation, suspending or revoking the license, or imposing civil penalties, but always in accordance with due process (notice and opportunity for a hearing):contentReference[oaicite:0]{index=0}:contentReference[oaicite:1]{index=1}. The Commissioner cannot directly imprison individuals or change contract terms – criminal penalties would be handled by the courts, not the Commissioner.",
+    "explanation": "The Commissioner has broad authority to enforce the insurance laws. This includes placing a producer on probation, suspending or revoking the license, or imposing civil penalties, but always in accordance with due process (notice and opportunity for a hearing). The Commissioner cannot directly imprison individuals or change contract terms – criminal penalties would be handled by the courts, not the Commissioner.",
     "difficulty": "medium",
     "wrongs": [
       "Impose imprisonment of the producer for up to one year.",
       "Unilaterally change the terms of the producer’s insurance contracts.",
       "Grant the producer immunity from any future violations."
-    ],
-{
+    ]
+  },
+  {
     "question": "Under Tennessee law, what is the maximum civil penalty **per violation** the Commissioner may impose for a knowing (willful) violation of an insurance statute or rule?",
     "correct": "$25,000 per violation.",
-    "explanation": "For unintentional violations, Tennessee law allows fines up to $1,000 per violation (capped at $100,000 total). However, if a person knowingly violates an insurance law or order, the Commissioner can impose up to $25,000 for each violation, with an aggregate limit of $250,000:contentReference[oaicite:2]{index=2}.",
+    "explanation": "For unintentional violations, Tennessee law allows fines up to $1,000 per violation (capped at $100,000 total). However, if a person knowingly violates an insurance law or order, the Commissioner can impose up to $25,000 for each violation, with an aggregate limit of $250,000.",
     "difficulty": "hard",
     "wrongs": [
       "$1,000 per violation.",
       "$5,000 per violation.",
       "$50,000 per violation."
-    ],
-{
+    ]
+  },
+  {
     "question": "In Tennessee, an \"insurance producer\" is best defined as:",
     "correct": "A person (individual or business entity) required to be licensed to sell, solicit, or negotiate insurance.",
-    "explanation": "Tennessee uses the term *insurance producer* to refer to anyone who must be licensed to sell, solicit, or negotiate insurance products in the state:contentReference[oaicite:3]{index=3}. This includes traditional agents (and brokers), and can include business entities (agencies) acting through designated individuals. Insurers themselves are separate entities and clients who purchase insurance are not \"producers.\"",
+    "explanation": "Tennessee uses the term *insurance producer* to refer to anyone who must be licensed to sell, solicit, or negotiate insurance products in the state. This includes traditional agents (and brokers), and can include business entities (agencies) acting through designated individuals. Insurers themselves are separate entities and clients who purchase insurance are not \"producers.\"",
     "difficulty": "easy",
     "wrongs": [
       "An insurance company authorized to sell policies in Tennessee.",
       "Any person who purchases an insurance policy for another party.",
       "A clerical employee in an insurance agency who does not need a license."
-    ],
-{
+    ]
+  },
+  {
     "question": "What is a consequence if a Tennessee-licensed producer sells insurance for an insurer that is not authorized (an **unauthorized insurer**) in Tennessee?",
     "correct": "The producer can be held personally liable for any premiums and unpaid claims on policies sold for the unauthorized insurer.",
-    "explanation": "Transacting business with an unauthorized (non-admitted) insurer is illegal. Tennessee law makes a person who sells or aids such unauthorized insurance personally liable for the premiums collected and for valid claims under those contracts:contentReference[oaicite:4]{index=4}. This deters producers from placing business with insurers that have not been licensed or approved in the state. Such policies are not protected by Tennessee insurance regulations or guaranty associations.",
+    "explanation": "Transacting business with an unauthorized (non-admitted) insurer is illegal. Tennessee law makes a person who sells or aids such unauthorized insurance personally liable for the premiums collected and for valid claims under those contracts. This deters producers from placing business with insurers that have not been licensed or approved in the state. Such policies are not protected by Tennessee insurance regulations or guaranty associations.",
     "difficulty": "medium",
     "wrongs": [
       "The state guaranty association will pay the claims instead of the insurer.",
       "There is no penalty as long as the client agrees in writing to use a non-admitted insurer.",
       "Only the insurer is penalized; the producer faces no consequences."
-    ],
-{
+    ]
+  },
+  {
     "question": "Which of the following is a requirement to obtain a resident insurance **producer license** in Tennessee?",
     "correct": "Be at least 18 years of age and successfully pass the required licensing examination.",
-    "explanation": "To earn a resident producer license in Tennessee, an applicant must meet general requirements of the Tennessee Insurance Producer Licensing Act. Key requirements include being at least 18 years old, establishing Tennessee residency, completing any required prelicensing education (for certain lines), and passing the state licensing exam:contentReference[oaicite:5]{index=5}. (Additional steps include submitting an application, fees, and fingerprints for a background check.) There is no college-degree requirement, and insurer appointments are obtained *after* licensure, not before.",
+    "explanation": "To earn a resident producer license in Tennessee, an applicant must meet general requirements of the Tennessee Insurance Producer Licensing Act. Key requirements include being at least 18 years old, establishing Tennessee residency, completing any required prelicensing education (for certain lines), and passing the state licensing exam. (Additional steps include submitting an application, fees, and fingerprints for a background check.) There is no college-degree requirement, and insurer appointments are obtained *after* licensure, not before.",
     "difficulty": "easy",
     "wrongs": [
       "Hold an associate’s or bachelor’s degree in insurance or a related field.",
       "Already be appointed by an insurance company at the time of license application.",
       "Be a United States citizen (green card holders or legal residents are not eligible)."
-    ],
-{
+    ]
+  },
+  {
     "question": "Which statement is true about **nonresident** producer licensing in Tennessee?",
     "correct": "A nonresident licensed in good standing in their home state can obtain a Tennessee producer license without taking the TN exam.",
-    "explanation": "Tennessee, like other states, grants nonresident producer licenses by reciprocity. If you are licensed and in good standing as a producer in your home state, you may apply for a nonresident TN license for the same lines of authority without having to retake an examination:contentReference[oaicite:6]{index=6}. Nonresidents must still apply and pay fees, but they are not required to maintain a physical office in Tennessee. Their license term and obligations (such as renewals) are similar to residents, but they generally satisfy CE requirements via their home state.",
+    "explanation": "Tennessee, like other states, grants nonresident producer licenses by reciprocity. If you are licensed and in good standing as a producer in your home state, you may apply for a nonresident TN license for the same lines of authority without having to retake an examination. Nonresidents must still apply and pay fees, but they are not required to maintain a physical office in Tennessee. Their license term and obligations (such as renewals) are similar to residents, but they generally satisfy CE requirements via their home state.",
     "difficulty": "medium",
     "wrongs": [
       "Nonresident applicants must pass the Tennessee state exam for each line of authority.",
       "Nonresidents must maintain a principal place of business in Tennessee to be licensed.",
       "Tennessee does not grant nonresident insurance licenses (only residents can be licensed)."
-    ],
-{
+    ]
+  },
+  {
     "question": "How long is a **temporary insurance producer license** valid in Tennessee, and who may receive one?",
     "correct": "It is valid for up to 180 days and is issued to someone like a surviving spouse, business partner, or court-appointed representative of a disabled or deceased producer to service the insurance business.",
-    "explanation": "The Commissioner may issue a temporary producer license for a period not exceeding 180 days (approximately six months):contentReference[oaicite:7]{index=7}. No exam is required for a temporary license. It is typically granted to an appropriate individual (for example, the spouse or personal representative of a deceased or incapacitated agent, or a designee when an agent is called to active military service) so that they can continue servicing or wind down the existing insurance business. Temporary licenses are strictly limited in scope and duration, and the Commissioner can revoke a temporary license if it’s not in the public interest.",
+    "explanation": "The Commissioner may issue a temporary producer license for a period not exceeding 180 days (approximately six months). No exam is required for a temporary license. It is typically granted to an appropriate individual (for example, the spouse or personal representative of a deceased or incapacitated agent, or a designee when an agent is called to active military service) so that they can continue servicing or wind down the existing insurance business. Temporary licenses are strictly limited in scope and duration, and the Commissioner can revoke a temporary license if it’s not in the public interest.",
     "difficulty": "medium",
     "wrongs": [
       "It is valid for 90 days and can be given to any new trainee agent to start selling insurance immediately.",
       "It remains in effect until the person passes the licensing exam (no time limit specified).",
       "It lasts one year and is available to anyone who fails the exam but wants to sell insurance temporarily."
-    ],
-{
+    ]
+  },
+  {
     "question": "How many **continuing education (CE)** credits must a Tennessee insurance producer complete to renew their license?",
     "correct": "24 credit hours of approved continuing education every two years (biennially), including at least 3 hours of ethics courses.",
-    "explanation": "Tennessee producers must fulfill ongoing education to keep their knowledge current. The requirement is 24 hours of continuing education each two-year license cycle. Within those 24 hours, at least 3 hours must be on ethics topics:contentReference[oaicite:8]{index=8}. (Certain specialized training, such as a one-time annuity suitability course or long-term care partnership training, may also be required if selling those products. Nonresident agents are generally exempt from TN’s CE if they meet their home state’s CE.)",
+    "explanation": "Tennessee producers must fulfill ongoing education to keep their knowledge current. The requirement is 24 hours of continuing education each two-year license cycle. Within those 24 hours, at least 3 hours must be on ethics topics. (Certain specialized training, such as a one-time annuity suitability course or long-term care partnership training, may also be required if selling those products. Nonresident agents are generally exempt from TN’s CE if they meet their home state’s CE.)",
     "difficulty": "easy",
     "wrongs": [
       "20 hours of CE every year, including 10 hours of ethics.",
       "No continuing education is required for license renewal in Tennessee.",
       "30 hours of CE every two years, with no specific subject requirements."
-    ],
-{
+    ]
+  },
+  {
     "question": "Which of the following could result in the Commissioner **suspending an insurance producer’s license** in Tennessee?",
     "correct": "The producer has been officially reported for failing to pay court-ordered child support.",
-    "explanation": "Besides insurance law violations, certain other offenses can trigger license suspension. Under Tennessee law, if a licensee is delinquent on child support, their professional license (including an insurance producer license) can be suspended after due notice from the child support enforcement authorities:contentReference[oaicite:9]{index=9}. This is an enforcement mechanism to encourage payment of support. Other causes for suspension or revocation include misrepresentation, fraud, felony conviction, etc., but not things like personal bankruptcy or missing sales targets (those are not legal violations).",
+    "explanation": "Besides insurance law violations, certain other offenses can trigger license suspension. Under Tennessee law, if a licensee is delinquent on child support, their professional license (including an insurance producer license) can be suspended after due notice from the child support enforcement authorities. This is an enforcement mechanism to encourage payment of support. Other causes for suspension or revocation include misrepresentation, fraud, felony conviction, etc., but not things like personal bankruptcy or missing sales targets (those are not legal violations).",
     "difficulty": "medium",
     "wrongs": [
       "The producer filed personal bankruptcy last year.",
       "The producer did not meet the insurer’s monthly sales quota.",
       "The producer’s client filed a single complaint (with no finding of wrongdoing)."
-    ],
-{
+    ]
+  },
+  {
     "question": "Misappropriating or improperly withholding **premiums** that a client paid is an example of what, in terms of license discipline in Tennessee?",
     "correct": "An act that is grounds for license revocation or suspension by the Commissioner.",
-    "explanation": "Failing to properly remit client premiums (i.e., pocketing or misusing insurance premiums) is a serious violation. Tennessee law explicitly lists \"improperly withholding, misappropriating or converting\" money received in the course of insurance business as a cause for license suspension or revocation:contentReference[oaicite:10]{index=10}. This fiduciary duty is taken very seriously. Such an act would be considered an unlawful misappropriation of funds, and the Commissioner can revoke the producer’s license for it. (It may also carry legal penalties for fraud.)",
+    "explanation": "Failing to properly remit client premiums (i.e., pocketing or misusing insurance premiums) is a serious violation. Tennessee law explicitly lists \"improperly withholding, misappropriating or converting\" money received in the course of insurance business as a cause for license suspension or revocation. This fiduciary duty is taken very seriously. Such an act would be considered an unlawful misappropriation of funds, and the Commissioner can revoke the producer’s license for it. (It may also carry legal penalties for fraud.)",
     "difficulty": "easy",
     "wrongs": [
       "A legal practice allowed if the producer corrects it within 30 days.",
       "An unfair claims practice but not related to licensing (handled only by courts).",
       "A minor violation that typically only results in a warning on first offense."
-    ],
-{
+    ]
+  },
+  {
     "question": "If the Commissioner decides to revoke or suspend a producer’s license for misconduct, what procedural right does the producer have under Tennessee law?",
     "correct": "The right to written notice of the charges and an opportunity for a **hearing** under the Uniform Administrative Procedures Act before the action is taken.",
-    "explanation": "An insurance producer facing license revocation or suspension is entitled to due process. In Tennessee, any such disciplinary action must comply with the state’s Uniform Administrative Procedures Act, meaning the producer gets notice of the allegations and a chance for a hearing (a contested case hearing):contentReference[oaicite:11]{index=11}. Only after this can the Commissioner take final action. This protects the producer’s right to defend themselves. (There are some exceptions, like immediate suspension in child support cases or imminent harm situations, but even then a prompt post-suspension hearing is provided.)",
+    "explanation": "An insurance producer facing license revocation or suspension is entitled to due process. In Tennessee, any such disciplinary action must comply with the state’s Uniform Administrative Procedures Act, meaning the producer gets notice of the allegations and a chance for a hearing (a contested case hearing). Only after this can the Commissioner take final action. This protects the producer’s right to defend themselves. (There are some exceptions, like immediate suspension in child support cases or imminent harm situations, but even then a prompt post-suspension hearing is provided.)",
     "difficulty": "medium",
     "wrongs": [
       "None – the Commissioner may revoke a license at will, without prior notice.",
       "The producer can only appeal *after* the license has been revoked, with no prior hearing.",
       "The producer must petition the state legislature for reinstatement, as no administrative hearing is offered."
-    ],
-{
+    ]
+  },
+  {
     "question": "An insurance agent in Tennessee offers a $100 gift card to a client as an incentive for purchasing a life insurance policy. Which **unfair trade practice** does this scenario describe?",
     "correct": "Rebating.",
-    "explanation": "Rebating is the practice of offering something of value not specified in the policy (such as cash, gifts, or a portion of the agent’s commission) to induce someone to buy insurance. Tennessee, like all states, prohibits rebating:contentReference[oaicite:12]{index=12}:contentReference[oaicite:13]{index=13}. In this scenario, the $100 gift card is a valuable consideration not stated in the policy, offered as an inducement to purchase – that is a classic example of rebating, which is illegal. (Coercion involves force or threats, and defamation involves false statements about an insurer; those don’t apply here.)",
+    "explanation": "Rebating is the practice of offering something of value not specified in the policy (such as cash, gifts, or a portion of the agent’s commission) to induce someone to buy insurance. Tennessee, like all states, prohibits rebating. In this scenario, the $100 gift card is a valuable consideration not stated in the policy, offered as an inducement to purchase – that is a classic example of rebating, which is illegal. (Coercion involves force or threats, and defamation involves false statements about an insurer; those don’t apply here.)",
     "difficulty": "easy",
     "wrongs": [
       "Coercion.",
       "Twisting.",
       "Defamation."
-    ],
-{
+    ]
+  },
+  {
     "question": "A bank lender requires a borrower to buy a life insurance policy from the bank’s own affiliate as a condition for approving a loan. For insurance purposes, this practice is considered:",
     "correct": "Coercion (an unfair trade practice).",
-    "explanation": "**Coercion** (or boycott/intimidation) in insurance is forcing or unduly pressuring someone into a transaction. In Tennessee, it’s an unfair trade practice for a person or entity to use their position (like a lender’s position over a borrower) to compel the purchase of insurance from a particular source:contentReference[oaicite:14]{index=14}. Requiring the borrower to use the lender’s affiliate insurer to get the loan is coercion. (This violates the free choice of insurance and anti-tying provisions.) It’s not rebating (no gift is offered) and not discrimination in this context – it is coercive tying of insurance to a loan.",
+    "explanation": "**Coercion** (or boycott/intimidation) in insurance is forcing or unduly pressuring someone into a transaction. In Tennessee, it’s an unfair trade practice for a person or entity to use their position (like a lender’s position over a borrower) to compel the purchase of insurance from a particular source. Requiring the borrower to use the lender’s affiliate insurer to get the loan is coercion. (This violates the free choice of insurance and anti-tying provisions.) It’s not rebating (no gift is offered) and not discrimination in this context – it is coercive tying of insurance to a loan.",
     "difficulty": "medium",
     "wrongs": [
       "Legal, as long as the insurance rates are filed and approved.",
       "An example of controlled business but not an unfair practice.",
       "Rebating, since the lender is offering a loan in return for buying insurance."
-    ],
-{
+    ]
+  },
+  {
     "question": "Making or circulating false, maliciously critical statements about an insurer’s financial condition in order to harm the insurer is an example of which unfair practice?",
     "correct": "Defamation.",
-    "explanation": "In insurance, **defamation** refers to making false or derogatory statements about an insurer’s solvency, financial condition, or general reputation with the intent to injure. It is prohibited as an unfair trade practice:contentReference[oaicite:15]{index=15}. In this case, spreading malicious falsehoods about an insurer’s finances fits the definition of defamation. (False advertising usually refers to misrepresenting your own products, while defamation is about false statements regarding another company.)",
+    "explanation": "In insurance, **defamation** refers to making false or derogatory statements about an insurer’s solvency, financial condition, or general reputation with the intent to injure. It is prohibited as an unfair trade practice. In this case, spreading malicious falsehoods about an insurer’s finances fits the definition of defamation. (False advertising usually refers to misrepresenting your own products, while defamation is about false statements regarding another company.)",
     "difficulty": "easy",
     "wrongs": [
       "Misrepresentation.",
       "False advertising.",
       "Coercion."
-    ],
-{
+    ]
+  },
+  {
     "question": "Which statement about the Tennessee Life and Health Insurance **Guaranty Association** is TRUE?",
     "correct": "It is prohibited for insurance agents or companies to advertise or imply that the Guaranty Association will guarantee a policy’s benefits.",
-    "explanation": "Under Tennessee law, it is an unfair trade practice to use the existence of the Life and Health Insurance Guaranty Association as a sales inducement:contentReference[oaicite:17]{index=17}. Agents and insurers cannot advertise that the Association backs the policy’s benefits if the insurer fails. The Guaranty Association does provide a safety net (up to certain limits) for policyholders if an insurer becomes insolvent, but it is funded by assessments on insurers (not taxpayers) and has coverage limits. Importantly, consumers shouldn’t rely on or be sold insurance on the basis of this protection.",
+    "explanation": "Under Tennessee law, it is an unfair trade practice to use the existence of the Life and Health Insurance Guaranty Association as a sales inducement. Agents and insurers cannot advertise that the Association backs the policy’s benefits if the insurer fails. The Guaranty Association does provide a safety net (up to certain limits) for policyholders if an insurer becomes insolvent, but it is funded by assessments on insurers (not taxpayers) and has coverage limits. Importantly, consumers shouldn’t rely on or be sold insurance on the basis of this protection.",
     "difficulty": "medium",
     "wrongs": [
       "It is financed by state taxpayer funds to protect insureds of insolvent insurers.",
       "It guarantees all policy benefits in full, with no maximum limits.",
       "Agents are encouraged to mention the Association during sales to reassure clients."
-    ],
-{
+    ]
+  },
+  {
     "question": "What is the **minimum grace period** for a life insurance premium payment in Tennessee (after the first premium is paid)?",
     "correct": "One month (at least 30 or 31 days) after the premium due date, during which the policy stays in force.",
-    "explanation": "Tennessee law requires that life insurance policies include a grace period of one month for the payment of each premium after the first:contentReference[oaicite:18]{index=18}. In practice, one month is typically interpreted as 30 or 31 days. If the insured dies during the grace period without having paid the premium, the insurer can deduct the overdue premium from the death benefit, but coverage cannot be terminated until the grace period expires. This grace period applies to all payments after the initial premium.",
+    "explanation": "Tennessee law requires that life insurance policies include a grace period of one month for the payment of each premium after the first. In practice, one month is typically interpreted as 30 or 31 days. If the insured dies during the grace period without having paid the premium, the insurer can deduct the overdue premium from the death benefit, but coverage cannot be terminated until the grace period expires. This grace period applies to all payments after the initial premium.",
     "difficulty": "easy",
     "wrongs": [
       "10 days for all life insurance premium payments.",
       "31 days for the first premium only, and no grace period thereafter.",
       "No mandatory grace period is required by Tennessee law."
-    ],
-{
+    ]
+  },
+  {
     "question": "How long is the **free-look** (right to examine) period for a newly delivered individual life insurance policy in Tennessee?",
     "correct": "10 days from the date the policy is delivered to the policyowner.",
-    "explanation": "Tennessee regulations give life insurance buyers at least a 10-day \"free look\" period to review a new policy. If the policyowner decides to cancel within 10 days of delivery, they can return the policy for a full refund of any premium paid:contentReference[oaicite:19]{index=19}. (If the policy is a replacement, insurers often extend the free-look to 20 days by rule, to allow more caution in replacing coverage.) This free-look provision is an important consumer protection, and the policy’s cover page will state the free-look duration.",
+    "explanation": "Tennessee regulations give life insurance buyers at least a 10-day \"free look\" period to review a new policy. If the policyowner decides to cancel within 10 days of delivery, they can return the policy for a full refund of any premium paid. (If the policy is a replacement, insurers often extend the free-look to 20 days by rule, to allow more caution in replacing coverage.) This free-look provision is an important consumer protection, and the policy’s cover page will state the free-look duration.",
     "difficulty": "easy",
     "wrongs": [
       "No free-look period is required once a life insurance policy is delivered.",
       "31 days from the policy’s effective date.",
       "45 days from the application date, regardless of when it’s delivered."
-    ],
-{
+    ]
+  },
+  {
     "question": "When **replacing** an existing life insurance policy in Tennessee, which of the following is a duty of the insurance producer?",
     "correct": "Provide the applicant with a \"Notice Regarding Replacement\" (signed by both the applicant and producer) and submit a copy to the replacing insurer.",
-    "explanation": "Tennessee’s replacement rules require a producer who is involved in a policy replacement to give the applicant a signed notice explaining that a replacement is occurring and outlining the applicant’s rights and some considerations:contentReference[oaicite:20]{index=20}. The notice must be signed by both the producer and the applicant, and copies go to the applicant and the new (replacing) insurance company. The producer must also list on the application any existing policies being replaced. It is not the producer’s role to directly notify the original insurer; instead, the replacing insurer will notify the existing insurer about the replacement. Canceling the old policy should only be done after the new policy is issued and the client decides to proceed.",
+    "explanation": "Tennessee’s replacement rules require a producer who is involved in a policy replacement to give the applicant a signed notice explaining that a replacement is occurring and outlining the applicant’s rights and some considerations. The notice must be signed by both the producer and the applicant, and copies go to the applicant and the new (replacing) insurance company. The producer must also list on the application any existing policies being replaced. It is not the producer’s role to directly notify the original insurer; instead, the replacing insurer will notify the existing insurer about the replacement. Canceling the old policy should only be done after the new policy is issued and the client decides to proceed.",
     "difficulty": "medium",
     "wrongs": [
       "Personally cancel the client’s old policy as soon as the new application is signed.",
       "Assure the client that the new policy will have better terms in every respect (guaranteeing a superior policy).",
       "No special steps are required by the producer – the replacement rules apply only to insurers, not agents."
-    ],
-{
+    ]
+  },
+  {
     "question": "What is required for a producer to lawfully **sell annuity** products in Tennessee?",
     "correct": "Hold a life insurance license and complete a one-time approved training course on annuity suitability before soliciting any annuity sales.",
-    "explanation": "Fixed and indexed annuities are regulated as life insurance in Tennessee, so a producer must have a life insurance line of authority to sell them. In addition, Tennessee has adopted the NAIC Suitability in Annuity Transactions Model regulation. This means producers must complete a one-time annuity training course (typically 4 hours covering annuity types, suitability, and disclosures) before selling annuities:contentReference[oaicite:21]{index=21}. The producer also has to follow suitability guidelines – i.e., gather the client’s financial information and ensure any annuity recommendation is in the client’s best interest. (A securities license is only required for **variable** annuities, not for fixed or indexed annuities.)",
+    "explanation": "Fixed and indexed annuities are regulated as life insurance in Tennessee, so a producer must have a life insurance line of authority to sell them. In addition, Tennessee has adopted the NAIC Suitability in Annuity Transactions Model regulation. This means producers must complete a one-time annuity training course (typically 4 hours covering annuity types, suitability, and disclosures) before selling annuities. The producer also has to follow suitability guidelines – i.e., gather the client’s financial information and ensure any annuity recommendation is in the client’s best interest. (A securities license is only required for **variable** annuities, not for fixed or indexed annuities.)",
     "difficulty": "medium",
     "wrongs": [
       "Obtain a separate \"annuities producer\" license endorsement from the Department.",
       "No special license or training – any licensed producer can sell annuities with no additional requirements.",
       "Be registered with FINRA (have a securities license) in all cases to sell any annuity product."
     ]
-},
-    {
-    "question": "What type of risk has only two possible outcomes—loss or no loss—and is insurable?",
-    "correct": "Pure risk",
-    "explanation": "Only pure risk has potential for loss or no loss and is insurable.",
-    "difficulty": "easy",
-    "wrongs": [
-      "Speculative risk",
-      "Investment risk",
-      "Moral hazard"
-    ]
   },
-  
-  {
-    "question": "The law of large numbers allows insurers to:",
-    "correct": "Predict loss by pooling similar risks",
-    "explanation": "With a large group of homogeneous exposures, insurers can predict loss experience.",
-    "difficulty": "medium",
-    "wrongs": [
-      "Eliminate risk entirely",
-      "Guarantee profit for policyholders",
-      "Invest premiums in stocks"
-    ]
-  },
-  
   {
     "question": "What type of risk has only two possible outcomes—loss or no loss—and is insurable?",
     "correct": "Pure risk",
@@ -365,7 +373,6 @@ window.TN_EXAM_QUESTIONS = [
       "Moral hazard"
     ]
   },
-  
   {
     "question": "The law of large numbers allows insurers to:",
     "correct": "Predict loss by pooling similar risks",
@@ -377,7 +384,6 @@ window.TN_EXAM_QUESTIONS = [
       "Invest premiums in stocks"
     ]
   },
-  
   {
     "question": "Insurable interest in life insurance must exist:",
     "correct": "At policy inception",
@@ -389,7 +395,6 @@ window.TN_EXAM_QUESTIONS = [
       "Only for term policies"
     ]
   },
-  
   {
     "question": "Which of the following is an example of a moral hazard?",
     "correct": "An applicant lies about their health history",
@@ -401,7 +406,6 @@ window.TN_EXAM_QUESTIONS = [
       "A factory stores flammable chemicals"
     ]
   },
-  
   {
     "question": "Which need is best addressed by family income replacement life insurance?",
     "correct": "Maintaining survivors’ standard of living",
@@ -413,7 +417,6 @@ window.TN_EXAM_QUESTIONS = [
       "Paying small emergency bills only"
     ]
   },
-  
   {
     "question": "Which type of business life insurance covers a key executive whose death would harm the company?",
     "correct": "Key person insurance",
@@ -425,7 +428,6 @@ window.TN_EXAM_QUESTIONS = [
       "Industrial life insurance"
     ]
   },
-  
   {
     "question": "A buy-sell agreement funded by life insurance is primarily designed to:",
     "correct": "Provide money for surviving owners to purchase a deceased owner’s interest",
@@ -437,7 +439,6 @@ window.TN_EXAM_QUESTIONS = [
       "Pay off the key person’s mortgage"
     ]
   },
-  
   {
     "question": "Term life insurance is best described as providing:",
     "correct": "Pure death benefit protection for a specified period",
@@ -449,7 +450,6 @@ window.TN_EXAM_QUESTIONS = [
       "Coverage that builds equity in real estate"
     ]
   },
-  
   {
     "question": "Which type of life insurance combines permanent protection with a guaranteed cash value?",
     "correct": "Whole life insurance",
@@ -461,7 +461,6 @@ window.TN_EXAM_QUESTIONS = [
       "Credit life insurance"
     ]
   },
-  
   {
     "question": "A flexible-premium policy with an adjustable death benefit and cash value tied to insurer’s general account is:",
     "correct": "Universal life insurance",
@@ -473,7 +472,6 @@ window.TN_EXAM_QUESTIONS = [
       "Industrial life"
     ]
   },
-  
   {
     "question": "Variable life insurance differs from whole life because its cash value:",
     "correct": "Is invested in separate accounts with no guaranteed return",
@@ -485,7 +483,6 @@ window.TN_EXAM_QUESTIONS = [
       "Cannot lose value"
     ]
   },
-  
   {
     "question": "Which policy type allows the policyowner to change the coverage and premium within certain limits?",
     "correct": "Adjustable life",
@@ -497,7 +494,6 @@ window.TN_EXAM_QUESTIONS = [
       "Credit life"
     ]
   },
-  
   {
     "question": "What is the primary feature of a decreasing term policy?",
     "correct": "Death benefit decreases over the policy term while premium usually stays level",
@@ -509,7 +505,6 @@ window.TN_EXAM_QUESTIONS = [
       "Cash value steadily increases"
     ]
   },
-  
   {
     "question": "Which policy is most suitable to cover a mortgage that declines over time?",
     "correct": "Decreasing term life insurance",
@@ -521,7 +516,6 @@ window.TN_EXAM_QUESTIONS = [
       "Level term life insurance"
     ]
   },
-  
   {
     "question": "Which life insurance policy is characterized by a single, lump-sum premium payment?",
     "correct": "Single premium whole life",
@@ -533,7 +527,6 @@ window.TN_EXAM_QUESTIONS = [
       "Limited pay whole life"
     ]
   },
-  
   {
     "question": "Limited-pay whole life policies are designed so that:",
     "correct": "Premiums are paid for a limited time, but coverage lasts a lifetime",
@@ -545,7 +538,6 @@ window.TN_EXAM_QUESTIONS = [
       "No cash value ever accumulates"
     ]
   },
-  
   {
     "question": "Which policy feature allows the insurer to assume that the insured’s statements are true without further investigation?",
     "correct": "Doctrine of utmost good faith",
@@ -557,7 +549,6 @@ window.TN_EXAM_QUESTIONS = [
       "Doctrine of indemnity"
     ]
   },
-  
   {
     "question": "In a life insurance policy, consideration is defined as:",
     "correct": "The premium and statements in the application",
@@ -569,7 +560,6 @@ window.TN_EXAM_QUESTIONS = [
       "The policy loan interest"
     ]
   },
-  
   {
     "question": "A contract that is one-sided, where only the insurer is legally bound, is called:",
     "correct": "Unilateral contract",
@@ -581,7 +571,6 @@ window.TN_EXAM_QUESTIONS = [
       "Conditional contract"
     ]
   },
-  
   {
     "question": "A conditional receipt given at application generally provides coverage:",
     "correct": "Only if the applicant is found insurable as applied for",
@@ -593,7 +582,6 @@ window.TN_EXAM_QUESTIONS = [
       "Only after first-year premiums are paid"
     ]
   },
-  
   {
     "question": "Which underwriting source provides the insurer with the most detailed information about the applicant’s health?",
     "correct": "Attending Physician’s Statement (APS)",
@@ -605,7 +593,6 @@ window.TN_EXAM_QUESTIONS = [
       "Agent’s report"
     ]
   },
-  
   {
     "question": "What is the purpose of the Medical Information Bureau (MIB)?",
     "correct": "To share medical information among member insurers to prevent fraud",
@@ -617,7 +604,6 @@ window.TN_EXAM_QUESTIONS = [
       "To provide medical treatment to insureds"
     ]
   },
-  
   {
     "question": "Which risk classification would typically be charged the lowest premiums?",
     "correct": "Preferred",
@@ -629,7 +615,6 @@ window.TN_EXAM_QUESTIONS = [
       "Rated"
     ]
   },
-  
   {
     "question": "A backdated life insurance policy is primarily used to:",
     "correct": "Save age and obtain a lower premium",
@@ -641,7 +626,6 @@ window.TN_EXAM_QUESTIONS = [
       "Avoid evidence of insurability"
     ]
   },
-  
   {
     "question": "The free-look provision allows the policyowner to:",
     "correct": "Return the policy for a full refund within a specified period",
@@ -653,7 +637,6 @@ window.TN_EXAM_QUESTIONS = [
       "Increase coverage automatically"
     ]
   },
-  
   {
     "question": "The incontestability clause prevents the insurer from voiding coverage after:",
     "correct": "The policy has been in force for a specified period, usually two years",
@@ -665,7 +648,6 @@ window.TN_EXAM_QUESTIONS = [
       "Any claim occurs"
     ]
   },
-  
   {
     "question": "The misstatement of age provision allows the insurer to:",
     "correct": "Adjust benefits to what the premium would have purchased at the correct age",
@@ -677,7 +659,6 @@ window.TN_EXAM_QUESTIONS = [
       "Deny claims automatically"
     ]
   },
-  
   {
     "question": "The grace period in a life insurance policy is designed to:",
     "correct": "Prevent unintentional lapse by allowing late premium payment",
@@ -689,7 +670,6 @@ window.TN_EXAM_QUESTIONS = [
       "Extend the incontestability period"
     ]
   },
-  
   {
     "question": "A policy that has lapsed for nonpayment of premium can be reinstated if the owner:",
     "correct": "Provides evidence of insurability and pays back premiums with interest",
@@ -701,7 +681,6 @@ window.TN_EXAM_QUESTIONS = [
       "Proves financial hardship"
     ]
   },
-  
   {
     "question": "Which nonforfeiture option provides coverage for the longest possible period?",
     "correct": "Extended term insurance",
@@ -713,7 +692,6 @@ window.TN_EXAM_QUESTIONS = [
       "Automatic premium loan"
     ]
   },
-  
   {
     "question": "Which nonforfeiture option uses the cash value to purchase a smaller, fully paid permanent policy?",
     "correct": "Reduced paid-up insurance",
@@ -725,7 +703,6 @@ window.TN_EXAM_QUESTIONS = [
       "Automatic premium loan"
     ]
   },
-  
   {
     "question": "Which dividend option allows policyowners to purchase small amounts of paid-up additional insurance?",
     "correct": "Paid-up additions",
@@ -737,7 +714,6 @@ window.TN_EXAM_QUESTIONS = [
       "One-year term"
     ]
   },
-  
   {
     "question": "Under which dividend option does the insurer keep the dividend and credit it with interest?",
     "correct": "Accumulation at interest",
@@ -749,7 +725,6 @@ window.TN_EXAM_QUESTIONS = [
       "Reduced paid-up"
     ]
   },
-  
   {
     "question": "Which dividend option immediately reduces the out-of-pocket premium the policyowner must pay?",
     "correct": "Reduction of premium",
@@ -761,7 +736,6 @@ window.TN_EXAM_QUESTIONS = [
       "Cash surrender"
     ]
   },
-  
   {
     "question": "The automatic premium loan provision, if elected, prevents a lapse by:",
     "correct": "Using available cash value to pay overdue premiums",
@@ -773,7 +747,6 @@ window.TN_EXAM_QUESTIONS = [
       "Borrowing from the agent’s commission"
     ]
   },
-  
   {
     "question": "The waiver of premium rider typically waives premiums when the insured:",
     "correct": "Becomes totally disabled as defined in the policy",
@@ -785,7 +758,6 @@ window.TN_EXAM_QUESTIONS = [
       "Is unemployed for 30 days"
     ]
   },
-  
   {
     "question": "The accidental death benefit rider pays an additional benefit if death:",
     "correct": "Is caused by an accident within a specified time frame",
@@ -797,7 +769,6 @@ window.TN_EXAM_QUESTIONS = [
       "Results from sickness only"
     ]
   },
-  
   {
     "question": "A guaranteed insurability rider allows the insured to:",
     "correct": "Purchase additional coverage at specified ages without evidence of insurability",
@@ -809,7 +780,6 @@ window.TN_EXAM_QUESTIONS = [
       "Reduce premiums during disability"
     ]
   },
-  
   {
     "question": "The cost-of-living rider typically adjusts the policy’s:",
     "correct": "Death benefit based on changes in an inflation index",
@@ -821,7 +791,6 @@ window.TN_EXAM_QUESTIONS = [
       "Interest rate on policy loans"
     ]
   },
-  
   {
     "question": "An accelerated death benefit rider allows the insured to:",
     "correct": "Receive part of the death benefit while living under certain conditions",
@@ -833,7 +802,6 @@ window.TN_EXAM_QUESTIONS = [
       "Change the contract law in their state"
     ]
   },
-  
   {
     "question": "Under a return of premium rider on term life, if the insured outlives the term:",
     "correct": "Some or all premiums paid may be returned",
@@ -845,7 +813,6 @@ window.TN_EXAM_QUESTIONS = [
       "All premiums are forfeited"
     ]
   },
-  
   {
     "question": "Which settlement option provides a series of payments for a specific number of years?",
     "correct": "Fixed period",
@@ -857,7 +824,6 @@ window.TN_EXAM_QUESTIONS = [
       "Joint and survivor"
     ]
   },
-  
   {
     "question": "Which settlement option provides income for the beneficiary’s life, regardless of how long they live?",
     "correct": "Life income",
@@ -869,7 +835,6 @@ window.TN_EXAM_QUESTIONS = [
       "Cash refund"
     ]
   },
-  
   {
     "question": "Under the interest-only settlement option, the insurer:",
     "correct": "Pays interest periodically and holds the principal intact",
@@ -881,7 +846,6 @@ window.TN_EXAM_QUESTIONS = [
       "Guarantees the principal is never paid"
     ]
   },
-  
   {
     "question": "The straight life annuity option provides payments:",
     "correct": "For as long as the annuitant lives, then stops at death",
@@ -893,7 +857,6 @@ window.TN_EXAM_QUESTIONS = [
       "Until the cash value is depleted, regardless of lifespan"
     ]
   },
-  
   {
     "question": "In a fixed annuity, the insurer bears which risk?",
     "correct": "Investment risk",
@@ -905,7 +868,6 @@ window.TN_EXAM_QUESTIONS = [
       "Insurable interest risk"
     ]
   },
-  
   {
     "question": "Which annuity type offers payments that vary with the performance of underlying separate account investments?",
     "correct": "Variable annuity",
@@ -917,7 +879,6 @@ window.TN_EXAM_QUESTIONS = [
       "Immediate fixed annuity"
     ]
   },
-  
   {
     "question": "An immediate annuity begins income payments:",
     "correct": "Within one year of purchase",
@@ -929,7 +890,6 @@ window.TN_EXAM_QUESTIONS = [
       "After the policy builds sufficient cash value"
     ]
   },
-  
   {
     "question": "A deferred annuity is primarily used to:",
     "correct": "Accumulate funds for future income",
@@ -941,7 +901,6 @@ window.TN_EXAM_QUESTIONS = [
       "Pay short-term medical expenses"
     ]
   },
-  
   {
     "question": "Which party in an annuity receives income payments during the payout phase?",
     "correct": "Annuitant",
@@ -953,7 +912,6 @@ window.TN_EXAM_QUESTIONS = [
       "Producer"
     ]
   },
-  
   {
     "question": "Life insurance death benefits paid as a lump sum to a named beneficiary are generally:",
     "correct": "Received income tax free",
@@ -965,7 +923,6 @@ window.TN_EXAM_QUESTIONS = [
       "Taxable only if the insured is under age 59½"
     ]
   },
-  
   {
     "question": "Interest paid on life insurance death proceeds left on deposit with the insurer is:",
     "correct": "Taxable as ordinary income to the beneficiary",
@@ -977,7 +934,6 @@ window.TN_EXAM_QUESTIONS = [
       "Taxed only at the corporate rate"
     ]
   },
-  
   {
     "question": "Premiums for personally owned individual life insurance are generally:",
     "correct": "Not tax deductible",
@@ -989,7 +945,6 @@ window.TN_EXAM_QUESTIONS = [
       "Tax deductible only if the owner itemizes"
     ]
   },
-  
   {
     "question": "Policy loans from a life insurance policy are generally:",
     "correct": "Not taxable as long as the policy remains in force",
@@ -1001,7 +956,6 @@ window.TN_EXAM_QUESTIONS = [
       "Tax deductible for the policyowner"
     ]
   },
-  
   {
     "question": "If the owner surrenders a life insurance policy for its cash value, any amount received above total premiums paid is:",
     "correct": "Taxable as ordinary income",
@@ -1013,7 +967,6 @@ window.TN_EXAM_QUESTIONS = [
       "Always tax-free if held over 10 years"
     ]
   },
-  
   {
     "question": "A policy is considered a Modified Endowment Contract (MEC) primarily when:",
     "correct": "It fails the 7-pay test by being overfunded",
@@ -1025,7 +978,6 @@ window.TN_EXAM_QUESTIONS = [
       "The insured is over age 70"
     ]
   },
-  
   {
     "question": "Distributions from a MEC are taxed on a:",
     "correct": "Last-in, first-out (LIFO) basis",
@@ -1037,7 +989,6 @@ window.TN_EXAM_QUESTIONS = [
       "Capital gains basis only"
     ]
   },
-  
   {
     "question": "Group life insurance is typically written as:",
     "correct": "Annual renewable term insurance",
@@ -1049,7 +1000,6 @@ window.TN_EXAM_QUESTIONS = [
       "Single premium whole life"
     ]
   },
-  
   {
     "question": "Under contributory group life plans, what percentage of eligible employees typically must participate?",
     "correct": "At least 75%",
@@ -1061,7 +1011,6 @@ window.TN_EXAM_QUESTIONS = [
       "100% of employees"
     ]
   },
-  
   {
     "question": "In group life insurance, the policy is owned by the:",
     "correct": "Employer or sponsoring organization",
@@ -1073,7 +1022,6 @@ window.TN_EXAM_QUESTIONS = [
       "Insured’s beneficiary"
     ]
   },
-  
   {
     "question": "A qualified retirement plan must meet IRS requirements primarily to:",
     "correct": "Receive favorable tax treatment",
@@ -1085,7 +1033,6 @@ window.TN_EXAM_QUESTIONS = [
       "Avoid all reporting obligations"
     ]
   },
-  
   {
     "question": "Contributions to a traditional qualified plan are generally:",
     "correct": "Tax deductible to the employer and sometimes the employee",
@@ -1097,7 +1044,6 @@ window.TN_EXAM_QUESTIONS = [
       "Tax deductible for beneficiaries only"
     ]
   },
-  
   {
     "question": "A Section 1035 exchange allows a policyowner to:",
     "correct": "Exchange one life policy for another without immediate tax consequences",
@@ -1109,7 +1055,6 @@ window.TN_EXAM_QUESTIONS = [
       "Convert a policy into real estate"
     ]
   },
-  
   {
     "question": "Which beneficiary designation takes precedence if no contingent beneficiary is named?",
     "correct": "Primary beneficiary",
@@ -1121,7 +1066,6 @@ window.TN_EXAM_QUESTIONS = [
       "State insurance department"
     ]
   },
-  
   {
     "question": "A revocable beneficiary designation means the policyowner may:",
     "correct": "Change the beneficiary at any time, subject to policy rules",
@@ -1133,7 +1077,6 @@ window.TN_EXAM_QUESTIONS = [
       "Change only upon court order"
     ]
   },
-  
   {
     "question": "If no beneficiary is living at the insured’s death, proceeds typically:",
     "correct": "Are paid to the insured’s estate",
@@ -1145,7 +1088,6 @@ window.TN_EXAM_QUESTIONS = [
       "Are paid to the insurance agent"
     ]
   },
-  
   {
     "question": "The spendthrift clause in a life insurance policy is designed to:",
     "correct": "Protect proceeds from the beneficiary’s creditors",
@@ -1157,7 +1099,6 @@ window.TN_EXAM_QUESTIONS = [
       "Eliminate all income taxes on benefits"
     ]
   },
-  
   {
     "question": "Stranger-originated life insurance (STOLI) arrangements are generally viewed as:",
     "correct": "Against public policy and often prohibited",
@@ -1169,7 +1110,6 @@ window.TN_EXAM_QUESTIONS = [
       "A form of preferred risk classification"
     ]
   },
-  
   {
     "question": "Industrial (home service) life insurance is typically characterized by:",
     "correct": "Small face amounts and frequent premium collection",
@@ -1181,7 +1121,6 @@ window.TN_EXAM_QUESTIONS = [
       "Employer-paid group coverage"
     ]
   },
-  
   {
     "question": "Credit life insurance is most often used to:",
     "correct": "Pay off a borrower’s loan balance if they die",
@@ -1193,7 +1132,6 @@ window.TN_EXAM_QUESTIONS = [
       "Provide key person coverage"
     ]
   },
-  
   {
     "question": "Which of the following is a primary purpose of life insurance illustration regulations?",
     "correct": "Prevent misleading projections about non-guaranteed elements",
@@ -1205,7 +1143,6 @@ window.TN_EXAM_QUESTIONS = [
       "Eliminate all policy riders"
     ]
   },
-  
   {
     "question": "The replacement of an existing life insurance policy requires the producer to:",
     "correct": "Provide disclosures and compare old and new coverage fairly",
@@ -1217,7 +1154,6 @@ window.TN_EXAM_QUESTIONS = [
       "Refuse to discuss surrender charges"
     ]
   },
-  
   {
     "question": "A producer primarily represents which party in a life insurance transaction?",
     "correct": "The insurer",
@@ -1229,7 +1165,6 @@ window.TN_EXAM_QUESTIONS = [
       "The beneficiary only"
     ]
   },
-  
   {
     "question": "Twisting in life insurance refers to:",
     "correct": "Inducing a lapse or surrender of a policy through misrepresentation",
@@ -1241,7 +1176,6 @@ window.TN_EXAM_QUESTIONS = [
       "Sharing underwriting information lawfully"
     ]
   },
-  
   {
     "question": "Rebating occurs when a producer:",
     "correct": "Offers a portion of their commission or something of value as an inducement to buy",
@@ -1253,7 +1187,6 @@ window.TN_EXAM_QUESTIONS = [
       "Provides a policy summary"
     ]
   },
-  
   {
     "question": "Under the principle of indemnity, an insured should:",
     "correct": "Not profit from a loss but be restored financially",
@@ -1265,7 +1198,6 @@ window.TN_EXAM_QUESTIONS = [
       "Bear all risk personally"
     ]
   },
-  
   {
     "question": "A contract of adhesion means that:",
     "correct": "The insured must accept or reject the policy as written by the insurer",
@@ -1277,7 +1209,6 @@ window.TN_EXAM_QUESTIONS = [
       "The insurer has no obligation to pay claims"
     ]
   },
-  
   {
     "question": "In a life policy, the owner’s rights typically include all of the following EXCEPT:",
     "correct": "Determining the mortality tables used by the insurer",
@@ -1289,7 +1220,6 @@ window.TN_EXAM_QUESTIONS = [
       "Assigning the policy as collateral"
     ]
   },
-  
   {
     "question": "Which of the following is TRUE about a collateral assignment of a life policy?",
     "correct": "The policy is pledged to a creditor as security for a loan",
@@ -1301,7 +1231,6 @@ window.TN_EXAM_QUESTIONS = [
       "Policy cannot be surrendered"
     ]
   },
-  
   {
     "question": "Level term life insurance provides a death benefit that:",
     "correct": "Remains the same for the duration of the term",
@@ -1313,7 +1242,6 @@ window.TN_EXAM_QUESTIONS = [
       "Can never be renewed"
     ]
   },
-  
   {
     "question": "Annually renewable term life insurance is characterized by:",
     "correct": "Renewal each year with premiums that typically increase",
@@ -1325,7 +1253,6 @@ window.TN_EXAM_QUESTIONS = [
       "Guaranteed cash values each year"
     ]
   },
-  
   {
     "question": "Which of the following statements about whole life cash value is TRUE?",
     "correct": "It grows tax-deferred and can be accessed via policy loans",
@@ -1337,7 +1264,6 @@ window.TN_EXAM_QUESTIONS = [
       "It can never be used as collateral"
     ]
   },
-  
   {
     "question": "Which life policy combines term insurance on children with permanent coverage on the primary insured?",
     "correct": "Family rider attached to a whole life policy",
@@ -1349,7 +1275,6 @@ window.TN_EXAM_QUESTIONS = [
       "Industrial policy"
     ]
   },
-  
   {
     "question": "Joint life policies generally pay the death benefit:",
     "correct": "Upon the first insured’s death",
@@ -1361,7 +1286,6 @@ window.TN_EXAM_QUESTIONS = [
       "Only if both insureds die together"
     ]
   },
-  
   {
     "question": "Survivorship life (second-to-die) policies pay the death benefit:",
     "correct": "After the death of the last insured",
@@ -1373,7 +1297,6 @@ window.TN_EXAM_QUESTIONS = [
       "Only if both insureds die simultaneously"
     ]
   },
-  
   {
     "question": "Which of the following statements about variable universal life (VUL) is TRUE?",
     "correct": "It combines flexible premiums with investment options in separate accounts",
@@ -1385,7 +1308,6 @@ window.TN_EXAM_QUESTIONS = [
       "It eliminates all investment risk for the policyowner"
     ]
   },
-  
   {
     "question": "A policy illustration that shows values not guaranteed by the contract must:",
     "correct": "Clearly distinguish between guaranteed and non-guaranteed elements",
@@ -1397,7 +1319,6 @@ window.TN_EXAM_QUESTIONS = [
       "Be approved by the beneficiary"
     ]
   },
-  
   {
     "question": "An example of an unfair claim settlement practice is:",
     "correct": "Failing to promptly investigate a claim",
@@ -1409,7 +1330,6 @@ window.TN_EXAM_QUESTIONS = [
       "Clarifying policy provisions for the insured"
     ]
   },
-  
   {
     "question": "Which of the following is TRUE regarding participating whole life policies?",
     "correct": "They may pay dividends to policyowners",
@@ -1421,7 +1341,6 @@ window.TN_EXAM_QUESTIONS = [
       "They always guarantee dividends"
     ]
   },
-  
   {
     "question": "Which statement about non-participating whole life policies is CORRECT?",
     "correct": "They do not pay dividends to policyowners",
@@ -1433,7 +1352,6 @@ window.TN_EXAM_QUESTIONS = [
       "They are sold only as term riders"
     ]
   },
-  
   {
     "question": "Which life policy type is MOST likely to lapse if premiums are not paid when due and there is no cash value?",
     "correct": "Term life insurance",
@@ -1445,7 +1363,6 @@ window.TN_EXAM_QUESTIONS = [
       "Single premium whole life"
     ]
   },
-  
   {
     "question": "Which party listed is NOT a party to a life insurance contract?",
     "correct": "Underwriter",
@@ -1457,7 +1374,6 @@ window.TN_EXAM_QUESTIONS = [
       "Insured"
     ]
   },
-  
   {
     "question": "What term refers to the period during which a policyholder can pay an overdue premium without losing the policy?",
     "correct": "Grace period",
@@ -1469,7 +1385,6 @@ window.TN_EXAM_QUESTIONS = [
       "Waiting period"
     ]
   },
-  
   {
     "question": "After the birth of his daughter, what should James do to ensure his life insurance meets his family’s needs?",
     "correct": "Increase his life insurance policy death benefit",
@@ -1481,7 +1396,6 @@ window.TN_EXAM_QUESTIONS = [
       "Stop paying premiums"
     ]
   },
-  
   {
     "question": "Mr. Smith has a whole life policy and needs funds for nursing home expenses. What part of his policy can he access?",
     "correct": "The living benefits",
@@ -1493,7 +1407,6 @@ window.TN_EXAM_QUESTIONS = [
       "The annuity benefits"
     ]
   },
-  
   {
     "question": "Jack has a temporary need for life insurance to cover his 15-year mortgage. Which policy best meets this need?",
     "correct": "Term Life Insurance",
@@ -1505,7 +1418,6 @@ window.TN_EXAM_QUESTIONS = [
       "A Viatical Settlement"
     ]
   },
-  
   {
     "question": "Which statement correctly describes a key characteristic of group life insurance?",
     "correct": "It is often part of an employer or membership benefit package",
@@ -1517,7 +1429,6 @@ window.TN_EXAM_QUESTIONS = [
       "Premiums are significantly higher than individual policies"
     ]
   },
-  
   {
     "question": "Which type of life insurance pays a benefit only if the insured dies within a specified period?",
     "correct": "Term Life Insurance",
@@ -1529,7 +1440,6 @@ window.TN_EXAM_QUESTIONS = [
       "Universal Life Insurance"
     ]
   },
-  
   {
     "question": "Which type of permanent life insurance offers both a death benefit and a cash value component?",
     "correct": "Universal Life Insurance",
@@ -1541,7 +1451,6 @@ window.TN_EXAM_QUESTIONS = [
       "Renewable Term Insurance"
     ]
   },
-  
   {
     "question": "Which life insurance policy type is considered riskier because of its investment component?",
     "correct": "Variable Life Insurance",
@@ -1553,7 +1462,6 @@ window.TN_EXAM_QUESTIONS = [
       "Decreasing Term Life Insurance"
     ]
   },
-  
   {
     "question": "Life insurance underwriters consider many factors when evaluating applicants. Which is true?",
     "correct": "They consider health history, occupation and hobbies",
@@ -1565,7 +1473,6 @@ window.TN_EXAM_QUESTIONS = [
       "They do not consider hobbies"
     ]
   },
-  
   {
     "question": "What does underwriting in life insurance primarily involve?",
     "correct": "Evaluating the risk of insuring a person",
@@ -1577,7 +1484,6 @@ window.TN_EXAM_QUESTIONS = [
       "Deciding the policy duration"
     ]
   },
-  
   {
     "question": "In a life insurance contract, the principle of 'Utmost Good Faith' means:",
     "correct": "The insured and insurer must disclose all relevant information",
@@ -1589,7 +1495,6 @@ window.TN_EXAM_QUESTIONS = [
       "The premiums are fixed for life"
     ]
   },
-  
   {
     "question": "Who must have an insurable interest for a life insurance policy to be issued?",
     "correct": "The owner",
@@ -1601,7 +1506,6 @@ window.TN_EXAM_QUESTIONS = [
       "The insured"
     ]
   },
-  
   {
     "question": "The legal framework allowing someone to act on behalf of another party in creating a contract is called the:",
     "correct": "Law of agency",
@@ -1613,7 +1517,6 @@ window.TN_EXAM_QUESTIONS = [
       "None of the above"
     ]
   },
-  
   {
     "question": "Which event below is NOT typically considered a life-changing event that could alter life insurance needs?",
     "correct": "Change in job title",
@@ -1625,7 +1528,6 @@ window.TN_EXAM_QUESTIONS = [
       "Marriage"
     ]
   },
-  
   {
     "question": "When conducting a life insurance needs analysis, which factors should be considered?",
     "correct": "All of the above (age, hobbies/lifestyle, dependents and future obligations)",
@@ -1637,7 +1539,6 @@ window.TN_EXAM_QUESTIONS = [
       "Number of dependents only"
     ]
   },
-  
   {
     "question": "Term life insurance should always be used in buy-sell agreements. True or false?",
     "correct": "False",
@@ -1647,7 +1548,6 @@ window.TN_EXAM_QUESTIONS = [
       "True"
     ]
   },
-  
   {
     "question": "In estate planning, life insurance can help beneficiaries primarily by:",
     "correct": "Covering estate taxes and final expenses",
@@ -1659,7 +1559,6 @@ window.TN_EXAM_QUESTIONS = [
       "Directly transferring business ownership"
     ]
   },
-  
   {
     "question": "How can life insurance help a small business owner ensure business continuity?",
     "correct": "All of the above (cover operational costs, buy out a deceased partner's share, pay creditors)",
@@ -1671,7 +1570,6 @@ window.TN_EXAM_QUESTIONS = [
       "Pay creditors only"
     ]
   },
-  
   {
     "question": "Corporate-owned life insurance proceeds may be used to replace a deceased key employee, fund debt obligations and redeem the employee’s stock. What is the correct answer?",
     "correct": "All of the above",
@@ -1683,7 +1581,6 @@ window.TN_EXAM_QUESTIONS = [
       "None of the above"
     ]
   },
-  
   {
     "question": "What is the most common component of all life insurance policies?",
     "correct": "Death benefit",
@@ -1695,7 +1592,6 @@ window.TN_EXAM_QUESTIONS = [
       "Cost of living rider"
     ]
   },
-  
   {
     "question": "Which of the following is a type of non-forfeiture option in life insurance?",
     "correct": "An option to receive reduced paid-up insurance or cash surrender value",
@@ -1707,7 +1603,6 @@ window.TN_EXAM_QUESTIONS = [
       "All options are forfeited"
     ]
   },
-  
   {
     "question": "Permanent life insurance policies always have which two components?",
     "correct": "Death benefit and cash value",
@@ -1719,7 +1614,6 @@ window.TN_EXAM_QUESTIONS = [
       "All of the above"
     ]
   },
-  
   {
     "question": "What value does a beneficiary receive upon the death of the insured?",
     "correct": "Death benefit",
@@ -1731,7 +1625,6 @@ window.TN_EXAM_QUESTIONS = [
       "Investment value"
     ]
   },
-  
   {
     "question": "In a life insurance policy, what is a settlement option?",
     "correct": "The way a beneficiary chooses to receive the death benefit",
@@ -1743,7 +1636,6 @@ window.TN_EXAM_QUESTIONS = [
       "Options for investing the policy’s cash value"
     ]
   },
-  
   {
     "question": "John’s wife filed a life insurance claim on September 5, and the claim was settled on October 30. Were any laws violated?",
     "correct": "No, the agent filed the paperwork within 30 days of the claim",
@@ -1755,7 +1647,6 @@ window.TN_EXAM_QUESTIONS = [
       "Yes, the claim was not settled within 15 days"
     ]
   },
-  
   {
     "question": "Which rider allows a terminally ill insured to access part of the death benefit before death?",
     "correct": "Living benefit",
@@ -1767,7 +1658,6 @@ window.TN_EXAM_QUESTIONS = [
       "Addendum"
     ]
   },
-  
   {
     "question": "What distinguishes a viatical settlement from a life settlement?",
     "correct": "Viatical settlements involve terminally ill policyholders, while life settlements do not",
@@ -1779,7 +1669,6 @@ window.TN_EXAM_QUESTIONS = [
       "Viatical settlements are tax-free"
     ]
   },
-  
   {
     "question": "How can living benefits on a life insurance policy typically be accessed?",
     "correct": "All of the above (lump sum, regular installments, or loan)",
@@ -1791,7 +1680,6 @@ window.TN_EXAM_QUESTIONS = [
       "Loan only"
     ]
   },
-  
   {
     "question": "Because the insured party has no role in drafting the wording, insurance contracts are considered:",
     "correct": "Contracts of Adhesion",
@@ -1803,7 +1691,6 @@ window.TN_EXAM_QUESTIONS = [
       "Contracts by Law"
     ]
   },
-  
   {
     "question": "What role does government regulation typically play in health insurance?",
     "correct": "It establishes standards and guidelines for health insurance policies",
@@ -1815,7 +1702,6 @@ window.TN_EXAM_QUESTIONS = [
       "It directly provides health insurance to all citizens"
     ]
   },
-  
   {
     "question": "What is the insuring clause in an insurance contract?",
     "correct": "A statement by the insurer promising to pay for covered losses",
@@ -1827,7 +1713,6 @@ window.TN_EXAM_QUESTIONS = [
       "A rider"
     ]
   },
-  
   {
     "question": "Which of the following is NOT a form of health insurance?",
     "correct": "None of the above (all listed are forms of health insurance)",
@@ -1839,7 +1724,6 @@ window.TN_EXAM_QUESTIONS = [
       "Long-term care insurance"
     ]
   },
-  
   {
     "question": "A key difference between a PPO and an HMO is that:",
     "correct": "PPO plans offer more flexibility in choosing providers outside the network",
@@ -1851,7 +1735,6 @@ window.TN_EXAM_QUESTIONS = [
       "HMOs offer wider provider choice"
     ]
   },
-  
   {
     "question": "A business client wants lower premiums and opts for a high-deductible health plan. What should the agent discuss?",
     "correct": "Health Savings Account (HSA)",
@@ -1863,7 +1746,6 @@ window.TN_EXAM_QUESTIONS = [
       "POS"
     ]
   },
-  
   {
     "question": "Which of the following is NOT a component of a long-term care insurance policy?",
     "correct": "Own occupation",
@@ -1875,7 +1757,6 @@ window.TN_EXAM_QUESTIONS = [
       "Benefit duration"
     ]
   },
-  
   {
     "question": "Which of the following is commonly excluded under most health insurance policies?",
     "correct": "Cosmetic surgery",
@@ -1887,7 +1768,6 @@ window.TN_EXAM_QUESTIONS = [
       "Prescription medications"
     ]
   },
-  
   {
     "question": "When constructing a major medical insurance policy, which criteria must be established?",
     "correct": "All of the above (deductible, maximum out-of-pocket amount, elimination period)",
@@ -1899,7 +1779,6 @@ window.TN_EXAM_QUESTIONS = [
       "Elimination period only"
     ]
   },
-  
   {
     "question": "An agent offers a vacation to induce an applicant to buy a policy. Is this allowed and what is it called?",
     "correct": "No; it is considered rebating",
@@ -1911,7 +1790,6 @@ window.TN_EXAM_QUESTIONS = [
       "Yes; it is acceptable"
     ]
   },
-  
   {
     "question": "An agent encourages a client to let his policy lapse so he can sell a new policy. What is this practice called?",
     "correct": "Twisting",
@@ -1923,7 +1801,6 @@ window.TN_EXAM_QUESTIONS = [
       "Acceptable marketing"
     ]
   },
-  
   {
     "question": "During policy delivery, what additional step should the agent emphasize?",
     "correct": "Thoroughly reviewing the policy with the client to ensure understanding",
@@ -1935,7 +1812,6 @@ window.TN_EXAM_QUESTIONS = [
       "Encouraging the client to shop for more coverage"
     ]
   },
-  
   {
     "question": "A ______ is the amount an insured must pay at the time of service under a health insurance plan.",
     "correct": "Copayment",
@@ -1947,7 +1823,6 @@ window.TN_EXAM_QUESTIONS = [
       "Corridor"
     ]
   },
-  
   {
     "question": "How does choosing a higher deductible typically affect health insurance premiums?",
     "correct": "Higher deductibles typically result in lower premiums",
@@ -1959,7 +1834,6 @@ window.TN_EXAM_QUESTIONS = [
       "Deductibles have no impact"
     ]
   },
-  
   {
     "question": "In long-term care insurance, the 'deductible' is referred to as the:",
     "correct": "Elimination period",
@@ -1971,7 +1845,6 @@ window.TN_EXAM_QUESTIONS = [
       "Copayment"
     ]
   },
-  
   {
     "question": "What is the key difference between indemnity and reimbursement health insurance plans?",
     "correct": "Indemnity plans pay a fixed benefit regardless of actual expenses; reimbursement plans pay back actual expenses",
@@ -1983,7 +1856,6 @@ window.TN_EXAM_QUESTIONS = [
       "Reimbursement plans have higher premiums"
     ]
   },
-  
   {
     "question": "Which type of disability coverage offers the broadest benefit triggers for a professional surgeon who breaks their hand?",
     "correct": "Own occupation",
@@ -1995,7 +1867,6 @@ window.TN_EXAM_QUESTIONS = [
       "Business overhead"
     ]
   },
-  
   {
     "question": "Social Security should be considered one’s primary source of disability income coverage. True or false?",
     "correct": "False",
@@ -2005,7 +1876,6 @@ window.TN_EXAM_QUESTIONS = [
       "True"
     ]
   },
-  
   {
     "question": "What does \"own occupation\" mean in a disability insurance policy?",
     "correct": "Benefits are paid if the policyholder cannot work in their specific occupation due to disability",
@@ -2017,7 +1887,6 @@ window.TN_EXAM_QUESTIONS = [
       "It covers only short-term disabilities"
     ]
   },
-  
   {
     "question": "Which risk management principle refers to spreading risk among multiple parties to minimize the financial impact on any one party?",
     "correct": "Risk transfer",
@@ -2029,7 +1898,6 @@ window.TN_EXAM_QUESTIONS = [
       "Risk retention"
     ]
   },
-  
   {
     "question": "If a licensed insurance producer submits an application missing required disclosures and with inaccurate coverage information, what is the likely consequence?",
     "correct": "The application will be denied and the producer may face penalties",
@@ -2041,7 +1909,6 @@ window.TN_EXAM_QUESTIONS = [
       "The insurer will issue a warning and proceed"
     ]
   },
-  
   {
     "question": "Jessica has a claims-made liability policy; a lawsuit is filed during the policy period for an incident 18 months ago. What should she check?",
     "correct": "Review the policy for a retroactive date provision",
@@ -2053,7 +1920,6 @@ window.TN_EXAM_QUESTIONS = [
       "File the claim without regard to timing"
     ]
   },
-  
   {
     "question": "When must insurable interest exist for a life insurance policy?",
     "correct": "At policy purchase and at the time of loss",
@@ -2065,7 +1931,6 @@ window.TN_EXAM_QUESTIONS = [
       "It is not required for life insurance"
     ]
   },
-  
   {
     "question": "What is a primary function of an insurance underwriter?",
     "correct": "Assess risk and determine premiums",
@@ -2077,7 +1942,6 @@ window.TN_EXAM_QUESTIONS = [
       "Investigate fraud"
     ]
   },
-  
   {
     "question": "If a client hides prior driving violations before filing an auto claim, what should the insurance agent do?",
     "correct": "Inform the insurer of the misrepresentation",
@@ -2089,7 +1953,6 @@ window.TN_EXAM_QUESTIONS = [
       "Let the client handle it alone"
     ]
   },
-  
   {
     "question": "What does the free-look period in a life insurance policy allow?",
     "correct": "Cancel the policy for a full refund within a specified period",
@@ -2101,7 +1964,6 @@ window.TN_EXAM_QUESTIONS = [
       "Lock in the best interest rates"
     ]
   },
-  
   {
     "question": "Which insurance covers a business owner if a customer is injured on the premises?",
     "correct": "General liability",
@@ -2113,7 +1975,6 @@ window.TN_EXAM_QUESTIONS = [
       "Professional liability"
     ]
   },
-  
   {
     "question": "Which feature is unique to variable life insurance?",
     "correct": "Ability to invest cash value in market options",
@@ -2125,7 +1986,6 @@ window.TN_EXAM_QUESTIONS = [
       "Guaranteed refund of premiums"
     ]
   },
-  
   {
     "question": "What best defines underinsurance?",
     "correct": "Having coverage less than the property’s value",
@@ -2137,7 +1997,6 @@ window.TN_EXAM_QUESTIONS = [
       "Coverage exceeding property value"
     ]
   },
-  
   {
     "question": "Which statement accurately describes a claims-made liability policy?",
     "correct": "It covers claims made during the policy period regardless of when the incident occurred (subject to retroactive date)",
@@ -2149,7 +2008,6 @@ window.TN_EXAM_QUESTIONS = [
       "It is effective only when the insurer files a claim"
     ]
   },
-  
   {
     "question": "A customer slips and sues John’s retail store. Which section of his business owner’s policy covers this claim?",
     "correct": "General liability",
@@ -2161,7 +2019,6 @@ window.TN_EXAM_QUESTIONS = [
       "Property insurance"
     ]
   },
-  
   {
     "question": "What is the key difference between term and whole life insurance?",
     "correct": "Term is temporary while whole life is permanent",
@@ -2173,7 +2030,6 @@ window.TN_EXAM_QUESTIONS = [
       "Term is for permanent needs"
     ]
   },
-  
   {
     "question": "What is the primary purpose of a deductible?",
     "correct": "It is the amount paid before the insurer pays",
@@ -2185,7 +2041,6 @@ window.TN_EXAM_QUESTIONS = [
       "Define maximum payout"
     ]
   },
-  
   {
     "question": "Replacement cost coverage means:",
     "correct": "Full replacement cost with no depreciation",
@@ -2197,7 +2052,6 @@ window.TN_EXAM_QUESTIONS = [
       "Land value only"
     ]
   },
-  
   {
     "question": "What does an exclusion in an insurance policy refer to?",
     "correct": "Risks not covered",
@@ -2209,7 +2063,6 @@ window.TN_EXAM_QUESTIONS = [
       "Claims process"
     ]
   },
-  
   {
     "question": "Which is an example of moral hazard?",
     "correct": "Risky or dishonest behavior by the insured",
@@ -2221,7 +2074,6 @@ window.TN_EXAM_QUESTIONS = [
       "Lower premiums due to health improvements"
     ]
   },
-  
   {
     "question": "Which peril is covered under comprehensive auto insurance?",
     "correct": "Vandalism",
@@ -2233,7 +2085,6 @@ window.TN_EXAM_QUESTIONS = [
       "Manufacturing defects"
     ]
   },
-  
   {
     "question": "A medical bill is $4,000 with a $500 deductible that has been met and 20% coinsurance. How much does the insured pay under this plan?",
     "correct": "$800",
@@ -2245,7 +2096,6 @@ window.TN_EXAM_QUESTIONS = [
       "$1,500"
     ]
   },
-  
   {
     "question": "Which of the following is a pure risk?",
     "correct": "Car accident",
@@ -2257,7 +2107,6 @@ window.TN_EXAM_QUESTIONS = [
       "Lottery winnings"
     ]
   },
-  
   {
     "question": "What is the purpose of the law of large numbers in insurance?",
     "correct": "To reduce random variability",
@@ -2269,7 +2118,6 @@ window.TN_EXAM_QUESTIONS = [
       "Limit claim volume"
     ]
   },
-  
   {
     "question": "What is the purpose of an insurance endorsement?",
     "correct": "To modify, add or exclude coverage",
@@ -2281,7 +2129,6 @@ window.TN_EXAM_QUESTIONS = [
       "Refund premiums"
     ]
   },
-  
   {
     "question": "If a claim is $5,000 and the deductible is $1,000, how much will the insurer pay?",
     "correct": "$4,000",
@@ -2293,7 +2140,6 @@ window.TN_EXAM_QUESTIONS = [
       "$6,000"
     ]
   },
-  
   {
     "question": "Which insurance provides income if you cannot work due to illness or injury?",
     "correct": "Disability insurance",
@@ -2305,7 +2151,6 @@ window.TN_EXAM_QUESTIONS = [
       "Auto insurance"
     ]
   },
-  
   {
     "question": "Which peril is typically excluded from homeowners insurance coverage?",
     "correct": "Flood",
@@ -2317,7 +2162,6 @@ window.TN_EXAM_QUESTIONS = [
       "Theft"
     ]
   },
-  
   {
     "question": "A medical expense totals $115,000 with a $5,000 deductible and 30% coinsurance. What is the insured’s out-of-pocket cost?",
     "correct": "$8,500",
@@ -2329,7 +2173,6 @@ window.TN_EXAM_QUESTIONS = [
       "$10,000"
     ]
   },
-  
   {
     "question": "What does an 'Act of God' clause refer to in insurance?",
     "correct": "Events beyond human control",
@@ -2341,7 +2184,6 @@ window.TN_EXAM_QUESTIONS = [
       "Intentional acts"
     ]
   },
-  
   {
     "question": "What term relates to the amount of money that an insured is entitled to withdraw from an annuity?",
     "correct": "Vesting",
@@ -2353,7 +2195,6 @@ window.TN_EXAM_QUESTIONS = [
       "SPDA"
     ]
   },
-  
   {
     "question": "If a whole life policyholder commits suicide, what happens?",
     "correct": "The policy will pay if the exclusionary period is over",
@@ -2365,7 +2206,6 @@ window.TN_EXAM_QUESTIONS = [
       "Premiums are returned"
     ]
   },
-  
   {
     "question": "Ken wants to buy a life policy quickly but keep the option to change if he finds a better policy. Which provision helps?",
     "correct": "Free look",
@@ -2377,7 +2217,6 @@ window.TN_EXAM_QUESTIONS = [
       "Tryout clauses"
     ]
   },
-  
   {
     "question": "Adjustable life policies are ______ compared to other policies.",
     "correct": "Flexible",
@@ -2389,7 +2228,6 @@ window.TN_EXAM_QUESTIONS = [
       "Illegal"
     ]
   },
-  
   {
     "question": "What is the primary purpose of a Stranger-Originated Life Insurance (STOLI) arrangement?",
     "correct": "An investment vehicle",
@@ -2402,7 +2240,6 @@ window.TN_EXAM_QUESTIONS = [
       "To make an insurance product cocktail"
     ]
   },
-  
   {
     "question": "Grant, who is terminally ill, wants to sell his life policy to a private individual for less than the death benefit. What is this called?",
     "correct": "Viatical settlement",
@@ -2414,7 +2251,6 @@ window.TN_EXAM_QUESTIONS = [
       "Settlement of cash value"
     ]
   },
-  
   {
     "question": "What is another name for the mathematician who calculates event probabilities and prices insurance policies?",
     "correct": "Actuary",
@@ -2426,7 +2262,6 @@ window.TN_EXAM_QUESTIONS = [
       "Computator"
     ]
   },
-  
   {
     "question": "Elish owns a personal airplane and seeks life insurance. What should he know about his coverage?",
     "correct": "His coverage may be limited",
@@ -2438,7 +2273,6 @@ window.TN_EXAM_QUESTIONS = [
       "All policies exclude losses due to aeronautical activities"
     ]
   },
-  
   {
     "question": "Which policy document allows an insured to obtain term coverage for a spouse?",
     "correct": "Spouse term insurance rider",
@@ -2450,7 +2284,6 @@ window.TN_EXAM_QUESTIONS = [
       "All of the above"
     ]
   },
-  
   {
     "question": "Your client Zhang plans to participate in a dangerous motorcycle race, but his life policy has a hazardous activity exclusion. What should you tell him?",
     "correct": "An exclusion in the policy will prevent coverage for the race",
@@ -2460,7 +2293,7 @@ window.TN_EXAM_QUESTIONS = [
       "Coverage could be available by other means",
       "His policy will provide coverage since it’s a one-time event",
       "The exclusion is unenforceable",
-      "None of the above"]
+      "None of the above"
+    ]
   }
 ];
-
