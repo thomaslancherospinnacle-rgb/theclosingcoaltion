@@ -1,583 +1,757 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Closing Coalition — Login</title>
-  <style>
-    :root{
-      --bg1:#071423;
-      --bg2:#0a1a2b;
-      --card: rgba(255,255,255,.06);
-      --card2: rgba(255,255,255,.08);
-      --line: rgba(255,255,255,.10);
-      --text:#eaf2ff;
-      --muted: rgba(234,242,255,.72);
-      --muted2: rgba(234,242,255,.52);
-      --accent:#4fd1c5;
-      --accent2:#2dd4bf;
-      --danger:#ff5a7a;
-      --ok:#22c55e;
-      --shadow: 0 18px 60px rgba(0,0,0,.55);
-      --r:18px;
-      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-      --sans: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
-    }
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0;
-      font-family:var(--sans);
-      color:var(--text);
-      background:
-        radial-gradient(1200px 700px at 20% 20%, rgba(79,209,197,.22), transparent 55%),
-        radial-gradient(1200px 700px at 80% 15%, rgba(45,212,191,.18), transparent 55%),
-        radial-gradient(900px 600px at 70% 80%, rgba(99,102,241,.16), transparent 55%),
-        linear-gradient(180deg, var(--bg1), var(--bg2));
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding:24px;
-    }
-    .wrap{width:min(980px, 100%); display:grid; grid-template-columns: 1fr; gap:18px;}
-    @media (min-width: 920px){ .wrap{grid-template-columns: 1.05fr .95fr;} }
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Closing Coalition - Futuristic Auth</title>
+<style>
+:root{
+  --bg:#060914;
+  --bg2:#020617;
+  --glass: rgba(8, 12, 28, .62);
+  --glass2: rgba(2, 6, 23, .55);
+  --line: rgba(255,255,255,.12);
+  --ink:#eaf2ff;
+  --muted: rgba(234,242,255,.72);
 
-    .card{
-      background: linear-gradient(180deg, var(--card2), var(--card));
-      border:1px solid var(--line);
-      border-radius: var(--r);
-      box-shadow: var(--shadow);
-      overflow:hidden;
-    }
-    .head{
-      padding:18px 18px 12px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      border-bottom:1px solid var(--line);
-    }
-    .brand{
-      display:flex; gap:12px; align-items:center;
-    }
-    .dot{
-      width:40px; height:40px;
-      border-radius:12px;
-      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.35), rgba(255,255,255,.06) 42%, rgba(79,209,197,.22) 100%),
-                  linear-gradient(180deg, rgba(79,209,197,.55), rgba(45,212,191,.12));
-      border:1px solid rgba(255,255,255,.14);
-    }
-    .title{font-weight:800; letter-spacing:.2px; line-height:1.05}
-    .sub{font-size:12px; color:var(--muted2); margin-top:2px}
+  --a:#38bdf8;      /* cyan */
+  --b:#a78bfa;      /* violet */
+  --c:#22c55e;      /* green */
+  --w:#f59e0b;      /* amber */
+  --r:18px;
+  --shadow: 0 18px 55px rgba(0,0,0,.55);
+  --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace;
+  --sans: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial;
+}
 
-    .tabs{
-      display:flex;
-      gap:10px;
-      padding:12px 18px 0;
-    }
-    .tab{
-      flex:1;
-      border:1px solid var(--line);
-      background: rgba(0,0,0,.18);
-      color: var(--muted);
-      padding:10px 12px;
-      border-radius: 14px;
-      font-weight:700;
-      cursor:pointer;
-      user-select:none;
-      text-align:center;
-      transition: all .15s ease;
-    }
-    .tab.active{
-      background: linear-gradient(180deg, rgba(79,209,197,.26), rgba(0,0,0,.20));
-      color: var(--text);
-      border-color: rgba(79,209,197,.35);
-    }
+/* ====== Base ====== */
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  font-family: var(--sans);
+  color: var(--ink);
+  background:
+    radial-gradient(1000px 700px at 14% 20%, rgba(56,189,248,.18), transparent 60%),
+    radial-gradient(900px 650px at 82% 40%, rgba(167,139,250,.14), transparent 60%),
+    radial-gradient(700px 550px at 55% 90%, rgba(34,197,94,.10), transparent 60%),
+    linear-gradient(180deg, var(--bg), var(--bg2));
+  overflow:hidden;
+}
 
-    .body{padding:16px 18px 18px}
-    .grid{display:grid; grid-template-columns:1fr; gap:12px}
-    .row2{display:grid; grid-template-columns:1fr; gap:12px}
-    @media (min-width: 520px){ .row2{grid-template-columns: 1fr 1fr;} }
+/* ====== Animated sci-fi backdrop ====== */
+.fx{
+  position:fixed; inset:-120px;
+  pointer-events:none;
+  z-index:0;
+}
+.fx .grid{
+  position:absolute; inset:0;
+  background:
+    linear-gradient(to right, rgba(56,189,248,.06) 1px, transparent 1px) 0 0/64px 64px,
+    linear-gradient(to bottom, rgba(167,139,250,.05) 1px, transparent 1px) 0 0/64px 64px;
+  transform: perspective(900px) rotateX(62deg) translateY(220px);
+  filter: blur(.2px);
+  opacity:.55;
+  animation: gridFloat 10s ease-in-out infinite;
+}
+@keyframes gridFloat{
+  0%,100%{transform: perspective(900px) rotateX(62deg) translateY(220px)}
+  50%{transform: perspective(900px) rotateX(60deg) translateY(190px)}
+}
+.fx .orbs{
+  position:absolute; inset:0;
+  background:
+    radial-gradient(circle at 20% 28%, rgba(56,189,248,.22), transparent 35%),
+    radial-gradient(circle at 70% 38%, rgba(167,139,250,.18), transparent 38%),
+    radial-gradient(circle at 55% 75%, rgba(34,197,94,.10), transparent 40%);
+  filter: blur(20px);
+  animation: orbDrift 12s ease-in-out infinite;
+  opacity:.9;
+}
+@keyframes orbDrift{
+  0%,100%{transform: translate3d(0,0,0) scale(1)}
+  50%{transform: translate3d(20px,-18px,0) scale(1.03)}
+}
+.fx .scanlines{
+  position:absolute; inset:0;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(255,255,255,.03) 0px,
+    rgba(255,255,255,.03) 1px,
+    transparent 3px,
+    transparent 7px
+  );
+  opacity:.18;
+  mix-blend-mode: overlay;
+  animation: scan 6s linear infinite;
+}
+@keyframes scan{
+  from{transform: translateY(0)}
+  to{transform: translateY(40px)}
+}
+.fx .noise{
+  position:absolute; inset:0;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='.25'/%3E%3C/svg%3E");
+  opacity:.06;
+  mix-blend-mode: soft-light;
+}
 
-    label{display:block; font-size:12px; color:var(--muted2); margin:0 0 6px}
-    input{
-      width:100%;
-      padding:12px 12px;
-      border-radius: 14px;
-      border: 1px solid var(--line);
-      background: rgba(0,0,0,.18);
-      color: var(--text);
-      outline:none;
-      font-size:14px;
-    }
-    input:focus{border-color: rgba(79,209,197,.45); box-shadow:0 0 0 4px rgba(79,209,197,.10)}
-    .pill{
-      font-family: var(--mono);
-      font-size: 12px;
-      padding: 12px;
-      border-radius: 14px;
-      border: 1px solid var(--line);
-      background: rgba(0,0,0,.12);
-      color: var(--text);
-      overflow:hidden;
-      white-space:nowrap;
-      text-overflow:ellipsis;
-    }
+/* ====== Layout ====== */
+.stage{
+  position:relative;
+  z-index:2;
+  height:100%;
+  display:grid;
+  place-items:center;
+  padding:18px;
+}
+.shell{
+  width:min(540px, 100%);
+  position:relative;
+}
 
-    .actions{display:flex; gap:10px; margin-top:6px; flex-wrap:wrap}
-    button{
-      border:none;
-      cursor:pointer;
-      padding:12px 14px;
-      border-radius: 14px;
-      font-weight:800;
-      color: var(--text);
-      background: linear-gradient(180deg, rgba(79,209,197,.35), rgba(0,0,0,.18));
-      border:1px solid rgba(79,209,197,.28);
-      transition: transform .05s ease, filter .15s ease;
-      min-width: 160px;
-    }
-    button:active{transform: translateY(1px)}
-    button.secondary{
-      background: rgba(0,0,0,.18);
-      border:1px solid var(--line);
-      color: var(--muted);
-      min-width: 120px;
-    }
-    button:disabled{
-      opacity:.55;
-      cursor:not-allowed;
-    }
+/* Floating header glow */
+.headerGlow{
+  position:absolute;
+  inset:-20px -20px auto -20px;
+  height:90px;
+  background:
+    radial-gradient(closest-side at 20% 40%, rgba(56,189,248,.28), transparent 70%),
+    radial-gradient(closest-side at 85% 60%, rgba(167,139,250,.22), transparent 70%);
+  filter: blur(22px);
+  opacity:.85;
+  z-index:0;
+  pointer-events:none;
+}
 
-    .msg{
-      margin-top:12px;
-      padding:12px;
-      border-radius: 14px;
-      border:1px solid var(--line);
-      background: rgba(0,0,0,.14);
-      color: var(--muted);
-      display:none;
-    }
-    .msg.show{display:block}
-    .msg.ok{border-color: rgba(34,197,94,.35); color: rgba(220,255,233,.92)}
-    .msg.err{border-color: rgba(255,90,122,.35); color: rgba(255,220,228,.92)}
-    .hint{
-      margin-top:10px;
-      font-size:12px;
-      color: var(--muted2);
-      line-height:1.35;
-    }
+/* Card */
+.card{
+  position:relative;
+  background: linear-gradient(180deg, rgba(15,23,42,.65), rgba(2,6,23,.55));
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: var(--r);
+  box-shadow: var(--shadow);
+  overflow:hidden;
+  backdrop-filter: blur(14px);
+}
+.card::before{
+  content:"";
+  position:absolute; inset:-2px;
+  background: conic-gradient(
+    from 200deg,
+    rgba(56,189,248,.0),
+    rgba(56,189,248,.18),
+    rgba(167,139,250,.18),
+    rgba(34,197,94,.10),
+    rgba(56,189,248,.0)
+  );
+  filter: blur(18px);
+  opacity:.65;
+  z-index:0;
+}
+.card::after{
+  content:"";
+  position:absolute; inset:0;
+  background:
+    radial-gradient(1200px 320px at 10% 0%, rgba(56,189,248,.10), transparent 60%),
+    radial-gradient(1200px 320px at 90% 0%, rgba(167,139,250,.08), transparent 60%);
+  opacity:.9;
+  z-index:0;
+}
 
-    .side{
-      padding:18px;
-    }
-    .side h3{margin:0 0 10px; font-size:16px}
-    .side p{margin:0; color: var(--muted); font-size:13px; line-height:1.55}
-    .divider{height:1px; background: var(--line); margin:14px 0}
-    .statusRow{
-      display:flex; justify-content:space-between; align-items:center;
-      gap:12px;
-      padding:10px 12px;
-      border:1px solid var(--line);
-      border-radius: 14px;
-      background: rgba(0,0,0,.12);
-      font-size:13px;
-      color: var(--muted);
-    }
-    .badge{
-      font-size:12px;
-      font-weight:800;
-      padding:6px 10px;
-      border-radius: 999px;
-      border:1px solid var(--line);
-      background: rgba(0,0,0,.18);
-      color: var(--muted);
-    }
-    .badge.ok{border-color: rgba(34,197,94,.35); color: rgba(220,255,233,.92)}
-  </style>
+.hd{
+  position:relative;
+  z-index:1;
+  padding:18px 18px 14px;
+  border-bottom: 1px solid rgba(255,255,255,.10);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+}
+.brand{
+  display:flex;
+  gap:12px;
+  align-items:center;
+}
+.logo{
+  width:40px;height:40px;border-radius:14px;
+  border:1px solid rgba(255,255,255,.14);
+  background:
+    radial-gradient(circle at 30% 30%, rgba(56,189,248,.95), rgba(56,189,248,.16) 55%, transparent 62%),
+    radial-gradient(circle at 70% 70%, rgba(167,139,250,.85), rgba(167,139,250,.12) 60%, transparent 68%),
+    rgba(255,255,255,.06);
+  box-shadow: 0 16px 40px rgba(0,0,0,.35);
+  position:relative;
+  overflow:hidden;
+}
+.logo::after{
+  content:"";
+  position:absolute; inset:-40px;
+  background: linear-gradient(120deg, transparent, rgba(255,255,255,.35), transparent);
+  transform: translateX(-60px) rotate(14deg);
+  animation: shine 3.4s ease-in-out infinite;
+  opacity:.35;
+}
+@keyframes shine{
+  0%{transform: translateX(-120px) rotate(14deg)}
+  45%{transform: translateX(220px) rotate(14deg)}
+  100%{transform: translateX(220px) rotate(14deg)}
+}
+
+.titleWrap h1{
+  margin:0;
+  font-size:16px;
+  letter-spacing:.35px;
+}
+.titleWrap .sub{
+  margin-top:3px;
+  font-size:12px;
+  color: var(--muted);
+}
+.pill{
+  font-size:11px;
+  border:1px solid rgba(255,255,255,.14);
+  border-radius:999px;
+  padding:6px 10px;
+  color: var(--muted);
+  background: rgba(2,6,23,.32);
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  white-space:nowrap;
+}
+.pill .dot{
+  width:8px;height:8px;border-radius:99px;background: rgba(245,158,11,.95);
+  box-shadow: 0 0 0 3px rgba(245,158,11,.14);
+}
+.pill.good{border-color: rgba(34,197,94,.45); color: rgba(214,255,229,.95)}
+.pill.good .dot{background: rgba(34,197,94,.95); box-shadow: 0 0 0 3px rgba(34,197,94,.14)}
+.pill.bad{border-color: rgba(239,68,68,.45); color: rgba(255,214,214,.95)}
+.pill.bad .dot{background: rgba(239,68,68,.95); box-shadow: 0 0 0 3px rgba(239,68,68,.14)}
+.pill.warn{border-color: rgba(245,158,11,.45); color: rgba(255,241,214,.95)}
+.pill.warn .dot{background: rgba(245,158,11,.95); box-shadow: 0 0 0 3px rgba(245,158,11,.14)}
+
+.bd{
+  position:relative;
+  z-index:1;
+  padding:18px;
+}
+
+/* ====== Inputs ====== */
+label{display:block;font-size:12px;color:var(--muted);margin:0 0 7px}
+.field{
+  position:relative;
+}
+input{
+  width:100%;
+  padding:13px 12px;
+  border-radius: 14px;
+  border:1px solid rgba(255,255,255,.14);
+  background: rgba(2,6,23,.42);
+  color: var(--ink);
+  outline:none;
+  transition: border-color .2s ease, box-shadow .2s ease, transform .12s ease;
+}
+input:focus{
+  border-color: rgba(56,189,248,.62);
+  box-shadow: 0 0 0 3px rgba(56,189,248,.18);
+}
+input:hover{transform: translateY(-1px)}
+.hint{
+  margin-top:8px;
+  font-size:12px;
+  color: var(--muted);
+  line-height:1.35;
+}
+.mini{
+  font-size:11px;
+  color: rgba(234,242,255,.62);
+  margin-top:8px;
+  font-family: var(--mono);
+}
+
+/* ====== Button ====== */
+.btn{
+  width:100%;
+  margin-top:14px;
+  padding:13px 12px;
+  border-radius: 14px;
+  border:0;
+  background: linear-gradient(90deg, rgba(56,189,248,.95), rgba(167,139,250,.92));
+  color:#050b18;
+  font-weight:900;
+  letter-spacing:.3px;
+  cursor:pointer;
+  position:relative;
+  overflow:hidden;
+  transform: translateZ(0);
+}
+.btn::after{
+  content:"";
+  position:absolute; inset:-40px;
+  background: linear-gradient(120deg, transparent, rgba(255,255,255,.35), transparent);
+  transform: translateX(-140px) rotate(14deg);
+  animation: btnShine 2.9s ease-in-out infinite;
+  opacity:.32;
+}
+@keyframes btnShine{
+  0%{transform: translateX(-180px) rotate(14deg)}
+  45%{transform: translateX(260px) rotate(14deg)}
+  100%{transform: translateX(260px) rotate(14deg)}
+}
+.btn:active{transform: translateY(1px)}
+.btn:disabled{
+  opacity:.65;
+  cursor:not-allowed;
+}
+
+/* ====== Link row ====== */
+.linkrow{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  margin-top:12px;
+  font-size:12px;
+  color: var(--muted);
+}
+a{color: var(--a); text-decoration:none}
+a:hover{text-decoration:underline}
+
+/* ====== Animated view switching ====== */
+.view{
+  display:none;
+  opacity:0;
+  transform: translateY(10px) scale(.985);
+}
+.view.active{
+  display:block;
+  animation: popIn .55s cubic-bezier(.2,.9,.2,1) both;
+}
+@keyframes popIn{
+  from{opacity:0; transform: translateY(14px) scale(.98); filter: blur(2px)}
+  to{opacity:1; transform: translateY(0) scale(1); filter: blur(0)}
+}
+.view.exit{
+  display:block;
+  animation: popOut .28s ease both;
+}
+@keyframes popOut{
+  from{opacity:1; transform: translateY(0) scale(1)}
+  to{opacity:0; transform: translateY(10px) scale(.985)}
+}
+
+/* ====== Toast ====== */
+.toast{
+  position:fixed;
+  left:16px; bottom:16px;
+  max-width:min(560px, calc(100vw - 32px));
+  padding:10px 12px;
+  border-radius: 14px;
+  border:1px solid rgba(255,255,255,.14);
+  background: rgba(2,6,23,.78);
+  box-shadow: var(--shadow);
+  display:none;
+  z-index:99;
+  font-size:12px;
+}
+.toast.good{border-color: rgba(34,197,94,.45)}
+.toast.bad{border-color: rgba(239,68,68,.45)}
+.toast.warn{border-color: rgba(245,158,11,.45)}
+
+/* Subtle footer note */
+.footerNote{
+  margin-top:12px;
+  text-align:center;
+  font-size:11px;
+  color: rgba(234,242,255,.55);
+}
+.footerNote .mono{font-family:var(--mono)}
+</style>
 </head>
 <body>
-  <div class="wrap">
 
-    <!-- MAIN -->
+<div class="fx">
+  <div class="orbs"></div>
+  <div class="grid"></div>
+  <div class="scanlines"></div>
+  <div class="noise"></div>
+</div>
+
+<div class="stage">
+  <div class="shell">
+    <div class="headerGlow"></div>
+
     <div class="card">
-      <div class="head">
+      <div class="hd">
         <div class="brand">
-          <div class="dot"></div>
-          <div>
-            <div class="title">Closing Coalition</div>
-            <div class="sub">Login / Signup (verification-first)</div>
+          <div class="logo" aria-hidden="true"></div>
+          <div class="titleWrap">
+            <h1>Closing Coalition</h1>
+            <div class="sub" id="subtitle">Login</div>
           </div>
         </div>
+
+        <div class="pill warn" id="statusPill"><span class="dot"></span><span id="statusText">Idle</span></div>
       </div>
 
-      <div class="tabs">
-        <div class="tab" data-tab="login">Login</div>
-        <div class="tab active" data-tab="first">First-time</div>
-        <div class="tab" data-tab="verify">Verify</div>
-      </div>
+      <div class="bd">
 
-      <div class="body">
-        <div class="grid">
-
-          <div class="row2">
-            <div>
-              <label for="name">Name (First Last)</label>
-              <input id="name" autocomplete="name" placeholder="First Last" />
-            </div>
-
-            <div>
-              <label>Derived login email</label>
-              <div id="derived" class="pill">—</div>
-            </div>
+        <!-- LOGIN: name + password -->
+        <div class="view active" id="loginView">
+          <div class="field">
+            <label>First &amp; Last Name</label>
+            <input id="name" placeholder="John Doe" autocomplete="name" />
+            <div class="mini" id="derivedEmail">email: —</div>
           </div>
 
-          <div id="loginBlock" style="display:none">
-            <label for="loginPass">Password</label>
-            <input id="loginPass" type="password" autocomplete="current-password" placeholder="Enter password" />
-            <div class="actions">
-              <button id="btnLogin">Login</button>
-              <button id="btnLogout" class="secondary" style="display:none">Logout</button>
-            </div>
+          <div class="field" style="margin-top:12px;">
+            <label>Password</label>
+            <input id="password" type="password" placeholder="••••••••" autocomplete="current-password" />
           </div>
 
-          <div id="firstBlock">
-            <label for="firstPass">Create password</label>
-            <input id="firstPass" type="password" autocomplete="new-password" placeholder="Create a password" />
-            <div class="actions">
-              <button id="btnSignup">Send verification code</button>
-            </div>
-            <div class="hint">
-              The verification code is sent to your derived inbox: <span style="font-family:var(--mono); color:rgba(234,242,255,.85)">firstlast.ail@gmail.com</span>
-            </div>
+          <button class="btn" id="loginBtn" type="button">LOGIN</button>
+
+          <div class="linkrow">
+            <span></span>
+            <a href="#" id="forgotLink">Forgot password?</a>
           </div>
 
-          <div id="verifyBlock" style="display:none">
-            <label for="code">Verification code</label>
-            <input id="code" inputmode="numeric" autocomplete="one-time-code" placeholder="6-digit code" />
-            <div class="actions">
-              <button id="btnVerify">Verify code</button>
-              <button id="btnResend" class="secondary">Resend</button>
-            </div>
+          <div class="hint">
+            Everyone uses <span class="mono">@ailgmail.com</span>. Your email is generated automatically by removing spaces and lowercasing your name.
+          </div>
+        </div>
+
+        <!-- VERIFY: code + confirm password -->
+        <div class="view" id="verifyView">
+          <div class="field">
+            <label>Verification Code</label>
+            <input id="code" placeholder="123456" inputmode="numeric" />
           </div>
 
-          <div id="msg" class="msg"></div>
+          <div class="field" style="margin-top:12px;">
+            <label>Confirm Password</label>
+            <input id="confirm" type="password" placeholder="Re-enter password" autocomplete="current-password" />
+          </div>
 
-        </div>
-      </div>
-    </div>
+          <button class="btn" id="verifyBtn" type="button">VERIFY</button>
 
-    <!-- SIDE -->
-    <div class="card">
-      <div class="side">
-        <h3>Account status</h3>
+          <div class="linkrow">
+            <a href="#" id="backToLogin1">Back to login</a>
+            <a href="#" id="resendLink">Resend code</a>
+          </div>
 
-        <div class="statusRow">
-          <span>Session</span>
-          <span id="sessBadge" class="badge">Not logged in</span>
-        </div>
-
-        <div class="divider"></div>
-
-        <p>
-          First time: create a password, send a verification code, then verify.<br/>
-          After that: login with password.
-        </p>
-
-        <div class="divider"></div>
-
-        <div class="statusRow">
-          <span>Derived email</span>
-          <span id="derivedMini" class="badge">—</span>
+          <div class="hint">
+            Uses <span class="mono">verify</span> with your generated email + code + password.
+          </div>
         </div>
 
-        <div class="hint" style="margin-top:12px;">
-          If you don’t control the derived inbox, you won’t receive the code.
+        <!-- FORGOT: name only (per your spec) -->
+        <div class="view" id="forgotView">
+          <div class="field">
+            <label>First &amp; Last Name</label>
+            <input id="fpName" placeholder="John Doe" autocomplete="name" />
+            <div class="mini" id="fpDerivedEmail">email: —</div>
+          </div>
+
+          <button class="btn" id="fpSendBtn" type="button">SEND RESET CODE</button>
+
+          <div class="linkrow">
+            <a href="#" id="backToLogin2">Back to login</a>
+            <span></span>
+          </div>
+
+          <div class="hint">
+            Sends <span class="mono">forgot_start</span> using your generated email.
+          </div>
         </div>
+
       </div>
     </div>
 
+    <div class="footerNote">
+      API: <span class="mono" id="apiShown"></span>
+    </div>
   </div>
+</div>
+
+<div class="toast warn" id="toast"></div>
 
 <script>
-  /**********************
-   * CONFIG
-   **********************/
-  const API_URL = "https://closing-coalition-api.thomaslancheros06.workers.dev"; // <-- YOUR WORKER URL
+  // ====== CONFIG ======
+  const API = "https://closing-coalition-api.thomaslancheros06.workers.dev/";
+  const LS_TOKEN = "cc_session_token";
 
-  /**********************
-   * UI
-   **********************/
   const $ = (id) => document.getElementById(id);
 
-  const tabs = Array.from(document.querySelectorAll(".tab"));
-  const nameEl = $("name");
-  const derivedEl = $("derived");
-  const derivedMini = $("derivedMini");
-
-  const loginBlock = $("loginBlock");
-  const firstBlock = $("firstBlock");
-  const verifyBlock = $("verifyBlock");
-
-  const loginPass = $("loginPass");
-  const firstPass = $("firstPass");
-  const codeEl = $("code");
-
-  const btnLogin = $("btnLogin");
-  const btnLogout = $("btnLogout");
-  const btnSignup = $("btnSignup");
-  const btnVerify = $("btnVerify");
-  const btnResend = $("btnResend");
-
-  const msg = $("msg");
-  const sessBadge = $("sessBadge");
-
-  const LS_TOKEN = "cc_token";
-  const LS_EXPIRES = "cc_expires_at";
-
-  function setMsg(type, text){
-    msg.className = "msg show " + (type === "ok" ? "ok" : type === "err" ? "err" : "");
-    msg.textContent = text || "";
-  }
-  function clearMsg(){
-    msg.className = "msg";
-    msg.textContent = "";
-  }
-
-  function normalizeName(raw){
-    return String(raw || "").trim().replace(/\s+/g, " ");
-  }
-
-  function derivedEmailFromName(name){
-    // letters/spaces only, remove spaces, lowercase
-    const clean = normalizeName(name)
+  function emailFromName(name){
+    // Lowercase, remove ALL whitespace. (You can also remove punctuation if you want.)
+    return (name || "")
       .toLowerCase()
-      .replace(/[^a-z\s]/g, "")
-      .replace(/\s+/g, "");
-    return clean ? `${clean}.ail@gmail.com` : "";
+      .replace(/\s+/g, "")
+      .trim() + "@ailgmail.com";
   }
 
-  function setLoading(btn, loading){
-    btn.disabled = !!loading;
-    btn.dataset._old = btn.dataset._old || btn.textContent;
-    btn.textContent = loading ? "Working..." : btn.dataset._old;
+  function setDerived(){
+    const n = $("name").value;
+    const cleaned = (n || "").trim();
+    $("derivedEmail").textContent = cleaned ? ("email: " + emailFromName(cleaned)) : "email: —";
+  }
+  function setFpDerived(){
+    const n = $("fpName").value;
+    const cleaned = (n || "").trim();
+    $("fpDerivedEmail").textContent = cleaned ? ("email: " + emailFromName(cleaned)) : "email: —";
   }
 
-  function setTab(tab){
-    tabs.forEach(t => t.classList.toggle("active", t.dataset.tab === tab));
-    clearMsg();
+  function setSubtitle(t){ $("subtitle").textContent = t; }
 
-    loginBlock.style.display = (tab === "login") ? "" : "none";
-    firstBlock.style.display = (tab === "first") ? "" : "none";
-    verifyBlock.style.display = (tab === "verify") ? "" : "none";
+  function setStatus(text, kind){
+    const pill = $("statusPill");
+    const dot = pill.querySelector(".dot");
+    $("statusText").textContent = text;
+
+    pill.classList.remove("good","bad","warn");
+    pill.classList.add(kind || "warn");
+
+    // dot styling already handled via pill class in CSS
+    if(kind==="good"){ dot.style.background="rgba(34,197,94,.95)"; dot.style.boxShadow="0 0 0 3px rgba(34,197,94,.14)"; }
+    else if(kind==="bad"){ dot.style.background="rgba(239,68,68,.95)"; dot.style.boxShadow="0 0 0 3px rgba(239,68,68,.14)"; }
+    else { dot.style.background="rgba(245,158,11,.95)"; dot.style.boxShadow="0 0 0 3px rgba(245,158,11,.14)"; }
   }
 
-  tabs.forEach(t => t.addEventListener("click", () => setTab(t.dataset.tab)));
-
-  function getToken(){
-    return localStorage.getItem(LS_TOKEN) || "";
-  }
-  function setSession(token, expiresAt){
-    if (!token){
-      localStorage.removeItem(LS_TOKEN);
-      localStorage.removeItem(LS_EXPIRES);
-      return;
-    }
-    localStorage.setItem(LS_TOKEN, token);
-    if (expiresAt) localStorage.setItem(LS_EXPIRES, expiresAt);
+  function toast(msg, kind="warn"){
+    const t = $("toast");
+    t.textContent = msg;
+    t.classList.remove("good","bad","warn");
+    t.classList.add(kind);
+    t.style.display = "block";
+    setTimeout(()=> t.style.display="none", 2400);
   }
 
-  function updateSessionUI(){
-    const token = getToken();
-    if (token){
-      sessBadge.textContent = "Logged in";
-      sessBadge.classList.add("ok");
-      btnLogout.style.display = "";
-    } else {
-      sessBadge.textContent = "Not logged in";
-      sessBadge.classList.remove("ok");
-      btnLogout.style.display = "none";
-    }
+  function safeJsonParse(text){
+    try { return JSON.parse(text); }
+    catch { return { ok:false, error:"Non-JSON response", detail:text }; }
   }
 
-  function updateDerived(){
-    const email = derivedEmailFromName(nameEl.value);
-    derivedEl.textContent = email || "—";
-    derivedMini.textContent = email ? email.split("@")[0] : "—";
+  function isAccountNotFound(resp){
+    const msg = String(resp?.error || resp?.message || resp?.detail || "").toLowerCase();
+    return msg.includes("account not found") || msg.includes("not found") || msg.includes("no such user");
   }
 
-  nameEl.addEventListener("input", updateDerived);
-  updateDerived();
-  updateSessionUI();
+  async function post(action, data){
+    const body = Object.assign({ action }, data || {});
+    const token = localStorage.getItem(LS_TOKEN) || "";
+    if(token && !body.token) body.token = token;
 
-  /**********************
-   * API
-   **********************/
-  async function api(action, payload){
-    const res = await fetch(API_URL, {
-      method: "POST",
-      headers: { "Content-Type":"application/json" },
-      body: JSON.stringify({ action, ...payload })
+    const res = await fetch(API.replace(/\/+$/,""), {
+      method:"POST",
+      headers:{ "Content-Type":"application/json" },
+      body: JSON.stringify(body)
     });
-
     const text = await res.text();
-    let data;
-    try { data = JSON.parse(text); }
-    catch { throw new Error(text || "Invalid response"); }
-
-    if (!data || data.ok !== true){
-      const err = (data && (data.error || data.detail)) ? (data.error + (data.detail ? ` — ${data.detail}` : "")) : "Request failed";
-      throw new Error(err);
-    }
-    return data;
+    const json = safeJsonParse(text);
+    if(!res.ok && json && json.ok !== true) json.http_status = res.status;
+    return json;
   }
 
-  /**********************
-   * ACTIONS
-   **********************/
-  btnSignup.addEventListener("click", async () => {
-    clearMsg();
+  // ====== View transitions ======
+  let current = "loginView";
+  function switchTo(id){
+    if(id === current) return;
 
-    const username = normalizeName(nameEl.value);
-    const password = String(firstPass.value || "");
+    const from = $(current);
+    const to = $(id);
 
-    if (!username){
-      setMsg("err", "Enter your name (First Last).");
-      return;
-    }
-    if (password.length < 6){
-      setMsg("err", "Password must be at least 6 characters.");
-      return;
-    }
+    from.classList.remove("active");
+    from.classList.add("exit");
 
-    setLoading(btnSignup, true);
-    try{
-      await api("signup", { username, password });
-      setMsg("ok", "Verification code sent. Go to Verify.");
-      setTab("verify");
-      codeEl.focus();
-    } catch(e){
-      setMsg("err", e.message || "Signup failed.");
-    } finally {
-      setLoading(btnSignup, false);
-    }
-  });
+    // Ensure to is displayed with animation
+    to.classList.remove("exit");
+    to.classList.add("active");
 
-  btnResend.addEventListener("click", async () => {
-    clearMsg();
+    // cleanup exit after animation
+    setTimeout(()=> {
+      from.classList.remove("exit");
+      from.style.display = "none";
+      // active sets display via CSS, but ensure
+      to.style.display = "block";
+      current = id;
+    }, 280);
+  }
 
-    const username = normalizeName(nameEl.value);
-    const password = String(firstPass.value || "");
+  // Ensure correct initial display
+  ["loginView","verifyView","forgotView"].forEach(id => $(id).style.display = (id==="loginView" ? "block" : "none"));
 
-    if (!username){
-      setMsg("err", "Enter your name (First Last).");
-      return;
-    }
-    if (password.length < 6){
-      setMsg("err", "Enter your password (same one you created).");
+  // ====== Actions ======
+  async function loginFlow(){
+    const name = $("name").value.trim();
+    const password = $("password").value;
+
+    if(!name || !password){
+      toast("Name + password required", "bad");
       return;
     }
 
-    setLoading(btnResend, true);
-    try{
-      await api("signup", { username, password });
-      setMsg("ok", "Verification code re-sent.");
-    } catch(e){
-      setMsg("err", e.message || "Resend failed.");
-    } finally {
-      setLoading(btnResend, false);
-    }
-  });
+    const email = emailFromName(name);
 
-  btnVerify.addEventListener("click", async () => {
-    clearMsg();
+    setStatus("Logging in...", "warn");
+    $("loginBtn").disabled = true;
 
-    const username = normalizeName(nameEl.value);
-    const code = String(codeEl.value || "").trim();
+    const r = await post("login", { email, password });
 
-    if (!username){
-      setMsg("err", "Enter your name (First Last).");
-      return;
-    }
-    if (!/^\d{6}$/.test(code)){
-      setMsg("err", "Enter the 6-digit code.");
+    if(r?.ok){
+      const token = r?.token || r?.sessionToken || r?.data?.token || "";
+      if(token) localStorage.setItem(LS_TOKEN, token);
+      setStatus("Logged in", "good");
+      toast("Login OK", "good");
+      $("loginBtn").disabled = false;
       return;
     }
 
-    setLoading(btnVerify, true);
-    try{
-      await api("verify", { username, code });
-      setMsg("ok", "Verified. You can now login.");
-      setTab("login");
-      loginPass.focus();
-    } catch(e){
-      setMsg("err", e.message || "Verification failed.");
-    } finally {
-      setLoading(btnVerify, false);
-    }
-  });
-
-  btnLogin.addEventListener("click", async () => {
-    clearMsg();
-
-    const username = normalizeName(nameEl.value);
-    const password = String(loginPass.value || "");
-
-    if (!username){
-      setMsg("err", "Enter your name (First Last).");
-      return;
-    }
-    if (!password){
-      setMsg("err", "Enter your password.");
-      return;
-    }
-
-    setLoading(btnLogin, true);
-    try{
-      const out = await api("login", { username, password });
-      setSession(out.token, out.expires_at);
-      updateSessionUI();
-      setMsg("ok", "Logged in.");
-      
-      window.location.href = "home.html";
-
-      // Optional redirect:
-      // window.location.href = "app.html";
-    } catch(e){
-      setMsg("err", e.message || "Login failed.");
-    } finally {
-      setLoading(btnLogin, false);
-    }
-  });
-
-  btnLogout.addEventListener("click", async () => {
-    clearMsg();
-    const token = getToken();
-    setLoading(btnLogout, true);
-    try{
-      if (token){
-        // best-effort
-        await api("logout", { token }).catch(()=>{});
+    if(isAccountNotFound(r)){
+      setStatus("No account - sending code...", "warn");
+      const s = await post("signup", { email, password });
+      if(s?.ok){
+        setStatus("Check your email", "good");
+        toast("Verification sent", "good");
+        setSubtitle("Verification");
+        $("confirm").value = "";
+        $("code").value = "";
+        switchTo("verifyView");
+        $("loginBtn").disabled = false;
+        return;
       }
-      setSession("", "");
-      updateSessionUI();
-      setMsg("ok", "Logged out.");
-    } finally {
-      setLoading(btnLogout, false);
+      setStatus("Signup failed", "bad");
+      toast("Signup failed", "bad");
+      $("loginBtn").disabled = false;
+      return;
     }
+
+    setStatus("Login failed", "bad");
+    toast(String(r?.error || r?.message || "Login failed"), "bad");
+    $("loginBtn").disabled = false;
+  }
+
+  async function verifyFlow(){
+    const name = $("name").value.trim();
+    const email = emailFromName(name);
+    const code = $("code").value.trim();
+    const pass = $("password").value;
+    const confirm = $("confirm").value;
+
+    if(!name || !code || !confirm){
+      toast("Name + code + confirm password required", "bad");
+      return;
+    }
+    if(pass !== confirm){
+      toast("Confirm must match login password", "bad");
+      return;
+    }
+
+    setStatus("Verifying...", "warn");
+    $("verifyBtn").disabled = true;
+
+    const r = await post("verify", { email, code, password: confirm });
+
+    if(r?.ok){
+      const token = r?.token || r?.sessionToken || r?.data?.token || "";
+      if(token) localStorage.setItem(LS_TOKEN, token);
+      setStatus("Verified", "good");
+      toast("Verified", "good");
+      setSubtitle("Login");
+      switchTo("loginView");
+      $("verifyBtn").disabled = false;
+      return;
+    }
+
+    setStatus("Verify failed", "bad");
+    toast(String(r?.error || r?.message || "Verify failed"), "bad");
+    $("verifyBtn").disabled = false;
+  }
+
+  async function resendFlow(){
+    const name = $("name").value.trim();
+    const password = $("password").value;
+    if(!name || !password){
+      toast("Need name + password to resend", "bad");
+      return;
+    }
+    const email = emailFromName(name);
+    setStatus("Resending...", "warn");
+    const r = await post("signup", { email, password });
+    if(r?.ok){
+      setStatus("Code resent", "good");
+      toast("Code resent", "good");
+      return;
+    }
+    setStatus("Resend failed", "bad");
+    toast("Resend failed", "bad");
+  }
+
+  async function forgotStart(){
+    const name = $("fpName").value.trim();
+    if(!name){
+      toast("Enter your first + last name", "bad");
+      return;
+    }
+    const email = emailFromName(name);
+    setStatus("Sending reset...", "warn");
+    $("fpSendBtn").disabled = true;
+    const r = await post("forgot_start", { email });
+    if(r?.ok){
+      setStatus("Reset sent", "good");
+      toast("Reset code sent", "good");
+      $("fpSendBtn").disabled = false;
+      return;
+    }
+    setStatus("Reset failed", "bad");
+    toast(String(r?.error || "Reset failed"), "bad");
+    $("fpSendBtn").disabled = false;
+  }
+
+  // ====== Wire UI ======
+  $("apiShown").textContent = API;
+
+  $("name").addEventListener("input", setDerived);
+  $("fpName").addEventListener("input", setFpDerived);
+  setDerived();
+  setFpDerived();
+
+  $("loginBtn").addEventListener("click", (e)=>{ e.preventDefault(); loginFlow(); });
+  $("verifyBtn").addEventListener("click", (e)=>{ e.preventDefault(); verifyFlow(); });
+
+  $("forgotLink").addEventListener("click", (e)=>{
+    e.preventDefault();
+    setSubtitle("Forgot Password");
+    $("fpName").value = $("name").value || "";
+    setFpDerived();
+    setStatus("Idle", "warn");
+    switchTo("forgotView");
   });
 
-  // On load, validate token silently (best effort)
-  (async () => {
-    const token = getToken();
-    if (!token) return;
-    try{
-      await api("me", { token });
-      updateSessionUI();
-    } catch {
-      setSession("", "");
-      updateSessionUI();
-    }
-  })();
+  $("backToLogin1").addEventListener("click", (e)=>{
+    e.preventDefault();
+    setSubtitle("Login");
+    setStatus("Idle", "warn");
+    switchTo("loginView");
+  });
+
+  $("backToLogin2").addEventListener("click", (e)=>{
+    e.preventDefault();
+    setSubtitle("Login");
+    setStatus("Idle", "warn");
+    switchTo("loginView");
+  });
+
+  $("resendLink").addEventListener("click", (e)=>{ e.preventDefault(); resendFlow(); });
+  $("fpSendBtn").addEventListener("click", (e)=>{ e.preventDefault(); forgotStart(); });
+
+  // Start state
+  setSubtitle("Login");
+  setStatus("Idle", "warn");
 </script>
 </body>
 </html>
