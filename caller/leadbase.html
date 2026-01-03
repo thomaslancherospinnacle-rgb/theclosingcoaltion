@@ -1,0 +1,1357 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <title>Lead Dialer</title>
+  <style>
+    :root{
+      --bg:#f5f5f5;
+      --card:#ffffff;
+      --ink:#333333;
+      --muted:#666666;
+      --line:#d0d0d0;
+      --brand:#007bff;
+      --brand2:#0056b3;
+      --good:#28a745;
+      --topbar:#2c3e50;
+      --shadow:0 2px 4px rgba(0,0,0,.1);
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:var(--sans);color:var(--ink);background:var(--bg);font-size:14px}
+    a{color:inherit}
+    .app{min-height:100vh;display:flex;flex-direction:column}
+    .topbar{
+      height:50px;
+      background:var(--topbar);
+      color:#fff; display:flex; align-items:center; justify-content:space-between;
+      padding:0 20px; box-shadow:var(--shadow);
+    }
+    .topbar .title{font-weight:600; font-size:16px;}
+    .topbar .right{display:flex; gap:12px; align-items:center}
+    .pill{
+      background:rgba(255,255,255,.15); border:1px solid rgba(255,255,255,.2);
+      color:#fff; padding:4px 12px; font-size:13px;
+      display:flex; align-items:center; gap:8px;
+    }
+    .pill code{font-family:var(--mono); color:#fff}
+    .btn{
+      border:1px solid rgba(255,255,255,.3);
+      background:rgba(255,255,255,.1);
+      color:#fff; padding:6px 12px; cursor:pointer;
+      font-weight:500; font-size:13px;
+    }
+    .btn:hover{background:rgba(255,255,255,.2)}
+    .btn:active{transform:translateY(1px)}
+    .wrap{max-width:1200px; margin:20px auto; padding:0 20px; width:100%;}
+    .panel{background:var(--card); border:1px solid var(--line); box-shadow:var(--shadow)}
+    .grid{display:grid; gap:12px}
+    .row{display:flex; gap:10px; align-items:center}
+    .muted{color:var(--muted)}
+    .h1{font-size:18px; font-weight:600}
+    .h2{font-size:14px; font-weight:600}
+    .small{font-size:12px}
+    .input{
+      width:100%; padding:8px 12px; border:1px solid var(--line);
+      font-size:16px; outline:none; font-family:var(--sans);
+    }
+    .input:focus{border-color:var(--brand); box-shadow:0 0 0 2px rgba(0,123,255,.15)}
+    .primary{
+      background:var(--brand);
+      color:#fff; border:none; padding:10px 16px; cursor:pointer;
+      font-weight:600; font-size:14px; text-decoration:none; display:inline-flex; align-items:center; justify-content:center;
+    }
+    .primary:hover{background:var(--brand2)}
+    .primary:active{transform:translateY(1px)}
+    .ghost{
+      background:#fff; color:var(--ink); border:1px solid var(--line);
+      padding:8px 12px; cursor:pointer; font-weight:500; font-size:14px;
+    }
+    .ghost:hover{background:#f8f9fa}
+    .ghost:active{transform:translateY(1px)}
+    .hidden{display:none !important}
+
+    .list-header{
+      padding:12px 16px; border-bottom:2px solid var(--line);
+      display:grid;
+      gap:16px; background:#f8f9fa; font-weight:600; font-size:13px;
+      color:var(--ink);
+    }
+    .lead-row{
+      padding:12px 16px; border-bottom:1px solid var(--line);
+      display:grid;
+      gap:16px; align-items:center;
+    }
+    .lead-row:hover{background:#f8f9fa}
+    .lead-row:last-child{border-bottom:none}
+    .name-link{
+      color:var(--brand); font-weight:600; text-decoration:none; cursor:pointer;
+    }
+    .name-link:hover{text-decoration:underline}
+    .icons{display:flex; gap:8px; justify-content:flex-end}
+    .icon-btn{
+      width:32px; height:32px; border:1px solid var(--line);
+      background:#fff; cursor:pointer; display:grid; place-items:center; font-size:16px;
+    }
+    .icon-btn:hover{background:#f8f9fa}
+    .icon-btn:active{transform:translateY(1px)}
+    .status-line{
+      grid-column:1 / -1;
+      color:var(--muted); font-size:12px; margin-top:6px;
+      padding:8px 12px; background:#f8f9fa; border:1px solid var(--line);
+    }
+
+    .detail-head{
+      padding:16px; border-bottom:1px solid var(--line);
+      display:flex; align-items:flex-start; justify-content:space-between; gap:10px;
+      background:#f8f9fa;
+    }
+    .nav-arrows{display:flex; gap:8px; align-items:center}
+    .arrow{
+      width:36px; height:36px; border:1px solid var(--line);
+      background:#fff; cursor:pointer; display:grid; place-items:center; font-size:18px;
+    }
+    .arrow:hover{background:#f8f9fa}
+    .arrow:active{transform:translateY(1px)}
+    .detail-body{padding:16px}
+    .kv{display:grid; grid-template-columns: 140px 1fr; gap:8px; align-items:center; font-size:14px; margin-bottom:8px}
+    .kv .k{color:var(--muted); font-weight:600}
+    .kv .v{font-weight:500}
+    .addr{
+      margin-top:12px; padding:12px; border:1px solid var(--line); background:#f8f9fa;
+    }
+    .actions{
+      margin-top:16px;
+      display:grid; grid-template-columns: repeat(4, 1fr);
+      gap:12px;
+    }
+    .action{
+      border:1px solid var(--line);
+      background:#fff; padding:12px;
+      display:flex; flex-direction:column; gap:6px; align-items:center; justify-content:center;
+      cursor:pointer; text-decoration:none;
+    }
+    .action:hover{background:#f8f9fa}
+    .action strong{font-size:12px; font-weight:600}
+    .action span{font-size:18px}
+    .action:active{transform:translateY(1px)}
+    .action.disabled{opacity:.4; cursor:not-allowed; pointer-events:none}
+
+    .tabs{
+      margin-top:16px;
+      border:1px solid var(--line);
+      overflow:hidden;
+      background:#fff;
+    }
+    .tabbar{
+      display:grid; grid-template-columns: 1fr 1fr;
+      background:#f8f9fa; border-bottom:1px solid var(--line);
+    }
+    .tabbtn{
+      padding:12px; border:none; cursor:pointer; font-weight:600;
+      background:transparent; font-size:14px;
+    }
+    .tabbtn:hover{background:#e9ecef}
+    .tabbtn.active{
+      background:var(--brand);
+      color:#fff;
+    }
+    .tabcontent{padding:16px}
+    .dispo-item{
+      padding:12px; border:1px solid var(--line);
+      background:#fff; cursor:pointer;
+      display:flex; flex-direction:column; gap:4px;
+      margin-bottom:10px;
+    }
+    .dispo-item:hover{background:#f8f9fa}
+    .dispo-item strong{font-size:13px; font-weight:600}
+    .dispo-item span{font-size:12px; color:var(--muted)}
+    .dispo-item:active{transform:translateY(1px)}
+    .resolve{margin-top:8px; width:100%; padding:10px; border:1px solid var(--line); background:#fff; font-weight:600; cursor:pointer; font-size:14px}
+    .resolve:hover{background:#f8f9fa}
+    .resolve:active{transform:translateY(1px)}
+
+    .overlay{
+      position:fixed; inset:0; background:rgba(0,0,0,.5); display:none;
+      align-items:flex-end; justify-content:center; padding:20px; z-index:1000;
+    }
+    .overlay.show{display:flex}
+    .sheet{
+      width:min(400px, 100%);
+      background:#fff; border:1px solid var(--line);
+      box-shadow:0 4px 12px rgba(0,0,0,.15);
+      overflow:hidden;
+    }
+    .sheethead{
+      padding:16px; display:flex; justify-content:space-between; align-items:center;
+      border-bottom:1px solid var(--line); background:#f8f9fa;
+      font-weight:600; font-size:15px;
+    }
+    .xbtn{border:1px solid var(--line); background:#fff; width:32px; height:32px; cursor:pointer; font-size:18px}
+    .xbtn:hover{background:#f8f9fa}
+    .xbtn:active{transform:translateY(1px)}
+    .sheetbody{padding:16px; max-height:70vh; overflow:auto}
+    .toast{
+      position:fixed; left:50%; transform:translateX(-50%);
+      bottom:20px; background:#333; color:#fff; padding:12px 20px;
+      font-size:14px; display:none; box-shadow:0 2px 8px rgba(0,0,0,.2); z-index:2000;
+    }
+    .toast.show{display:block}
+    .divider{height:1px;background:var(--line);margin:16px 0}
+    .footerbar{
+      padding:12px 16px; border-top:1px solid var(--line);
+      display:flex; gap:10px; justify-content:flex-end; background:#f8f9fa;
+    }
+    .name-grid{
+      display:grid; grid-template-columns: 1fr 1fr; gap:12px; margin-bottom:12px;
+    }
+    @media (max-width: 720px){
+      .actions{grid-template-columns: repeat(2,1fr)}
+      .name-grid{grid-template-columns:1fr;}
+    }
+  </style>
+</head>
+<body>
+<div class="app">
+
+  <div class="topbar">
+    <div class="title" id="agentNameDisplay">AGENT</div>
+    <div class="right">
+      <div class="pill">
+        <span>Code:</span><code id="codePill">—</code>
+      </div>
+      <div class="pill">
+        <span>Today dials:</span><strong id="todayDials">0</strong>
+      </div>
+      <button class="btn" id="exportBtn" title="Download updated CSV">Export CSV</button>
+      <button class="btn" id="resetBtn" title="Change code / reload">Change Code</button>
+    </div>
+  </div>
+
+  <div class="wrap">
+
+    <!-- Step 1: Enter Code -->
+    <section id="loginView" class="panel" style="padding:20px;">
+      <div class="grid" style="gap:12px">
+        <div class="h1">Step 1: Enter Code</div>
+
+        <div class="muted small">
+          Loads <span style="font-family:var(--mono)">./CODE.csv</span>.
+          Example: <b>agent1</b> → <span style="font-family:var(--mono)">agent1.csv</span>
+        </div>
+
+        <input id="codeInput" class="input"
+               placeholder="code (filename without .csv)"
+               autocomplete="off" />
+
+        <div class="row" style="justify-content:space-between; gap:10px;">
+          <div style="display:flex; gap:10px; flex-wrap:wrap;">
+            <button id="loadBtn" class="primary" type="button">Load sheet</button>
+
+            <!-- Hidden until CSV successfully loads -->
+            <a id="scriptBtn"
+               class="primary hidden"
+               href="https://drive.google.com/drive/folders/12tFssKLeEPW3bfvu5aKOMtCCBO73Cl0o?usp=sharing"
+               target="_blank"
+               rel="noopener noreferrer">
+              Access Docs
+            </a>
+          </div>
+
+          <label class="ghost" style="display:inline-flex; gap:8px; align-items:center; cursor:pointer;">
+            <input id="fileInput" type="file" accept=".csv,text/csv" style="display:none">
+            Upload CS1V instead
+          </label>
+        </div>
+
+        <div class="muted small" id="loginHint"></div>
+      </div>
+    </section>
+
+
+    <!-- Step 2: Enter Name -->
+    <section id="nameView" class="panel hidden" style="padding:20px;">
+      <div class="grid" style="gap:12px">
+        <div class="h1">Step 2: Enter Your Name</div>
+        <div class="muted small">Your name will be used for tracking in Google Sheets.</div>
+
+        <div class="name-grid">
+          <input id="firstNameInput" class="input" placeholder="First Name" autocomplete="given-name" />
+          <input id="lastNameInput" class="input" placeholder="Last Name" autocomplete="family-name" />
+        </div>
+
+        <button id="continueBtn" class="primary" type="button">Continue to Leads</button>
+
+        <!-- New box under "Enter Name" (hidden until CSV loads) -->
+        <div id="nameScriptBox" class="panel hidden" style="box-shadow:none; padding:12px; background:#f8f9fa;">
+          <div class="row" style="justify-content:space-between; align-items:center;">
+            <div>
+              <div class="h2">Scripts</div>
+              <div class="muted small">Open the training + scripts folder in a new tab.</div>
+            </div>
+            <a class="primary"
+               href="https://drive.google.com/drive/folders/12tFssKLeEPW3bfvu5aKOMtCCBO73Cl0o?usp=sharing"
+               target="_blank"
+               rel="noopener noreferrer">Access Docs</a>
+          </div>
+        </div>
+
+        <div class="muted small" id="nameHint"></div>
+      </div>
+    </section>
+
+    <!-- List -->
+    <section id="listView" class="panel hidden">
+      <div class="list-header" id="listHeader"></div>
+      <div id="leadList"></div>
+    </section>
+
+    <!-- Detail -->
+    <section id="detailView" class="panel hidden">
+      <div class="detail-head">
+        <div>
+          <div class="h1" id="dName">—</div>
+          <div class="muted small" id="dMeta">—</div>
+        </div>
+        <div class="nav-arrows">
+          <button class="arrow" id="prevLead" title="Previous" type="button">▲</button>
+          <button class="arrow" id="nextLead" title="Next" type="button">▼</button>
+        </div>
+      </div>
+      <div class="detail-body">
+        <div id="detailKVs"></div>
+
+        <div class="addr" id="dAddr">—</div>
+
+        <div class="actions">
+          <a class="action" id="callMobile" href="#"><span>📞</span><strong>Call Mobile</strong></a>
+          <a class="action" id="callHome" href="#"><span>☎️</span><strong>Call Home</strong></a>
+          <a class="action" id="sendText" href="#"><span>💬</span><strong>Send Text</strong></a>
+          <a class="action" id="droppedBy" href="#"><span>🚶</span><strong>Dropped By</strong></a>
+        </div>
+
+        <div class="tabs">
+          <div class="tabbar">
+            <button class="tabbtn active" data-tab="comments" type="button">Add Comments</button>
+            <button class="tabbtn" data-tab="history" type="button">History</button>
+          </div>
+          <div class="tabcontent" id="tab-comments">
+            <div class="muted small">Use dispositions (below) to save results. You can also add a quick note:</div>
+            <div style="height:10px"></div>
+            <input id="noteInput" class="input" placeholder="Optional note (saved into history)..." />
+            <div style="height:10px"></div>
+            <button class="ghost" id="saveNoteBtn" type="button">Save note</button>
+          </div>
+          <div class="tabcontent hidden" id="tab-history">
+            <div id="historyBox" class="muted small">No comment history found</div>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="panel" style="box-shadow:none;">
+          <div style="padding:12px; border-bottom:1px solid var(--line); background:#f8f9fa; font-weight:600;">
+            Call - What Happened?
+          </div>
+          <div style="padding:16px;">
+            <div id="dispoList"></div>
+            <button class="resolve" id="resolveBtn" type="button">Resolve</button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<div class="overlay" id="overlay">
+  <div class="sheet">
+    <div class="sheethead">
+      <div>Call - What Happened?</div>
+      <button class="xbtn" id="closeOverlay" type="button">✕</button>
+    </div>
+    <div class="sheetbody">
+      <div id="modalDispoList"></div>
+    </div>
+    <div class="footerbar">
+      <button class="ghost" id="cancelOverlay" type="button">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast">Saved</div>
+
+<script>
+const DISPOSITIONS = [
+  { key:"Pick Up", desc:"Client answered the call." },
+  { key:"No Answer", desc:"Client did not answer the call." },
+  { key:"Set Virtual Appointment", desc:"Schedule a virtual appointment and send confirmation." },
+];
+
+const DOCS_URL = "https://drive.google.com/drive/folders/12tFssKLeEPW3bfvu5aKOMtCCBO73Cl0o?usp=sharing";
+const DIAL_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx0HaEd0rJqfRKD6HEwMxG1d-aGfFXGF_wfWH9YWt2qpz5MNjyLeyrW7YkCzzqBLJ2jrA/exec";
+
+const els = {
+  loginView: document.getElementById("loginView"),
+  nameView: document.getElementById("nameView"),
+  listView: document.getElementById("listView"),
+  detailView: document.getElementById("detailView"),
+  codeInput: document.getElementById("codeInput"),
+  loadBtn: document.getElementById("loadBtn"),
+  fileInput: document.getElementById("fileInput"),
+  loginHint: document.getElementById("loginHint"),
+  firstNameInput: document.getElementById("firstNameInput"),
+  lastNameInput: document.getElementById("lastNameInput"),
+  continueBtn: document.getElementById("continueBtn"),
+  nameHint: document.getElementById("nameHint"),
+  agentNameDisplay: document.getElementById("agentNameDisplay"),
+  codePill: document.getElementById("codePill"),
+  listHeader: document.getElementById("listHeader"),
+  leadList: document.getElementById("leadList"),
+  exportBtn: document.getElementById("exportBtn"),
+  resetBtn: document.getElementById("resetBtn"),
+  todayDials: document.getElementById("todayDials"),
+  dName: document.getElementById("dName"),
+  dMeta: document.getElementById("dMeta"),
+  dAddr: document.getElementById("dAddr"),
+  detailKVs: document.getElementById("detailKVs"),
+  callMobile: document.getElementById("callMobile"),
+  callHome: document.getElementById("callHome"),
+  sendText: document.getElementById("sendText"),
+  droppedBy: document.getElementById("droppedBy"),
+  prevLead: document.getElementById("prevLead"),
+  nextLead: document.getElementById("nextLead"),
+  noteInput: document.getElementById("noteInput"),
+  saveNoteBtn: document.getElementById("saveNoteBtn"),
+  historyBox: document.getElementById("historyBox"),
+  dispoList: document.getElementById("dispoList"),
+  resolveBtn: document.getElementById("resolveBtn"),
+  overlay: document.getElementById("overlay"),
+  modalDispoList: document.getElementById("modalDispoList"),
+  closeOverlay: document.getElementById("closeOverlay"),
+  cancelOverlay: document.getElementById("cancelOverlay"),
+  toast: document.getElementById("toast"),
+  scriptBtn: document.getElementById("scriptBtn"),
+  nameScriptBox: document.getElementById("nameScriptBox"),
+};
+
+let state = {
+  code: "",
+  agentName: "",
+  leads: [],
+  headers: [],
+  extraColumns: [],
+  currentIndex: -1,
+  loadedFrom: "fetch",
+};
+
+function toast(msg="Saved"){
+  els.toast.textContent = msg;
+  els.toast.classList.add("show");
+  setTimeout(()=>els.toast.classList.remove("show"), 1200);
+}
+
+function nowLocalTimestamp(){
+  const d = new Date();
+  const pad = n => String(n).padStart(2,"0");
+  return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}
+
+function todayKey(){
+  const d = new Date();
+  const pad = n => String(n).padStart(2,"0");
+  return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+}
+
+function normalizeHeader(h){
+  return String(h||"").trim().toLowerCase().replace(/[^a-z0-9]/g,"");
+}
+
+function formatPhone10(raw){
+  let digits = String(raw||"").replace(/\D/g,"");  // FIXED: was /\\D/g
+  if (digits.length === 11 && digits.startsWith("1")) digits = digits.slice(1);
+  if (digits.length > 10) digits = digits.slice(-10);
+  if (digits.length !== 10) return { ok:false, digits, pretty:"—", tel:"#"};
+  const pretty = `(${digits.slice(0,3)}) ${digits.slice(3,6)}-${digits.slice(6)}`;
+  const tel = `tel:+1${digits}`;
+  return { ok:true, digits, pretty, tel };
+}
+
+function safeText(v){
+  return (v === null || v === undefined) ? "" : String(v);
+}
+
+function downloadText(filename, text){
+  const blob = new Blob([text], {type:"text/csv;charset=utf-8"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+
+function storageKey(){
+  return `dialer:${state.code}:history`;
+}
+
+function loadHistory(){
+  try{
+    const raw = localStorage.getItem(storageKey());
+    if(!raw) return { byLeadId:{} };
+    const data = JSON.parse(raw);
+    if(!data || typeof data !== "object") return { byLeadId:{} };
+    if(!data.byLeadId) data.byLeadId = {};
+    return data;
+  }catch{
+    return { byLeadId:{} };
+  }
+}
+
+function saveHistory(data){
+  localStorage.setItem(storageKey(), JSON.stringify(data));
+}
+
+function addHistory(leadId, entry){
+  const data = loadHistory();
+  if(!data.byLeadId[leadId]) data.byLeadId[leadId] = [];
+  data.byLeadId[leadId].push(entry);
+  saveHistory(data);
+}
+
+function getLeadHistory(leadId){
+  const data = loadHistory();
+  return data.byLeadId[leadId] || [];
+}
+
+function parseCSV(text){
+  const rows = [];
+  let i = 0, field = "", row = [], inQuotes = false;
+
+  function endField(){ row.push(field); field = ""; }
+  function endRow(){ rows.push(row); row = []; }
+
+  while(i < text.length){
+    const c = text[i];
+    if(inQuotes){
+      if(c === '"'){
+        if(text[i+1] === '"'){ field += '"'; i += 2; continue; }
+        inQuotes = false; i++; continue;
+      }
+      field += c; i++; continue;
+    } else {
+      if(c === '"'){ inQuotes = true; i++; continue; }
+      if(c === ","){ endField(); i++; continue; }
+      if(c === "\r"){ i++; continue; }
+      if(c === "\n"){ endField(); endRow(); i++; continue; }
+      field += c; i++; continue;
+    }
+  }
+  endField();
+  const allEmpty = row.every(v => String(v||"").trim()==="");
+  if(!allEmpty) endRow();
+  return rows;
+};
+
+
+function toCSV(rows){
+  return rows.map(r => r.map(cell => {
+    const s = safeText(cell);
+    if(/[",\n\r]/.test(s)) return `"${s.replace(/"/g,'""')}"`;  // FIXED: was /[",\\n\\r]/
+    return s;
+  }).join(",")).join("\n");  // FIXED: was "\\n"
+}
+
+async function loadFromFetch(code){
+  const url = `./${encodeURIComponent(code)}.csv`;
+  const res = await fetch(url, {cache:"no-store"});
+  if(!res.ok) throw new Error(`Could not load ${code}.csv (HTTP ${res.status})`);
+  const text = await res.text();
+  return { text, from:"fetch" };
+}
+
+function loadFromFile(file){
+  return new Promise((resolve, reject)=>{
+    const reader = new FileReader();
+    reader.onload = () => resolve({ text: String(reader.result||""), from:"upload" });
+    reader.onerror = () => reject(new Error("Could not read file"));
+    reader.readAsText(file);
+  });
+}
+
+function findColumn(hmap, ...patterns){
+  for(const pattern of patterns){
+    const idx = hmap.findIndex(h => h.includes(pattern));
+    if(idx !== -1) return idx;
+  }
+  return -1;
+}
+
+function mapLeads(rows){
+  if(!rows.length) throw new Error("CSV is empty");
+
+  const headers = rows[0];
+  const hmap = headers.map(normalizeHeader);
+  
+  console.log("Headers:", headers);
+  console.log("Normalized headers:", hmap);
+
+  // IMPROVED: Better column detection with fallbacks
+  let nameIdx = findColumn(hmap, "name", "fullname", "leadname", "contact", "client");
+  if(nameIdx === -1) nameIdx = findColumn(hmap, "first", "last");
+  if(nameIdx === -1) nameIdx = 0; // Fallback to first column
+  
+  let phoneIdx = findColumn(hmap, "phone", "mobile", "cell", "phonenumber", "telephone", "tel", "number");
+  if(phoneIdx === -1) phoneIdx = 1; // Fallback to second column
+  
+  let addressIdx = findColumn(hmap, "address", "street", "addr", "adress", "streetaddress");
+  if(addressIdx === -1) addressIdx = 2; // Fallback to third column
+  
+  console.log("Column indices - Name:", nameIdx, "Phone:", phoneIdx, "Address:", addressIdx);
+
+  const usedIndices = new Set([nameIdx, phoneIdx, addressIdx]);
+  const skipPatterns = ["city", "cities", "zip", "postal", "state", "province", "email", "home", "type"];
+
+  const extraColumns = [];
+  headers.forEach((header, idx) => {
+    if(usedIndices.has(idx)) return;
+    const norm = normalizeHeader(header);
+    if(skipPatterns.some(pattern => norm.includes(pattern))) return;
+    if(!String(header||"").trim()) return;
+    extraColumns.push({ index: idx, label: String(header).trim() });
+  });
+
+  const cityIdx = findColumn(hmap, "city", "cities", "town", "municipality");
+  const zipIdx = findColumn(hmap, "zip", "postal", "zipcode", "postalcode");
+  const typeIdx = findColumn(hmap, "type", "leadtype", "category");
+  const homeIdx = findColumn(hmap, "home", "homephone", "phone2", "secondaryphone");
+  const emailIdx = findColumn(hmap, "email", "emailaddress", "mail");
+  const stateIdx = findColumn(hmap, "state", "province", "region");
+
+  const leads = [];
+  for(let r=1; r<rows.length; r++){
+    const row = rows[r];
+    
+    // IMPROVED: Better empty row detection
+    const hasContent = row.some(v => String(v||"").trim() !== "");
+    if(!hasContent) {
+      console.log(`Row ${r}: Empty, skipping`);
+      continue;
+    }
+
+    const lead = {
+      __id: String(leads.length),
+      __rowIndex: r,
+      __raw: row,
+      name: safeText(row[nameIdx]).trim(),
+      phone: safeText(row[phoneIdx]).trim(),
+      address: addressIdx < row.length ? safeText(row[addressIdx]).trim() : "",
+      city: cityIdx >= 0 && cityIdx < row.length ? safeText(row[cityIdx]).trim() : "",
+      zip: zipIdx >= 0 && zipIdx < row.length ? safeText(row[zipIdx]).trim() : "",
+      type: typeIdx >= 0 && typeIdx < row.length ? safeText(row[typeIdx]).trim() : "Vendor",
+      home: homeIdx >= 0 && homeIdx < row.length ? safeText(row[homeIdx]).trim() : "",
+      email: emailIdx >= 0 && emailIdx < row.length ? safeText(row[emailIdx]).trim() : "",
+      state: stateIdx >= 0 && stateIdx < row.length ? safeText(row[stateIdx]).trim() : "",
+      language: "English",
+      extraData: {}
+    };
+
+    extraColumns.forEach(col => {
+      if(col.index < row.length) {
+        lead.extraData[col.label] = safeText(row[col.index]).trim();
+      }
+    });
+
+    // IMPROVED: Only skip if name is empty AND phone is empty
+    if(!lead.name && !lead.phone) {
+      console.log(`Row ${r}: No name and no phone, skipping`);
+      continue;
+    }
+    
+    // Use phone as name if name is missing
+    if(!lead.name && lead.phone) {
+      lead.name = lead.phone;
+      console.log(`Row ${r}: Using phone as name`);
+    }
+    
+    console.log(`Row ${r}: Valid lead -`, lead.name, lead.phone);
+    leads.push(lead);
+  }
+
+  console.log("Total valid leads:", leads.length);
+  return { headers, leads, extraColumns };
+}
+
+function show(view){
+  els.loginView.classList.toggle("hidden", view !== "login");
+  els.nameView.classList.toggle("hidden", view !== "name");
+  els.listView.classList.toggle("hidden", view !== "list");
+  els.detailView.classList.toggle("hidden", view !== "detail");
+}
+
+function renderList(){
+  const headerColumns = ["Name", "Phone Number", "Address"];
+  state.extraColumns.forEach(col => headerColumns.push(col.label));
+  headerColumns.push("");
+
+  const gridTemplate = `2fr 1.5fr 2fr ${"1fr ".repeat(state.extraColumns.length)}80px`;
+
+  els.listHeader.style.gridTemplateColumns = gridTemplate;
+  els.listHeader.innerHTML = headerColumns.map(h => `<div>${h}</div>`).join("");
+
+  els.leadList.innerHTML = "";
+  const frag = document.createDocumentFragment();
+
+  state.leads.forEach((lead, i)=>{
+    const row = document.createElement("div");
+    row.className = "lead-row";
+    row.style.gridTemplateColumns = gridTemplate;
+
+    const name = document.createElement("div");
+    const a = document.createElement("span");
+    a.className = "name-link";
+    a.textContent = lead.name.toUpperCase();
+    a.addEventListener("click", ()=> openLead(i));
+    name.appendChild(a);
+
+    const phoneCol = document.createElement("div");
+    const phoneObj = formatPhone10(lead.phone);
+    phoneCol.textContent = phoneObj.ok ? phoneObj.pretty : (lead.phone || "—");
+
+    const addrCol = document.createElement("div");
+    addrCol.textContent = lead.address || "—";
+
+    const extraCols = state.extraColumns.map(col => {
+      const div = document.createElement("div");
+      div.textContent = lead.extraData[col.label] || "—";
+      return div;
+    });
+
+    const icons = document.createElement("div");
+    icons.className = "icons";
+
+    const callBtn = document.createElement("button");
+    callBtn.className = "icon-btn";
+    callBtn.title = "Call";
+    callBtn.type = "button";
+    callBtn.textContent = "📞";
+    callBtn.addEventListener("click", (e)=>{
+      e.stopPropagation();
+      openLead(i);
+      setTimeout(() => openDispositionModal("mobile"), 100);
+    });
+
+    const navBtn = document.createElement("button");
+    navBtn.className = "icon-btn";
+    navBtn.title = "Navigate";
+    navBtn.type = "button";
+    navBtn.textContent = "📍";
+    navBtn.addEventListener("click",(e)=>{
+      e.stopPropagation();
+      openLead(i);
+      toast("Open lead and use address");
+    });
+
+    icons.appendChild(callBtn);
+    icons.appendChild(navBtn);
+
+    row.appendChild(name);
+    row.appendChild(phoneCol);
+    row.appendChild(addrCol);
+    extraCols.forEach(col => row.appendChild(col));
+    row.appendChild(icons);
+
+    const hist = getLeadHistory(state.leads[i].__id);
+    const latest = hist.length ? hist[hist.length-1] : null;
+    const status = document.createElement("div");
+    status.className = "status-line";
+    status.innerHTML = latest
+      ? `<span class="muted">Status</span> — <b>${escapeHtml(latest.outcome || "Update")}</b> on <b>${escapeHtml(latest.ts)}</b>`
+      : `<span class="muted">Status</span> — No history yet`;
+    row.appendChild(status);
+
+    frag.appendChild(row);
+  });
+  els.leadList.appendChild(frag);
+  updateTodayDials();
+}
+
+function escapeHtml(s){
+  return String(s||"").replace(/[&<>"']/g, (m)=>({
+    "&":"&amp;","<":"&lt;",">":"&gt;","\\\"":"&quot;","'":"&#039;"
+  }[m]));
+}
+
+function renderDetail(){
+  const lead = state.leads[state.currentIndex];
+  if(!lead) return;
+
+  els.dName.textContent = lead.name.toUpperCase();
+  els.dMeta.textContent = `${lead.city || "—"} • ${lead.zip || "—"} • ${lead.type || "Vendor"}`;
+
+  const mob = formatPhone10(lead.phone);
+  const hom = formatPhone10(lead.home);
+
+  let kvHtml = `
+    <div class="kv"><div class="k">Language</div><div class="v">${lead.language || "English"}</div></div>
+    <div class="kv"><div class="k">Mobile</div><div class="v">`;
+
+  if(mob.ok) {
+    kvHtml += `<a href="${mob.tel}" data-phone="mobile" class="phoneLink" style="color:#007bff;text-decoration:underline;">${mob.pretty}</a>`;
+  } else {
+    kvHtml += `<span class="muted">—</span>`;
+  }
+
+  kvHtml += `</div></div><div class="kv"><div class="k">Home</div><div class="v">`;
+
+  if(hom.ok) {
+    kvHtml += `<a href="${hom.tel}" data-phone="home" class="phoneLink" style="color:#007bff;text-decoration:underline;">${hom.pretty}</a>`;
+  } else {
+    kvHtml += `<span class="muted">—</span>`;
+  }
+
+  kvHtml += `</div></div><div class="kv"><div class="k">Email</div><div class="v">`;
+
+  if(lead.email) {
+    kvHtml += `<a href="mailto:${encodeURIComponent(lead.email)}" style="color:#007bff;text-decoration:underline;">${escapeHtml(lead.email)}</a>`;
+  } else {
+    kvHtml += `<span class="muted">—</span>`;
+  }
+
+  kvHtml += `</div></div>`;
+
+  state.extraColumns.forEach(col => {
+    const value = lead.extraData[col.label] || "—";
+    kvHtml += `<div class="kv"><div class="k">${escapeHtml(col.label)}</div><div class="v">${escapeHtml(value)}</div></div>`;
+  });
+
+  els.detailKVs.innerHTML = kvHtml;
+
+  const addrBits = [];
+  if(lead.address) addrBits.push(lead.address);
+  const cityLine = [lead.city, lead.state, lead.zip].filter(Boolean).join(", ");
+  if(cityLine) addrBits.push(cityLine);
+  els.dAddr.textContent = addrBits.length ? addrBits.join(" • ") : "—";
+
+  setupCallAction(els.callMobile, mob, "mobile");
+  setupCallAction(els.callHome, hom, "home");
+
+  if(mob.ok){
+    els.sendText.classList.remove("disabled");
+    els.sendText.href = `sms:+1${mob.digits}`;
+    els.sendText.onclick = null;
+  }else{
+    els.sendText.classList.add("disabled");
+    els.sendText.href = "#";
+    els.sendText.onclick = (e)=>{ e.preventDefault(); toast("No valid mobile number"); };
+  }
+
+  els.droppedBy.onclick = (e)=>{
+    e.preventDefault();
+    saveDisposition("Dropped By", { phoneUsed:"" });
+  };
+
+  els.prevLead.disabled = state.currentIndex <= 0;
+  els.nextLead.disabled = state.currentIndex >= state.leads.length - 1;
+
+  renderHistoryTab();
+
+  document.querySelectorAll(".phoneLink").forEach(a=>{
+    a.addEventListener("click", ()=>{
+      const which = a.getAttribute("data-phone") || "mobile";
+      setTimeout(()=>openDispositionModal(which), 150);
+    });
+  });
+}
+
+function setupCallAction(el, phoneObj, which){
+  if(phoneObj.ok){
+    el.classList.remove("disabled");
+    el.href = phoneObj.tel;
+    el.onclick = ()=>{
+      setTimeout(()=>openDispositionModal(which), 150);
+      incrementDialCount();
+      trackToSheets("Dials");
+    };
+  }else{
+    el.classList.add("disabled");
+    el.href = "#";
+    el.onclick = (e)=>{
+      e.preventDefault();
+      toast("No valid 10-digit phone");
+    };
+  }
+}
+
+function openLead(index){
+  state.currentIndex = index;
+  show("detail");
+  renderDetail();
+}
+
+function goList(){
+  show("list");
+  renderList();
+}
+
+document.querySelectorAll(".tabbtn").forEach(btn=>{
+  btn.addEventListener("click", ()=>{
+    document.querySelectorAll(".tabbtn").forEach(b=>b.classList.remove("active"));
+    btn.classList.add("active");
+    const tab = btn.getAttribute("data-tab");
+    document.getElementById("tab-comments").classList.toggle("hidden", tab !== "comments");
+    document.getElementById("tab-history").classList.toggle("hidden", tab !== "history");
+    if(tab === "history") renderHistoryTab();
+  });
+});
+
+function renderHistoryTab(){
+  const lead = state.leads[state.currentIndex];
+  if(!lead){ els.historyBox.textContent = "No comment history found"; return; }
+  const hist = getLeadHistory(lead.__id);
+  if(!hist.length){
+    els.historyBox.textContent = "No comment history found";
+    return;
+  }
+  const lines = hist.slice().reverse().map(h=>{
+    const phone = h.phoneUsed ? ` • ${h.phoneUsed}` : "";
+    const note = h.note ? ` • Note: ${h.note}` : "";
+    return `<div style="padding:10px;border:1px solid var(--line);background:#fff;margin-bottom:8px;">
+      <div style="font-weight:600">${escapeHtml(h.outcome || "Update")}</div>
+      <div class="muted small">${escapeHtml(h.ts)}${escapeHtml(phone)}${escapeHtml(note)}</div>
+    </div>`;
+  }).join("");
+  els.historyBox.innerHTML = lines;
+}
+
+function buildDispoButtons(container, onPick){
+  container.innerHTML = "";
+  DISPOSITIONS.forEach(d=>{
+    const div = document.createElement("div");
+    div.className = "dispo-item";
+    div.innerHTML = `<strong>${escapeHtml(d.key)}:</strong><span>${escapeHtml(d.desc)}</span>`;
+    div.addEventListener("click", ()=> onPick(d.key));
+    container.appendChild(div);
+  });
+}
+
+// List view dispositions: no phone context
+buildDispoButtons(els.dispoList, (key)=> saveDisposition(key, { phoneUsed:"" }));
+
+// Modal dispositions: use the actual phone type ("mobile" / "home") from overlay attribute
+buildDispoButtons(els.modalDispoList, (key)=> {
+  const which = els.overlay.getAttribute("data-phone") || "";
+  saveDisposition(key, { phoneUsed: which }); // <-- FIXED (was "Call mobile")
+  closeOverlay();
+});
+
+els.resolveBtn.addEventListener("click", ()=>{ goList(); });
+
+function openDispositionModal(whichPhone){
+  els.overlay.setAttribute("data-phone", whichPhone || "");
+  els.overlay.classList.add("show");
+}
+
+function closeOverlay(){
+  els.overlay.classList.remove("show");
+  els.overlay.removeAttribute("data-phone");
+}
+
+els.closeOverlay.addEventListener("click", closeOverlay);
+els.cancelOverlay.addEventListener("click", closeOverlay);
+els.overlay.addEventListener("click", (e)=>{ if(e.target === els.overlay) closeOverlay(); });
+
+function saveDisposition(outcome, { phoneUsed = "" } = {}) {
+  const lead = state.leads[state.currentIndex];
+  if (!lead) return;
+
+  // figure out actual phone number used
+  let dialedNumber = "";
+  let dialedPretty = "";
+  if (phoneUsed === "mobile") {
+    const mob = formatPhone10(lead.phone);
+    if (mob.ok){ dialedNumber = mob.digits; dialedPretty = mob.pretty; }
+  } else if (phoneUsed === "home") {
+    const hom = formatPhone10(lead.home);
+    if (hom.ok){ dialedNumber = hom.digits; dialedPretty = hom.pretty; }
+  }
+
+  if (outcome === "Pick Up") {
+    trackToSheets("Pickups");
+  } else if (outcome === "No Answer") {
+    trackToSheets("Disconnected");
+  } else if (outcome === "Set Virtual Appointment") {
+    trackToSheets("Appointments");
+
+      const calendlyBase = "https://calendly.com/thomaslancheros-ail/30min";
+      const params = new URLSearchParams();
+      
+      // Set name and email
+      params.set("name", lead.name || "");
+      params.set("email", lead.email || "");
+      
+      // Build the details text with ALL info including phone
+      const detailsParts = [];
+      
+      // Add the phone number that was actually dialed
+      if (dialedPretty) {
+        detailsParts.push(`Phone: ${dialedPretty}`);
+      } else if (lead.phone) {
+        // Fallback to lead.phone if dialedPretty isn't available
+        const phoneFormatted = formatPhone10(lead.phone);
+        detailsParts.push(`Phone: ${phoneFormatted.ok ? phoneFormatted.pretty : lead.phone}`);
+      }
+      
+      // Add address details
+      if (lead.address) {
+        detailsParts.push(`Address: ${lead.address}`);
+      }
+      if (lead.city) {
+        detailsParts.push(`City: ${lead.city}`);
+      }
+      if (lead.state) {
+        detailsParts.push(`State: ${lead.state}`);
+      }
+      if (lead.zip) {
+        detailsParts.push(`Zip: ${lead.zip}`);
+      }
+      
+      // Use 'a1' parameter for the "Please share anything..." field
+      if (detailsParts.length > 0) {
+        params.set("a1", detailsParts.join(" | "));
+      }
+      
+      window.open(`${calendlyBase}?${params.toString()}`, "_blank");
+    }
+
+  // readable note with the number
+  const phoneLabel = dialedPretty
+    ? `${phoneUsed === "mobile" ? "Mobile" : "Home"}: ${dialedPretty}`
+    : "";
+
+  const entry = {
+    ts: nowLocalTimestamp(),
+    outcome,
+    note: phoneLabel,
+    phoneUsed: dialedNumber ? `+1${dialedNumber}` : ""
+  };
+
+  addHistory(lead.__id, entry);
+  toast("Outcome saved");
+  renderHistoryTab();
+}
+
+els.saveNoteBtn.addEventListener("click", ()=>{
+  const lead = state.leads[state.currentIndex];
+  if(!lead) return;
+  const note = els.noteInput.value.trim();
+  if(!note){ toast("No note"); return; }
+  addHistory(lead.__id, { ts: nowLocalTimestamp(), outcome:"Note", note, phoneUsed:"" });
+  els.noteInput.value = "";
+  toast("Note saved");
+  renderHistoryTab();
+});
+
+function dialCountKey(){
+  return `dialer:${state.code}:dialcounts`;
+}
+
+function loadDialCounts(){
+  try{
+    const raw = localStorage.getItem(dialCountKey());
+    if(!raw) return {};
+    const data = JSON.parse(raw);
+    return (data && typeof data === "object") ? data : {};
+  }catch{
+    return {};
+  }
+}
+
+function saveDialCounts(data){
+  localStorage.setItem(dialCountKey(), JSON.stringify(data));
+}
+
+function incrementDialCount(){
+  const data = loadDialCounts();
+  const k = todayKey();
+  data[k] = (data[k] || 0) + 1;
+  saveDialCounts(data);
+  updateTodayDials();
+}
+
+function updateTodayDials(){
+  const data = loadDialCounts();
+  const k = todayKey();
+  els.todayDials.textContent = String(data[k] || 0);
+}
+
+function buildHistoryString(leadId){
+  const hist = getLeadHistory(leadId);
+  if(!hist.length) return "";
+  return hist.map(h=>{
+    const note = h.note ? ` (Note: ${h.note})` : "";
+    return `${h.ts} - ${h.outcome}${note}`;
+  }).join(" || ");
+}
+
+els.exportBtn.addEventListener("click", ()=>{
+  if(!state.leads.length){ toast("Nothing to export"); return; }
+
+  const orig = state.headers.slice();
+  const norm = orig.map(normalizeHeader);
+  let historyColIndex = norm.findIndex(h=>["history","callhistory","result","results","disposition","dispositions"].includes(h));
+  let headers = orig.slice();
+
+  if(historyColIndex === -1){
+    headers.push("History");
+    historyColIndex = headers.length - 1;
+  }
+
+  const outRows = [headers];
+  state.leads.forEach(lead=>{
+    const raw = lead.__raw.slice();
+    while(raw.length < headers.length) raw.push("");
+    raw[historyColIndex] = buildHistoryString(lead.__id);
+    outRows.push(raw);
+  });
+
+  const csv = toCSV(outRows);
+  downloadText(`${state.code}_updated.csv`, csv);
+  toast("Downloaded");
+});
+
+els.resetBtn.addEventListener("click", ()=>{
+  state = { code:"", agentName:"", leads:[], headers:[], extraColumns:[], currentIndex:-1, loadedFrom:"fetch" };
+  els.codePill.textContent = "—";
+  els.agentNameDisplay.textContent = "AGENT";
+  show("login");
+  els.loginHint.textContent = "";
+  els.codeInput.value = "";
+  updateTodayDials();
+
+  // hide docs UI again
+  els.scriptBtn.classList.add("hidden");
+  els.nameScriptBox.classList.add("hidden");
+});
+
+els.prevLead.addEventListener("click", ()=>{
+  if(state.currentIndex > 0){
+    state.currentIndex--;
+    renderDetail();
+  }
+});
+
+els.nextLead.addEventListener("click", ()=>{
+  if(state.currentIndex < state.leads.length - 1){
+    state.currentIndex++;
+    renderDetail();
+  }
+});
+
+els.loadBtn.addEventListener("click", async ()=>{
+  const code = els.codeInput.value.trim();
+  if(!code){
+    els.loginHint.textContent = "Enter a code first.";
+    return;
+  }
+  await startWithCode(code);
+});
+
+els.codeInput.addEventListener("keydown", async (e)=>{
+  if(e.key === "Enter"){
+    const code = els.codeInput.value.trim();
+    if(code) await startWithCode(code);
+  }
+});
+
+els.continueBtn.addEventListener("click", ()=>{
+  const first = els.firstNameInput.value.trim();
+  const last = els.lastNameInput.value.trim();
+  if(!first || !last){
+    els.nameHint.textContent = "Please enter both first and last name.";
+    return;
+  }
+  state.agentName = `${first} ${last}`;
+  els.agentNameDisplay.textContent = state.agentName.toUpperCase();
+  show("list");
+  renderList();
+});
+
+els.firstNameInput.addEventListener("keydown", (e)=>{
+  if(e.key === "Enter") els.lastNameInput.focus();
+});
+
+els.lastNameInput.addEventListener("keydown", (e)=>{
+  if(e.key === "Enter") els.continueBtn.click();
+});
+
+els.fileInput.addEventListener("change", async ()=>{
+  const file = els.fileInput.files && els.fileInput.files[0];
+  if(!file) return;
+
+  let code = els.codeInput.value.trim();
+  if(!code){
+    code = file.name.replace(/\\.csv$/i,"") || "uploaded";
+    els.codeInput.value = code;
+  }
+
+  try{
+    const { text, from } = await loadFromFile(file);
+    bootSheet(code, text, from);
+  }catch(err){
+    els.loginHint.textContent = err.message || "Could not load file.";
+  } finally{
+    els.fileInput.value = "";
+  }
+});
+
+async function startWithCode(code){
+  els.loginHint.textContent = `Loading ${code}.csv...`;
+  try{
+    const { text, from } = await loadFromFetch(code);
+    bootSheet(code, text, from);
+  }catch(err){
+    els.loginHint.textContent = (err.message || "Could not load CSV") + " — You can upload the CSV instead.";
+  }
+}
+
+function bootSheet(code, csvText, from){
+  console.log("=== CSV Debug Info ===");
+  console.log("CSV Text Length:", csvText.length);
+  console.log("First 500 chars:", csvText.substring(0, 500));
+  
+  const rows = parseCSV(csvText);
+  console.log("Total rows parsed:", rows.length);
+  console.log("First row (headers):", rows[0]);
+  if(rows.length > 1) console.log("Second row (first data):", rows[1]);
+  
+  const { headers, leads, extraColumns } = mapLeads(rows);
+  console.log("Leads found:", leads.length);
+  if(leads.length > 0) console.log("First lead:", leads[0]);
+
+  state.code = code;
+  state.headers = headers;
+  state.leads = leads;
+  state.extraColumns = extraColumns;
+  state.currentIndex = -1;
+  state.loadedFrom = from;
+
+  els.codePill.textContent = code;
+  updateTodayDials();
+
+  if(!leads.length){
+    els.loginHint.textContent = "Loaded, but no leads found. Check your CSV. Open browser console (F12) for debug info.";
+    return;
+  }
+
+  // show docs buttons after CSV successfully loads
+  els.scriptBtn.classList.remove("hidden");
+  els.nameScriptBox.classList.remove("hidden");
+
+  show("name");
+  els.nameHint.textContent = "";
+}
+
+function trackToSheets(action) {
+  if (!state.agentName) {
+    console.warn("No agent name set for tracking");
+    return;
+  }
+
+  fetch(DIAL_SCRIPT_URL, {
+    method: "POST",
+    mode: "no-cors",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      name: state.agentName,
+      action
+    })
+  }).catch(()=>{});
+}
+
+// Search functionality
+els.searchInput.addEventListener("input", (e)=>{
+  const query = e.target.value.trim();
+  
+  // Clear results if less than 4 digits
+  if(query.length < 4){
+    els.searchResults.classList.remove("show");
+    els.searchResults.innerHTML = "";
+    return;
+  }
+  
+  // Only search numbers (remove non-digits)
+  const digits = query.replace(/\D/g, "");
+  if(digits.length !== 4){
+    els.searchResults.classList.remove("show");
+    return;
+  }
+  
+  // Find matching leads
+  const matches = state.leads.filter((lead, index) => {
+    const phoneDigits = String(lead.phone || "").replace(/\D/g, "");
+    const homeDigits = String(lead.home || "").replace(/\D/g, "");
+    
+    // Check if last 4 digits match
+    const phoneLast4 = phoneDigits.slice(-4);
+    const homeLast4 = homeDigits.slice(-4);
+    
+    return phoneLast4 === digits || homeLast4 === digits;
+  });
+  
+  // Display results
+  if(matches.length === 0){
+    els.searchResults.innerHTML = `<div style="padding:16px; text-align:center; color:var(--muted)">No matches found for "${digits}"</div>`;
+    els.searchResults.classList.add("show");
+  } else {
+    els.searchResults.innerHTML = matches.map((lead) => {
+      const phoneObj = formatPhone10(lead.phone);
+      const phoneDisplay = phoneObj.ok ? phoneObj.pretty : (lead.phone || "—");
+      
+      return `<div class="search-result-item" data-lead-id="${lead.__id}">
+        <div>
+          <div class="search-result-name">${escapeHtml(lead.name.toUpperCase())}</div>
+          <div class="search-result-phone">${escapeHtml(phoneDisplay)}</div>
+        </div>
+        <div style="color:var(--brand); font-size:12px; font-weight:600">VIEW →</div>
+      </div>`;
+    }).join("");
+    els.searchResults.classList.add("show");
+    
+    // Add click handlers
+    document.querySelectorAll(".search-result-item").forEach(item => {
+      item.addEventListener("click", ()=>{
+        const leadId = item.getAttribute("data-lead-id");
+        const leadIndex = state.leads.findIndex(l => l.__id === leadId);
+        if(leadIndex !== -1){
+          openLead(leadIndex);
+          els.searchResults.classList.remove("show");
+          els.searchInput.value = "";
+        }
+      });
+    });
+  }
+});
+
+// Close search results when clicking outside
+document.addEventListener("click", (e)=>{
+  if(!els.searchBar.contains(e.target) && !els.searchResults.contains(e.target)){
+    els.searchResults.classList.remove("show");
+  }
+});
+
+// Allow only numbers in search input
+els.searchInput.addEventListener("keypress", (e)=>{
+  if(!/[0-9]/.test(e.key) && e.key !== "Backspace" && e.key !== "Delete"){
+    e.preventDefault();
+  }
+});
+</script>
+</body>
+</html>
