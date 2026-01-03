@@ -716,8 +716,10 @@ async function finishExam(){
   // auto-load initial exam bank
   try{
     await loadExamBank();
-  } catch {
-    // ignore, user can hit Load
+  } catch(e) {
+    console.error("Auto-load failed:", e);
+    statusPill.textContent = "Click 'Load Exam Bank' to start";
+    statusPill.className = "badge err";
   }
 })();
 </script>
