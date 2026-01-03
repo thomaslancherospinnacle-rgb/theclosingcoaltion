@@ -1505,17 +1505,6 @@ window.MI_EXAM_QUESTIONS = [
     ]
   },
   {
-    "question": "On a health insurance claim form, the exact procedures performed are represented by which standard codes?",
-    "correct": "CPT codes",
-    "explanation": "CPT (Current Procedural Terminology) codes describe medical procedures on claim forms.",
-    "difficulty": "easy",
-    "wrongs": [
-      "RVU codes",
-      "AMA codes",
-      "HCPCS codes"
-    ]
-  },
-  {
     "question": "What is the key difference between indemnity and reimbursement health insurance plans?",
     "correct": "Indemnity plans pay a fixed benefit regardless of actual expenses; reimbursement plans pay back actual expenses",
     "explanation": "Indemnity coverage provides set benefits, whereas reimbursement plans pay covered costs up to policy limits.",
@@ -1524,17 +1513,6 @@ window.MI_EXAM_QUESTIONS = [
       "Reimbursement plans offer wider networks",
       "Indemnity plans require referrals",
       "Reimbursement plans have higher premiums"
-    ]
-  },
-  {
-    "question": "What notice lists all services billed to Medicare during a three-month period and shows what Medicare paid?",
-    "correct": "MSN",
-    "explanation": "The Medicare Summary Notice (MSN) is sent quarterly to beneficiaries to show charges, payments and what the patient owes.",
-    "difficulty": "easy",
-    "wrongs": [
-      "CPT",
-      "OPPS",
-      "HCPCS"
     ]
   },
   {
