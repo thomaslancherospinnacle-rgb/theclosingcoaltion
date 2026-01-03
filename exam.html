@@ -1,228 +1,729 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<title>MI Life Exam Practice</title>
-<meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Closing Coalition — Exam</title>
+  <style>
+    :root{
+      --bg1:#071423;
+      --bg2:#0b1220;
+      --card: rgba(255,255,255,.06);
+      --card2: rgba(255,255,255,.08);
+      --line: rgba(255,255,255,.10);
+      --text:#eaf2ff;
+      --muted: rgba(234,242,255,.72);
+      --muted2: rgba(234,242,255,.52);
+      --accent:#2dd4bf;
+      --danger:#ff5a7a;
+      --ok:#22c55e;
+      --shadow: 0 18px 60px rgba(0,0,0,.55);
+      --r:18px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:var(--sans);
+      color:var(--text);
+      background:
+        radial-gradient(1200px 700px at 20% 20%, rgba(45,212,191,.18), transparent 55%),
+        radial-gradient(900px 600px at 75% 80%, rgba(99,102,241,.14), transparent 55%),
+        linear-gradient(180deg, var(--bg1), var(--bg2));
+      padding:20px;
+    }
+    .wrap{width:min(1100px, 100%); margin:0 auto; display:grid; gap:14px;}
+    .card{
+      background: linear-gradient(180deg, var(--card2), var(--card));
+      border:1px solid var(--line);
+      border-radius: var(--r);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .head{
+      padding:16px 18px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      border-bottom:1px solid var(--line);
+    }
+    .brand{display:flex; gap:12px; align-items:center;}
+    .dot{
+      width:40px; height:40px;
+      border-radius:12px;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.35), rgba(255,255,255,.06) 42%, rgba(45,212,191,.22) 100%),
+                  linear-gradient(180deg, rgba(45,212,191,.55), rgba(45,212,191,.12));
+      border:1px solid rgba(255,255,255,.14);
+    }
+    .title{font-weight:900; letter-spacing:.2px; line-height:1.05}
+    .sub{font-size:12px; color:var(--muted2); margin-top:2px}
+    .right{display:flex; gap:10px; align-items:center; flex-wrap:wrap; justify-content:flex-end}
+    .badge{
+      font-size:12px;
+      font-weight:900;
+      padding:7px 10px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background: rgba(0,0,0,.18);
+      color: var(--muted);
+      max-width: 320px;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .badge.ok{border-color: rgba(34,197,94,.35); color: rgba(220,255,233,.92)}
+    .badge.err{border-color: rgba(255,90,122,.35); color: rgba(255,220,228,.92)}
+    .btn{
+      border:none;
+      cursor:pointer;
+      padding:10px 12px;
+      border-radius: 14px;
+      font-weight:900;
+      color: var(--text);
+      background: linear-gradient(180deg, rgba(45,212,191,.35), rgba(0,0,0,.18));
+      border:1px solid rgba(45,212,191,.28);
+      transition: transform .05s ease, filter .15s ease;
+    }
+    .btn.secondary{
+      background: rgba(0,0,0,.18);
+      border:1px solid var(--line);
+      color: var(--muted);
+    }
+    .btn:active{transform: translateY(1px)}
+    .btn:disabled{opacity:.55; cursor:not-allowed}
 
-<style>
-body{
-  margin:0;
-  font-family:system-ui,Segoe UI,Roboto,Arial;
-  background:#0b1220;
-  color:#eaf2ff;
-  padding:20px;
-}
-.card{
-  max-width:900px;
-  margin:auto;
-  background:rgba(255,255,255,.06);
-  border:1px solid rgba(255,255,255,.12);
-  border-radius:16px;
-  padding:20px;
-}
-h1{margin-top:0}
-.row{margin-bottom:14px}
-input{
-  padding:10px;
-  border-radius:10px;
-  border:1px solid rgba(255,255,255,.2);
-  background:#000;
-  color:#fff;
-  width:120px;
-}
-button{
-  padding:12px 16px;
-  border-radius:12px;
-  border:1px solid rgba(255,255,255,.25);
-  background:#22c55e;
-  color:#000;
-  font-weight:800;
-  cursor:pointer;
-}
-button.secondary{background:#111;color:#fff}
-.choice{
-  display:block;
-  padding:10px;
-  border:1px solid rgba(255,255,255,.15);
-  border-radius:10px;
-  margin-bottom:8px;
-  cursor:pointer;
-}
-.choice:hover{background:rgba(255,255,255,.1)}
-.choice.correct{border-color:#22c55e;color:#22c55e}
-.choice.wrong{border-color:#ff5a7a;color:#ff5a7a}
-#timer{font-weight:800}
-.hidden{display:none}
-</style>
+    .body{padding:16px 18px 18px}
+    .grid{display:grid; grid-template-columns: 1fr; gap:12px;}
+    .row2{display:grid; grid-template-columns: 1fr; gap:12px;}
+    @media (min-width: 820px){ .row2{grid-template-columns: 1fr 1fr;} }
+
+    label{display:block; font-size:12px; color:var(--muted2); margin:0 0 6px}
+    select,input{
+      width:100%;
+      padding:12px 12px;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: rgba(0,0,0,.18);
+      color: var(--text);
+      outline:none;
+      font-size:14px;
+      font-family: var(--mono);
+    }
+    select:focus,input:focus{border-color: rgba(45,212,191,.45); box-shadow:0 0 0 4px rgba(45,212,191,.10)}
+    .pill{
+      font-family: var(--mono);
+      font-size: 12px;
+      padding: 12px;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: rgba(0,0,0,.12);
+      color: var(--text);
+      overflow:hidden;
+      white-space:nowrap;
+      text-overflow:ellipsis;
+    }
+    .actions{display:flex; gap:10px; flex-wrap:wrap}
+    .muted{color:var(--muted); font-size:13px; line-height:1.5}
+    .hr{height:1px; background:var(--line); margin:14px 0}
+
+    /* Exam UI */
+    .qCard{
+      padding:16px;
+      border-radius: 16px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.12);
+    }
+    .qTop{display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap}
+    .qTitle{font-weight:900; letter-spacing:.2px}
+    .qMeta{color:var(--muted2); font-size:12px; font-family:var(--mono)}
+    .question{margin:12px 0 10px; font-size:18px; font-weight:900; line-height:1.25}
+    .choices{display:grid; gap:10px; margin-top:10px}
+    .choice{
+      padding:12px 12px;
+      border-radius: 14px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.14);
+      cursor:pointer;
+      user-select:none;
+      font-weight:800;
+      line-height:1.25;
+    }
+    .choice:hover{filter:brightness(1.08)}
+    .choice.locked{cursor:default; opacity:.95}
+    .choice.correct{
+      border-color: rgba(34,197,94,.55);
+      box-shadow: 0 0 0 4px rgba(34,197,94,.10);
+      background: rgba(34,197,94,.14);
+      color: rgba(220,255,233,.96);
+    }
+    .choice.wrong{
+      border-color: rgba(255,90,122,.55);
+      box-shadow: 0 0 0 4px rgba(255,90,122,.10);
+      background: rgba(255,90,122,.12);
+      color: rgba(255,220,228,.96);
+    }
+    .exp{
+      margin-top:12px;
+      padding:12px;
+      border-radius: 14px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.14);
+      color: var(--muted);
+      display:none;
+    }
+    .exp.show{display:block}
+    .exp b{color:var(--text)}
+    .footerRow{display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin-top:12px}
+    .kpiRow{display:grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap:10px; margin-top:10px}
+    @media (max-width: 700px){ .kpiRow{grid-template-columns:1fr} }
+    .kpi{
+      padding:12px;
+      border-radius: 14px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.05);
+    }
+    .kpi .h{font-size:11px; color:var(--muted2)}
+    .kpi .v{font-family:var(--mono); font-weight:900; font-size:16px; margin-top:4px}
+  </style>
 </head>
 
 <body>
+  <div class="wrap">
 
-<div class="card">
+    <div class="card">
+      <div class="head">
+        <div class="brand">
+          <div class="dot"></div>
+          <div>
+            <div class="title">Closing Coalition — Exam</div>
+            <div class="sub">Select exam • select question count • click answers • instant explanation • uploads best result</div>
+          </div>
+        </div>
 
-<h1>MI Life Insurance Practice Exam</h1>
+        <div class="right">
+          <span id="userBadge" class="badge">Checking login…</span>
+          <button id="logoutBtn" class="btn secondary" style="display:none">Logout</button>
+        </div>
+      </div>
 
-<div class="row">
-  Total questions available:
-  <b id="totalCount">—</b>
-</div>
+      <div class="body">
+        <div class="grid">
 
-<div class="row">
-  How many questions do you want?
-  <input id="countInput" type="number" min="1">
-</div>
+          <div class="row2">
+            <div>
+              <label for="examSelect">Select Exam</label>
+              <select id="examSelect">
+                <option value="MI" selected>MI</option>
+                <option value="TN">TN</option>
+              </select>
+              <div class="muted" style="margin-top:8px">
+                Files expected: <span style="font-family:var(--mono)">/exams/MIexam.js</span> and <span style="font-family:var(--mono)">/exams/TNexam.js</span>
+              </div>
+            </div>
 
-<div class="row">
-  <button id="startBtn">Start Exam</button>
-</div>
+            <div>
+              <label for="qCount">Select questions (type a number)</label>
+              <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap">
+                <input id="qCount" type="number" min="1" value="25" style="flex:1; min-width:180px" />
+                <div id="loadedPill" class="pill" style="min-width:240px">Loaded: —</div>
+              </div>
+              <div class="muted" style="margin-top:8px">
+                Max will match the loaded exam bank.
+              </div>
+            </div>
+          </div>
 
-<hr>
+          <div class="actions">
+            <button id="loadBtn" class="btn secondary">Load Exam Bank</button>
+            <button id="startBtn" class="btn" disabled>Start Exam</button>
+            <button id="nextBtn" class="btn secondary" disabled>Next</button>
+            <button id="finishBtn" class="btn secondary" disabled>Finish</button>
+          </div>
 
-<div id="exam" class="hidden">
-  <div class="row">
-    <b>Time:</b> <span id="timer">0:00</span>
+          <div class="hr"></div>
+
+          <div class="kpiRow">
+            <div class="kpi"><div class="h">Timer</div><div class="v" id="timer">0:00</div></div>
+            <div class="kpi"><div class="h">Progress</div><div class="v" id="progress">—</div></div>
+            <div class="kpi"><div class="h">Score</div><div class="v" id="score">—</div></div>
+          </div>
+
+          <div id="examArea" class="qCard" style="display:none">
+            <div class="qTop">
+              <div class="qTitle" id="qTitle">Question</div>
+              <div class="qMeta" id="qMeta">—</div>
+            </div>
+
+            <div class="question" id="qText">—</div>
+            <div class="choices" id="choices"></div>
+
+            <div class="exp" id="explainBox">
+              <b>Explanation:</b>
+              <div id="explainText" style="margin-top:6px"></div>
+            </div>
+
+            <div class="footerRow">
+              <span id="statusPill" class="badge">Pick an answer</span>
+              <span id="uploadPill" class="badge" style="display:none"></span>
+            </div>
+          </div>
+
+          <div id="doneArea" class="qCard" style="display:none">
+            <div class="qTitle">Completed</div>
+            <div class="muted" id="doneText" style="margin-top:10px"></div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
   </div>
-
-  <div class="row">
-    <b id="qIndex"></b>
-  </div>
-
-  <div class="row" id="questionText"></div>
-
-  <div id="choices"></div>
-
-  <div class="row">
-    <button id="nextBtn" class="secondary">Next</button>
-  </div>
-</div>
-
-<hr>
-
-<div id="result" class="hidden">
-  <h2>Exam Complete</h2>
-  <div><b>Score:</b> <span id="scoreOut"></span></div>
-  <div><b>Time:</b> <span id="timeOut"></span></div>
-</div>
-
-</div>
-
-<!-- LOAD QUESTION BANK -->
-<script src="miexam.js"></script>
 
 <script>
-/***************
- STATE
-***************/
-let questions = [];
-let picked = [];
-let index = 0;
-let correct = 0;
-let startTime;
-let timerInt;
+/**********************
+ * CONFIG (REPLACE THIS)
+ **********************/
+const CLOUD_FLARE_URL = "REPLACE_CLOUD_FLARE_URL_HERE"; // <-- replace with your Worker URL or API proxy URL
+// Expected actions on backend: me, logout, saveExamResult
 
-/***************
- HELPERS
-***************/
-function shuffle(arr){
-  return arr.map(v=>[Math.random(),v]).sort().map(v=>v[1]);
+/**********************
+ * LOGIN GUARD (token)
+ **********************/
+const LS_TOKEN = "cc_token";
+const LS_EXPIRES = "cc_expires_at";
+const token = localStorage.getItem(LS_TOKEN) || "";
+
+const userBadge = document.getElementById("userBadge");
+const logoutBtn = document.getElementById("logoutBtn");
+
+function setBadge(kind, text){
+  userBadge.className = "badge " + (kind === "ok" ? "ok" : kind === "err" ? "err" : "");
+  userBadge.textContent = text;
 }
-function fmtTime(sec){
-  const m = Math.floor(sec/60);
-  const s = sec%60;
-  return m+":"+(s<10?"0":"")+s;
+
+async function api(action, payload){
+  const res = await fetch(CLOUD_FLARE_URL, {
+    method: "POST",
+    headers: { "Content-Type":"application/json" },
+    body: JSON.stringify({ action, ...payload })
+  });
+  const txt = await res.text();
+  let data;
+  try { data = JSON.parse(txt); } catch { throw new Error(txt || "Bad response"); }
+  if (!data || data.ok !== true) {
+    const msg = (data && (data.error || data.detail)) ? (data.error + (data.detail ? " — " + data.detail : "")) : "Request failed";
+    throw new Error(msg);
+  }
+  return data;
 }
 
-/***************
- INIT
-***************/
-const totalCountEl = document.getElementById("totalCount");
-const countInput = document.getElementById("countInput");
+let loginEmail = "";
 
-questions = window.MI_EXAM_QUESTIONS || [];
-totalCountEl.textContent = questions.length;
-countInput.max = questions.length;
-
-/***************
- EXAM LOGIC
-***************/
-document.getElementById("startBtn").onclick = () => {
-  const n = Number(countInput.value);
-  if (!n || n < 1 || n > questions.length){
-    alert("Enter a valid number");
+async function requireLogin(){
+  if (!token){
+    window.location.href = "index.html";
     return;
   }
+  try{
+    const me = await api("me", { token });
+    loginEmail = me.loginEmail || "";
+    setBadge("ok", loginEmail ? `Logged in: ${loginEmail}` : "Logged in");
+    logoutBtn.style.display = "";
+  } catch (e){
+    localStorage.removeItem(LS_TOKEN);
+    localStorage.removeItem(LS_EXPIRES);
+    window.location.href = "index.html";
+  }
+}
 
-  picked = shuffle([...questions]).slice(0,n);
-  index = 0;
-  correct = 0;
+logoutBtn.addEventListener("click", async () => {
+  try{
+    await api("logout", { token }).catch(()=>{});
+  } finally {
+    localStorage.removeItem(LS_TOKEN);
+    localStorage.removeItem(LS_EXPIRES);
+    window.location.href = "index.html";
+  }
+});
 
-  document.getElementById("exam").classList.remove("hidden");
-  document.getElementById("result").classList.add("hidden");
+/**********************
+ * EXAM BANK LOADING
+ **********************/
+const examSelect = document.getElementById("examSelect");
+const loadBtn = document.getElementById("loadBtn");
+const startBtn = document.getElementById("startBtn");
+const nextBtn = document.getElementById("nextBtn");
+const finishBtn = document.getElementById("finishBtn");
+const qCountEl = document.getElementById("qCount");
+const loadedPill = document.getElementById("loadedPill");
 
-  startTime = Date.now();
-  timerInt = setInterval(()=>{
-    const sec = Math.floor((Date.now()-startTime)/1000);
-    document.getElementById("timer").textContent = fmtTime(sec);
-  },1000);
+const examArea = document.getElementById("examArea");
+const doneArea = document.getElementById("doneArea");
 
-  showQuestion();
-};
+const qTitle = document.getElementById("qTitle");
+const qMeta = document.getElementById("qMeta");
+const qText = document.getElementById("qText");
+const choicesEl = document.getElementById("choices");
 
-function showQuestion(){
-  const q = picked[index];
-  document.getElementById("qIndex").textContent =
-    `Question ${index+1} of ${picked.length}`;
-  document.getElementById("questionText").textContent = q.question;
+const explainBox = document.getElementById("explainBox");
+const explainText = document.getElementById("explainText");
 
-  const choices = shuffle([q.correct, ...q.wrongs]);
-  const wrap = document.getElementById("choices");
-  wrap.innerHTML = "";
+const statusPill = document.getElementById("statusPill");
+const uploadPill = document.getElementById("uploadPill");
 
-  choices.forEach(c=>{
-    const div = document.createElement("div");
-    div.className="choice";
-    div.textContent=c;
-    div.onclick=()=>{
-      if (div.dataset.done) return;
-      div.dataset.done = "1";
+const timerEl = document.getElementById("timer");
+const progressEl = document.getElementById("progress");
+const scoreEl = document.getElementById("score");
 
-      if (c === q.correct){
-        div.classList.add("correct");
-        correct++;
-      } else {
-        div.classList.add("wrong");
-      }
+let bank = [];
+let deck = [];
+let idx = 0;
+let correct = 0;
+let answered = 0;
+let locked = false;
 
-      [...wrap.children].forEach(x=>x.style.pointerEvents="none");
-    };
-    wrap.appendChild(div);
+let startTs = 0;
+let timerInt = null;
+
+function fmtTime(sec){
+  sec = Math.max(0, Math.floor(sec));
+  const m = Math.floor(sec/60);
+  const s = sec % 60;
+  return m + ":" + (s < 10 ? "0" : "") + s;
+}
+
+function shuffle(arr){
+  return arr.map(v => [Math.random(), v]).sort((a,b)=>a[0]-b[0]).map(x=>x[1]);
+}
+
+function clearGlobals(){
+  // remove common exports so we don't accidentally reuse stale values
+  try { delete window.EXAM_QUESTIONS; } catch {}
+  try { delete window.MI_EXAM_QUESTIONS; } catch {}
+  try { delete window.TN_EXAM_QUESTIONS; } catch {}
+  try { delete window.MIEXAM; } catch {}
+  try { delete window.TNEXAM; } catch {}
+}
+
+function pickQuestionsFromWindow(){
+  // priority list
+  const candidates = [
+    window.EXAM_QUESTIONS,
+    window.MI_EXAM_QUESTIONS,
+    window.TN_EXAM_QUESTIONS,
+    window.MIEXAM,
+    window.TNEXAM
+  ].filter(Array.isArray);
+
+  if (candidates.length) return candidates[0];
+
+  // last resort: scan window for an array of objects that look like questions
+  for (const k of Object.keys(window)){
+    const v = window[k];
+    if (Array.isArray(v) && v.length && v[0] && typeof v[0] === "object" && ("question" in v[0]) && ("correct" in v[0]) && ("wrongs" in v[0])){
+      return v;
+    }
+  }
+  return [];
+}
+
+function loadScript(src){
+  return new Promise((resolve, reject) => {
+    const s = document.createElement("script");
+    s.src = src + "?v=" + Date.now(); // cache-bust for updates
+    s.onload = () => resolve();
+    s.onerror = () => reject(new Error("Failed to load " + src));
+    document.head.appendChild(s);
   });
 }
 
-document.getElementById("nextBtn").onclick = () => {
-  index++;
-  if (index >= picked.length){
-    finishExam();
-  } else {
-    showQuestion();
+async function loadExamBank(){
+  const code = examSelect.value; // "MI" or "TN"
+  const src = "./exams/" + code + "exam.js"; // MIexam.js / TNexam.js
+  // NOTE: your file names are MIexam.js and TNexam.js. This matches.
+
+  startBtn.disabled = true;
+  loadedPill.textContent = "Loaded: …";
+  bank = [];
+  deck = [];
+  idx = 0;
+
+  clearGlobals();
+
+  await loadScript(src);
+
+  bank = pickQuestionsFromWindow();
+
+  const total = bank.length;
+  loadedPill.textContent = "Loaded: " + total;
+
+  // enforce max
+  qCountEl.max = String(total || 1);
+  if (Number(qCountEl.value) > total) qCountEl.value = String(total || 1);
+
+  if (!total){
+    startBtn.disabled = true;
+    statusPill.textContent = "No questions loaded";
+    return;
   }
-};
 
-function finishExam(){
-  clearInterval(timerInt);
-  document.getElementById("exam").classList.add("hidden");
-  document.getElementById("result").classList.remove("hidden");
-
-  const totalTime = Math.floor((Date.now()-startTime)/1000);
-  document.getElementById("scoreOut").textContent =
-    `${correct} / ${picked.length} (${Math.round(correct/picked.length*100)}%)`;
-  document.getElementById("timeOut").textContent = fmtTime(totalTime);
-
-  // 🔴 THIS is where later you POST to GS:
-  // correct, picked.length, totalTime
+  statusPill.textContent = "Ready";
+  startBtn.disabled = false;
 }
-</script>
 
+loadBtn.addEventListener("click", async () => {
+  statusPill.textContent = "Loading exam bank…";
+  try{
+    await loadExamBank();
+  } catch(e){
+    loadedPill.textContent = "Loaded: 0";
+    startBtn.disabled = true;
+    statusPill.textContent = "Load failed";
+    alert(e.message || "Load failed");
+  }
+});
+
+// Auto-load on exam change
+examSelect.addEventListener("change", async () => {
+  statusPill.textContent = "Switching exam…";
+  try{
+    await loadExamBank();
+  } catch(e){
+    loadedPill.textContent = "Loaded: 0";
+    startBtn.disabled = true;
+    statusPill.textContent = "Load failed";
+  }
+});
+
+/**********************
+ * EXAM RUN
+ **********************/
+function resetExamState(){
+  deck = [];
+  idx = 0;
+  correct = 0;
+  answered = 0;
+  locked = false;
+  explainBox.classList.remove("show");
+  explainText.textContent = "";
+  uploadPill.style.display = "none";
+  uploadPill.textContent = "";
+  uploadPill.className = "badge";
+  doneArea.style.display = "none";
+  examArea.style.display = "none";
+  nextBtn.disabled = true;
+  finishBtn.disabled = true;
+  progressEl.textContent = "—";
+  scoreEl.textContent = "—";
+  timerEl.textContent = "0:00";
+  if (timerInt) clearInterval(timerInt);
+  timerInt = null;
+}
+
+function startTimer(){
+  startTs = Date.now();
+  timerEl.textContent = "0:00";
+  if (timerInt) clearInterval(timerInt);
+  timerInt = setInterval(() => {
+    const sec = (Date.now() - startTs) / 1000;
+    timerEl.textContent = fmtTime(sec);
+  }, 250);
+}
+
+function stopTimer(){
+  if (timerInt) clearInterval(timerInt);
+  timerInt = null;
+  const sec = Math.floor((Date.now() - startTs) / 1000);
+  return Math.max(0, sec);
+}
+
+function render(){
+  const q = deck[idx];
+  if (!q){
+    finishExam();
+    return;
+  }
+
+  locked = false;
+  nextBtn.disabled = true;
+  finishBtn.disabled = false;
+
+  examArea.style.display = "";
+  doneArea.style.display = "none";
+
+  explainBox.classList.remove("show");
+  explainText.textContent = "";
+
+  qTitle.textContent = "Question";
+  qMeta.textContent = `#${idx + 1} / ${deck.length}`;
+
+  qText.textContent = q.question || "—";
+  choicesEl.innerHTML = "";
+
+  const choices = shuffle([q.correct, ...(q.wrongs || [])]).filter(Boolean);
+
+  if (!choices.length){
+    const d = document.createElement("div");
+    d.className = "muted";
+    d.textContent = "No choices found for this question.";
+    choicesEl.appendChild(d);
+    return;
+  }
+
+  progressEl.textContent = `${idx + 1}/${deck.length}`;
+  scoreEl.textContent = `${correct}/${answered}`;
+
+  statusPill.textContent = "Pick an answer";
+  statusPill.className = "badge";
+
+  for (const opt of choices){
+    const c = document.createElement("div");
+    c.className = "choice";
+    c.textContent = opt;
+
+    c.addEventListener("click", () => {
+      if (locked) return;
+      locked = true;
+
+      // lock all
+      const kids = Array.from(choicesEl.children);
+      kids.forEach(k => k.classList.add("locked"));
+
+      const isRight = opt === q.correct;
+
+      // paint
+      kids.forEach(k => {
+        if (k.textContent === q.correct) k.classList.add("correct");
+      });
+      if (!isRight){
+        c.classList.add("wrong");
+      }
+
+      answered++;
+      if (isRight) correct++;
+
+      scoreEl.textContent = `${correct}/${answered}`;
+
+      // show explanation
+      const exp = (q.explanation || "").trim();
+      explainText.textContent = exp || "No explanation provided.";
+      explainBox.classList.add("show");
+
+      statusPill.textContent = isRight ? "Correct" : "Wrong";
+      statusPill.className = "badge " + (isRight ? "ok" : "err");
+
+      // enable next
+      nextBtn.disabled = false;
+    });
+
+    choicesEl.appendChild(c);
+  }
+}
+
+startBtn.addEventListener("click", () => {
+  if (!bank.length){
+    alert("Load an exam bank first.");
+    return;
+  }
+
+  const n = Math.floor(Number(qCountEl.value || 0));
+  if (!n || n < 1){
+    alert("Enter a valid number of questions.");
+    return;
+  }
+  if (n > bank.length){
+    alert(`You asked for ${n}, but only ${bank.length} questions are loaded.`);
+    return;
+  }
+
+  resetExamState();
+
+  deck = shuffle(bank).slice(0, n);
+  idx = 0;
+  correct = 0;
+  answered = 0;
+
+  startTimer();
+  render();
+
+  startBtn.disabled = true;
+  loadBtn.disabled = true;
+  examSelect.disabled = true;
+  qCountEl.disabled = true;
+});
+
+nextBtn.addEventListener("click", () => {
+  if (idx < deck.length - 1){
+    idx++;
+    render();
+  } else {
+    finishExam();
+  }
+});
+
+finishBtn.addEventListener("click", () => finishExam());
+
+async function finishExam(){
+  const time_sec = stopTimer();
+  const total = deck.length || 0;
+  const pct = total ? Math.round((correct / total) * 1000) / 10 : 0; // 1 decimal
+
+  examArea.style.display = "none";
+  doneArea.style.display = "";
+  const code = examSelect.value;
+  document.getElementById("doneText").innerHTML =
+    `<div style="font-weight:900;font-size:18px">Score: ${correct}/${total} (${pct}%)</div>
+     <div style="margin-top:6px">Time: ${fmtTime(time_sec)} (${time_sec}s)</div>
+     <div style="margin-top:10px;color:rgba(234,242,255,.72)">
+       Uploading result (only saves if better than your previous best)…
+     </div>`;
+
+  // re-enable setup UI
+  startBtn.disabled = false;
+  loadBtn.disabled = false;
+  examSelect.disabled = false;
+  qCountEl.disabled = false;
+  nextBtn.disabled = true;
+  finishBtn.disabled = true;
+
+  // Upload
+  uploadPill.style.display = "";
+  uploadPill.textContent = "Uploading…";
+  uploadPill.className = "badge";
+
+  try{
+    // This action must exist in your backend:
+    // handleSaveExamResult({token, pct, time_sec, exam_code})
+    await api("saveExamResult", {
+      token,
+      pct,
+      time_sec,
+      exam_code: code
+    });
+
+    uploadPill.textContent = "Saved (if better than previous)";
+    uploadPill.className = "badge ok";
+  } catch(e){
+    uploadPill.textContent = "Upload failed";
+    uploadPill.className = "badge err";
+  }
+}
+
+/**********************
+ * BOOT
+ **********************/
+(async () => {
+  await requireLogin();         // blocks if not logged in
+  // auto-load initial exam bank
+  try{
+    await loadExamBank();
+  } catch {
+    // ignore, user can hit Load
+  }
+})();
+</script>
 </body>
 </html>
