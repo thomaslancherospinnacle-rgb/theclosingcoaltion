@@ -2010,4 +2010,4 @@ window.MI_EXAM_QUESTIONS = [
       "None of the above"
     ]
   }
-]
+];
