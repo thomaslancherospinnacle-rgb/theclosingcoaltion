@@ -310,6 +310,32 @@
 
   <main class="wrap">
 
+    <!-- Phone Number Input (shown only if no phone) -->
+    <section id="phoneSection" class="card" style="display:none">
+      <div class="head">
+        <h2>📱 Enter Phone Number</h2>
+      </div>
+      <div class="body">
+        <p class="muted" style="margin-bottom:12px">Add your phone number to receive SMS notifications and exam reminders.</p>
+        <div style="display:flex;gap:10px;align-items:flex-start;flex-wrap:wrap">
+          <input 
+            type="tel" 
+            id="phoneInput" 
+            placeholder="(555) 555-5555"
+            style="flex:1;min-width:200px;font-family:var(--sans);font-weight:700;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:rgb(22 26 43);color:var(--text);font-size:14px"
+          />
+          <button 
+            id="savePhoneBtn" 
+            onclick="savePhoneNumber()"
+            style="padding:12px 20px;border-radius:12px;border:1px solid rgba(79,209,197,.28);background:linear-gradient(180deg,rgba(79,209,197,.35),rgba(0,0,0,.18));color:var(--text);font-weight:900;cursor:pointer;font-size:14px"
+          >
+            Save Phone Number
+          </button>
+        </div>
+        <div id="phoneMsg" class="msg"></div>
+      </div>
+    </section>
+
     <!-- Exam Readiness Dashboard -->
     <section class="card">
       <div class="head">
@@ -482,6 +508,100 @@
       xcelLink.style.display = "none";
     }
   });
+
+  /**********************
+   * PHONE NUMBER MANAGEMENT
+   **********************/
+  let userHasPhone = false;
+
+  // Auto-format phone number as user types
+  const phoneInput = $("phoneInput");
+  if (phoneInput) {
+    phoneInput.addEventListener("input", (e) => {
+      let value = e.target.value.replace(/\D/g, "");
+      if (value.length > 10) value = value.substring(0, 10);
+      
+      if (value.length >= 6) {
+        e.target.value = `(${value.substring(0,3)}) ${value.substring(3,6)}-${value.substring(6)}`;
+      } else if (value.length >= 3) {
+        e.target.value = `(${value.substring(0,3)}) ${value.substring(3)}`;
+      } else {
+        e.target.value = value;
+      }
+    });
+  }
+
+  // Check if user has phone number
+  async function checkUserPhone() {
+    try {
+      const token = getToken();
+      // Call a new API endpoint to get user profile
+      const response = await api("getUserProfile", { token });
+      
+      if (response.ok && response.phone && response.phone.trim().length >= 10) {
+        userHasPhone = true;
+        $("phoneSection").style.display = "none";
+      } else {
+        userHasPhone = false;
+        $("phoneSection").style.display = "block";
+      }
+    } catch (e) {
+      // If API doesn't exist yet, hide section for now
+      console.log("Phone check not available:", e);
+      $("phoneSection").style.display = "none";
+    }
+  }
+
+  // Save phone number
+  async function savePhoneNumber() {
+    const phone = $("phoneInput").value.trim();
+    const phoneDigits = phone.replace(/\D/g, "");
+    
+    if (!phone) {
+      showPhoneMsg("Please enter a phone number", "err");
+      return;
+    }
+    
+    if (phoneDigits.length < 10) {
+      showPhoneMsg("Phone number must be at least 10 digits", "err");
+      return;
+    }
+    
+    const btn = $("savePhoneBtn");
+    btn.disabled = true;
+    btn.textContent = "Saving...";
+    
+    try {
+      const token = getToken();
+      const response = await api("updatePhone", { token, phone });
+      
+      if (response.ok) {
+        showPhoneMsg("✅ Phone number saved successfully!", "");
+        setTimeout(() => {
+          $("phoneSection").style.display = "none";
+          userHasPhone = true;
+        }, 1500);
+      } else {
+        throw new Error(response.error || "Failed to save phone");
+      }
+    } catch (e) {
+      console.error("Error saving phone:", e);
+      showPhoneMsg("❌ " + e.message, "err");
+      btn.disabled = false;
+      btn.textContent = "Save Phone Number";
+    }
+  }
+
+  function showPhoneMsg(text, type) {
+    const msg = $("phoneMsg");
+    msg.textContent = text;
+    msg.className = "msg show" + (type === "err" ? " err" : "");
+    if (!type) {
+      setTimeout(() => {
+        msg.className = "msg";
+      }, 3000);
+    }
+  }
 
   /**********************
    * READINESS DASHBOARD
@@ -691,6 +811,9 @@
       const me = await api("me", { token });
       // success
       $("userEmail").textContent = me.loginEmail || "—";
+      
+      // Check if user has phone number
+      await checkUserPhone();
       
       // Load readiness data
       await loadReadinessData();
