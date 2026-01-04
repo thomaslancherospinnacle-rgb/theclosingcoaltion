@@ -107,5 +107,7 @@ const TERMS = [
   { term: "Deferred Annuity", category: "Annuity Type", definition: "An annuity that accumulates value during an accumulation period and begins payments at a later date during the distribution period." },
   { term: "Annuity", category: "Insurance Product", definition: "A contract between an individual and an insurer designed to accumulate funds and then distribute income, often used to provide retirement income." },
   { term: "Producer", category: "Insurance Role", definition: "A licensed individual authorized to sell, solicit, or negotiate insurance on behalf of an insurer. The term includes both agents and brokers." },
-  { term: "Aleatory Contract", category: "Contract Law", definition: "A contract in which the exchange of value is unequal. The insured may pay relatively small premiums while the insurer may pay out a much larger benefit, depending on uncertain events." }
+  { term: "Aleatory Contract", category: "Contract Law", definition: "A contract in which the exchange of value is unequal. The insured may pay relatively small premiums while the insurer may pay out a much larger benefit, depending on uncertain events." },
+  { term: "Subrogation", category: "Legal / Claims Concept", definition: "The legal right of an insurer to seek reimbursement from a third party who caused a loss after the insurer has paid the claim to the insured." }
+
 ];
