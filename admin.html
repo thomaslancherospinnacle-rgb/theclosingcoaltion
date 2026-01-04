@@ -767,10 +767,16 @@
         // ============================================================
 
         // Character counter for SMS
-        document.getElementById('smsMessageTemplate')?.addEventListener('input', (e) => {
-            const charCount = e.target.value.length;
-            document.getElementById('smsCharCount').textContent = charCount;
-        });
+        const smsTemplate = document.getElementById('smsMessageTemplate');
+        if (smsTemplate) {
+            smsTemplate.addEventListener('input', (e) => {
+                const charCount = e.target.value.length;
+                const charCountEl = document.getElementById('smsCharCount');
+                if (charCountEl) {
+                    charCountEl.textContent = charCount;
+                }
+            });
+        }
 
         // Populate SMS recipients list
         function populateSMSRecipients(users) {
