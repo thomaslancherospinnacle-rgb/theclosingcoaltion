@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <style>
         .tab-content { display: none; }
         .tab-content.active { display: block; }
@@ -217,86 +216,72 @@
             <!-- Settings Tab -->
             <div id="settingsTab" class="tab-content">
                 <div class="bg-white p-6 rounded-lg shadow mb-6">
-                    <h2 class="text-xl font-bold mb-4">Google Sheets Configuration</h2>
-                    <p class="text-sm text-gray-600 mb-4">Configure your Google Sheets API to load user data</p>
+                    <h2 class="text-xl font-bold mb-4">API Configuration</h2>
                     
-                    <div class="mb-4">
-                        <label class="block text-sm font-semibold mb-2">Google Sheets API Key</label>
-                        <input type="password" id="sheetsApiKey" 
-                            class="w-full p-3 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
-                            placeholder="Enter your Google Sheets API key">
+                    <div class="mb-4 p-4 bg-blue-50 border border-blue-200 rounded">
+                        <h3 class="font-semibold mb-2">✅ Connected Services</h3>
+                        <div class="text-sm space-y-2">
+                            <div class="flex items-center gap-2">
+                                <span class="text-green-600">●</span>
+                                <span>Cloudflare Worker API</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="text-green-600">●</span>
+                                <span>Google Apps Script Backend</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="text-green-600">●</span>
+                                <span>Google Sheets Database</span>
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="mb-4">
-                        <label class="block text-sm font-semibold mb-2">Spreadsheet ID</label>
-                        <input type="text" id="spreadsheetId" 
-                            class="w-full p-3 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
-                            placeholder="Enter your spreadsheet ID">
-                        <p class="text-xs text-gray-500 mt-1">Found in the URL: docs.google.com/spreadsheets/d/<strong>SPREADSHEET_ID</strong>/edit</p>
+                    <div class="mb-4 p-4 bg-gray-50 rounded">
+                        <h3 class="font-semibold mb-2">API Endpoint</h3>
+                        <code class="text-sm bg-white px-3 py-2 rounded border block break-all">
+                            https://closing-coalition-api.thomaslancheros06.workers.dev/
+                        </code>
                     </div>
 
-                    <div class="mb-4">
-                        <label class="block text-sm font-semibold mb-2">Sheet Name/Range</label>
-                        <input type="text" id="sheetRange" value="Sheet1!A:D"
-                            class="w-full p-3 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
-                            placeholder="e.g., Sheet1!A:D">
+                    <div class="mb-4 p-4 bg-gray-50 rounded">
+                        <h3 class="font-semibold mb-2">Google Sheets</h3>
+                        <code class="text-sm bg-white px-3 py-2 rounded border block break-all">
+                            https://script.google.com/macros/s/AKfycbzyOmxYVDoYJ6zmBMslbneUavlEKeWwplzA8zH8CvkXUx6sOTnfC7JPEsoTbjfJ2scvBQ/exec
+                        </code>
                     </div>
 
-                    <button onclick="saveGoogleSheetsConfig()" 
-                        class="w-full bg-blue-500 text-white p-3 rounded hover:bg-blue-600 transition">
-                        Save Configuration
-                    </button>
-
-                    <div class="mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded">
-                        <h4 class="font-semibold text-sm mb-2">📝 Setup Instructions:</h4>
+                    <div class="p-4 bg-yellow-50 border border-yellow-200 rounded">
+                        <h4 class="font-semibold text-sm mb-2">ℹ️ How It Works</h4>
                         <ol class="text-sm text-gray-700 space-y-1 list-decimal list-inside">
-                            <li>Go to <a href="https://console.cloud.google.com/" target="_blank" class="text-blue-600 hover:underline">Google Cloud Console</a></li>
-                            <li>Enable Google Sheets API</li>
-                            <li>Create an API key</li>
-                            <li>Make your spreadsheet publicly readable or use OAuth</li>
-                            <li>Expected columns: Name, Email, Phone, Status</li>
+                            <li>Admin dashboard sends requests to Cloudflare Worker</li>
+                            <li>Cloudflare Worker forwards to Google Apps Script</li>
+                            <li>Apps Script reads/writes to Google Sheets</li>
+                            <li>Apps Script sends emails via Gmail</li>
                         </ol>
                     </div>
                 </div>
 
                 <div class="bg-white p-6 rounded-lg shadow">
-                    <h2 class="text-xl font-bold mb-4">Email Service Configuration</h2>
-                    <p class="text-sm text-gray-600 mb-4">Configure EmailJS to send emails</p>
+                    <h2 class="text-xl font-bold mb-4">System Actions</h2>
                     
-                    <div class="mb-4">
-                        <label class="block text-sm font-semibold mb-2">EmailJS Public Key</label>
-                        <input type="text" id="emailjsPublicKey" 
-                            class="w-full p-3 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
-                            placeholder="Enter your EmailJS public key">
-                    </div>
+                    <div class="space-y-3">
+                        <button onclick="resetEmailCount()" 
+                            class="w-full p-4 border-2 border-orange-500 rounded-lg hover:bg-orange-50 transition text-left">
+                            <h3 class="font-semibold text-orange-600 mb-1">🔄 Reset Email Counter</h3>
+                            <p class="text-sm text-gray-600">Reset today's sent email count to 0</p>
+                        </button>
 
-                    <div class="mb-4">
-                        <label class="block text-sm font-semibold mb-2">Service ID</label>
-                        <input type="text" id="emailjsServiceId" 
-                            class="w-full p-3 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
-                            placeholder="Enter your service ID">
-                    </div>
+                        <button onclick="clearCache()" 
+                            class="w-full p-4 border-2 border-red-500 rounded-lg hover:bg-red-50 transition text-left">
+                            <h3 class="font-semibold text-red-600 mb-1">🗑️ Clear Cache</h3>
+                            <p class="text-sm text-gray-600">Clear all cached data and statistics</p>
+                        </button>
 
-                    <div class="mb-4">
-                        <label class="block text-sm font-semibold mb-2">Template ID</label>
-                        <input type="text" id="emailjsTemplateId" 
-                            class="w-full p-3 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
-                            placeholder="Enter your template ID">
-                    </div>
-
-                    <button onclick="saveEmailConfig()" 
-                        class="w-full bg-blue-500 text-white p-3 rounded hover:bg-blue-600 transition">
-                        Save Configuration
-                    </button>
-
-                    <div class="mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded">
-                        <h4 class="font-semibold text-sm mb-2">📝 Setup Instructions:</h4>
-                        <ol class="text-sm text-gray-700 space-y-1 list-decimal list-inside">
-                            <li>Sign up at <a href="https://www.emailjs.com/" target="_blank" class="text-blue-600 hover:underline">EmailJS.com</a></li>
-                            <li>Create an email service</li>
-                            <li>Create an email template with variables: {name}, {email}, {subject}, {message}</li>
-                            <li>Copy your Public Key, Service ID, and Template ID</li>
-                        </ol>
+                        <button onclick="loadUsersFromSheets()" 
+                            class="w-full p-4 border-2 border-green-500 rounded-lg hover:bg-green-50 transition text-left">
+                            <h3 class="font-semibold text-green-600 mb-1">📥 Reload Users</h3>
+                            <p class="text-sm text-gray-600">Fetch latest user data from Google Sheets</p>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -306,6 +291,7 @@
 
     <script>
         // Configuration
+        const API_URL = 'https://closing-coalition-api.thomaslancheros06.workers.dev/';
         const ADMIN_EMAIL = 'thomaslancheros.ail@gmail.com';
         let users = [];
         let selectedUserEmails = new Set();
@@ -314,7 +300,6 @@
         // Initialize
         document.addEventListener('DOMContentLoaded', function() {
             checkAuth();
-            loadSavedConfig();
         });
 
         // Authentication Functions
@@ -354,36 +339,71 @@
                 showMessage('Unauthorized email address', 'error');
                 return;
             }
-
-            // Generate 6-digit code
-            verificationCodeSent = Math.floor(100000 + Math.random() * 900000).toString();
             
             showMessage('Sending verification code...', 'info');
 
-            // In production, send actual email here
-            // For demo, we'll simulate sending and show the code
-            setTimeout(() => {
-                document.getElementById('loginForm').classList.add('hidden');
-                document.getElementById('verificationForm').classList.remove('hidden');
-                showMessage(`Demo: Your code is ${verificationCodeSent}`, 'success');
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        action: 'sendVerification',
+                        email: email
+                    })
+                });
+
+                const data = await response.json();
                 
-                // In production, you would send the email like this:
-                // sendEmailVerification(email, verificationCodeSent);
-            }, 1000);
+                if (data.success) {
+                    document.getElementById('loginForm').classList.add('hidden');
+                    document.getElementById('verificationForm').classList.remove('hidden');
+                    showMessage('Verification code sent to your email!', 'success');
+                } else {
+                    showMessage(data.message || 'Failed to send verification code', 'error');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showMessage('Error sending verification code. Please try again.', 'error');
+            }
         }
 
-        function verifyCode() {
+        async function verifyCode() {
             const enteredCode = document.getElementById('verificationCode').value.trim();
+            const email = document.getElementById('loginEmail').value.trim();
             
-            if (enteredCode === verificationCodeSent) {
-                localStorage.setItem('adminAuth', 'true');
-                localStorage.setItem('adminEmail', ADMIN_EMAIL);
-                showMessage('Login successful!', 'success');
-                setTimeout(() => {
-                    showDashboard();
-                }, 1000);
-            } else {
-                showMessage('Invalid verification code', 'error');
+            if (!enteredCode) {
+                showMessage('Please enter the verification code', 'error');
+                return;
+            }
+
+            showMessage('Verifying...', 'info');
+
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        action: 'verifyCode',
+                        email: email,
+                        code: enteredCode
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    localStorage.setItem('adminAuth', 'true');
+                    localStorage.setItem('adminEmail', ADMIN_EMAIL);
+                    showMessage('Login successful!', 'success');
+                    setTimeout(() => {
+                        showDashboard();
+                    }, 1000);
+                } else {
+                    showMessage(data.message || 'Invalid verification code', 'error');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showMessage('Error verifying code. Please try again.', 'error');
             }
         }
 
@@ -437,85 +457,49 @@
             }
         }
 
-        // Google Sheets Functions
-        function loadSavedConfig() {
-            const apiKey = localStorage.getItem('sheetsApiKey');
-            const spreadsheetId = localStorage.getItem('spreadsheetId');
-            const sheetRange = localStorage.getItem('sheetRange');
-            const emailjsKey = localStorage.getItem('emailjsPublicKey');
-            const serviceId = localStorage.getItem('emailjsServiceId');
-            const templateId = localStorage.getItem('emailjsTemplateId');
-
-            if (apiKey) document.getElementById('sheetsApiKey').value = apiKey;
-            if (spreadsheetId) document.getElementById('spreadsheetId').value = spreadsheetId;
-            if (sheetRange) document.getElementById('sheetRange').value = sheetRange;
-            if (emailjsKey) document.getElementById('emailjsPublicKey').value = emailjsKey;
-            if (serviceId) document.getElementById('emailjsServiceId').value = serviceId;
-            if (templateId) document.getElementById('emailjsTemplateId').value = templateId;
-        }
-
-        function saveGoogleSheetsConfig() {
-            const apiKey = document.getElementById('sheetsApiKey').value;
-            const spreadsheetId = document.getElementById('spreadsheetId').value;
-            const sheetRange = document.getElementById('sheetRange').value;
-
-            localStorage.setItem('sheetsApiKey', apiKey);
-            localStorage.setItem('spreadsheetId', spreadsheetId);
-            localStorage.setItem('sheetRange', sheetRange);
-
-            alert('Google Sheets configuration saved!');
-            loadUsersFromSheets();
-        }
-
-        function saveEmailConfig() {
-            const publicKey = document.getElementById('emailjsPublicKey').value;
-            const serviceId = document.getElementById('emailjsServiceId').value;
-            const templateId = document.getElementById('emailjsTemplateId').value;
-
-            localStorage.setItem('emailjsPublicKey', publicKey);
-            localStorage.setItem('emailjsServiceId', serviceId);
-            localStorage.setItem('emailjsTemplateId', templateId);
-
-            if (publicKey) {
-                emailjs.init(publicKey);
+        // Configuration Functions
+        function clearCache() {
+            if (confirm('Are you sure you want to clear all cached data?')) {
+                localStorage.removeItem('emailsSentToday');
+                updateStats();
+                alert('Cache cleared successfully!');
             }
+        }
 
-            alert('Email configuration saved!');
+        function resetEmailCount() {
+            if (confirm('Reset today\'s email count to 0?')) {
+                localStorage.setItem('emailsSentToday', '0');
+                updateStats();
+                alert('Email count reset!');
+            }
         }
 
         async function loadUsersFromSheets() {
-            const apiKey = localStorage.getItem('sheetsApiKey');
-            const spreadsheetId = localStorage.getItem('spreadsheetId');
-            const sheetRange = localStorage.getItem('sheetRange') || 'Sheet1!A:D';
-
-            if (!apiKey || !spreadsheetId) {
-                alert('Please configure Google Sheets API in Settings first');
-                return;
-            }
-
             try {
-                const url = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${sheetRange}?key=${apiKey}`;
-                const response = await fetch(url);
+                showMessage('Loading users...', 'info');
+                
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        action: 'getUsers'
+                    })
+                });
+
                 const data = await response.json();
 
-                if (data.values && data.values.length > 1) {
-                    // Skip header row
-                    const rows = data.values.slice(1);
-                    users = rows.map(row => ({
-                        name: row[0] || '',
-                        email: row[1] || '',
-                        phone: row[2] || '',
-                        status: row[3] || 'Active'
-                    })).filter(user => user.email); // Only include users with email
-
+                if (data.success && data.users) {
+                    users = data.users.filter(user => user.email); // Only include users with email
                     displayUsers();
                     updateStats();
+                    console.log(`Loaded ${users.length} users from Google Sheets`);
                 } else {
-                    alert('No data found in the spreadsheet');
+                    console.error('Error loading users:', data.message);
+                    alert('Error loading users: ' + (data.message || 'Unknown error'));
                 }
             } catch (error) {
                 console.error('Error loading users:', error);
-                alert('Error loading users from Google Sheets. Please check your configuration.');
+                alert('Error loading users from Google Sheets. Please check your connection.');
             }
         }
 
@@ -622,16 +606,6 @@
                 return;
             }
 
-            const publicKey = localStorage.getItem('emailjsPublicKey');
-            const serviceId = localStorage.getItem('emailjsServiceId');
-            const templateId = localStorage.getItem('emailjsTemplateId');
-
-            if (!publicKey || !serviceId || !templateId) {
-                alert('Please configure EmailJS in Settings first');
-                showTab('settings');
-                return;
-            }
-
             const subject = document.getElementById('emailSubject').value;
             const message = document.getElementById('emailMessage').value;
             const includePersonalization = document.getElementById('includePersonalization').checked;
@@ -641,6 +615,7 @@
 
             let sent = 0;
             let failed = 0;
+            const total = selectedUserEmails.size;
 
             for (const email of selectedUserEmails) {
                 const user = users.find(u => u.email === email);
@@ -649,23 +624,32 @@
                     : message;
 
                 try {
-                    // In production, send actual emails here
-                    // await emailjs.send(serviceId, templateId, {
-                    //     to_email: email,
-                    //     to_name: user.name,
-                    //     subject: subject,
-                    //     message: personalizedMessage
-                    // });
+                    const response = await fetch(API_URL, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            action: 'sendEmail',
+                            to: email,
+                            name: user?.name || '',
+                            subject: subject,
+                            message: personalizedMessage
+                        })
+                    });
+
+                    const data = await response.json();
                     
-                    // Simulate sending for demo
-                    await new Promise(resolve => setTimeout(resolve, 100));
-                    sent++;
+                    if (data.success) {
+                        sent++;
+                    } else {
+                        failed++;
+                        console.error(`Failed to send to ${email}:`, data.message);
+                    }
                 } catch (error) {
                     console.error(`Failed to send to ${email}:`, error);
                     failed++;
                 }
 
-                const progress = ((sent + failed) / selectedUserEmails.size) * 100;
+                const progress = ((sent + failed) / total) * 100;
                 document.getElementById('progressBar').style.width = progress + '%';
             }
 
@@ -675,15 +659,21 @@
             updateStats();
 
             statusDiv.innerHTML = `
-                <div class="p-4 bg-green-50 border border-green-200 rounded">
-                    <p class="text-green-800 font-semibold">✅ Email campaign completed!</p>
-                    <p class="text-sm mt-2">Successfully sent: ${sent}</p>
+                <div class="p-4 ${sent > 0 ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200'} border rounded">
+                    <p class="${sent > 0 ? 'text-green-800' : 'text-red-800'} font-semibold">
+                        ${sent > 0 ? '✅ Email campaign completed!' : '❌ Email campaign failed'}
+                    </p>
+                    <p class="text-sm mt-2">Successfully sent: ${sent} / ${total}</p>
                     ${failed > 0 ? `<p class="text-sm text-red-600">Failed: ${failed}</p>` : ''}
                 </div>
             `;
 
-            // Reset form
-            document.getElementById('emailForm').reset();
+            // Reset form if all sent successfully
+            if (failed === 0) {
+                setTimeout(() => {
+                    document.getElementById('emailForm').reset();
+                }, 3000);
+            }
         }
     </script>
 </body>
