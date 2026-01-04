@@ -688,6 +688,9 @@ let missedFromServer = [];  // loaded from server for retake
 let isRetakeMode = false;
 let missedForRetake = [];   // stored for "Take Missed?" immediate retake
 
+// Domain tracking for readiness metrics
+let domainStats = {}; // { "domain_name": { correct: 0, total: 0 } }
+
 function fmtTime(sec){
   sec = Math.max(0, Math.floor(sec));
   const m = Math.floor(sec/60);
@@ -815,6 +818,7 @@ function resetExamState(){
   correct = 0;
   answered = 0;
   locked = false;
+  domainStats = {}; // Reset domain tracking
   explainBox.classList.remove("show");
   explainText.textContent = "";
   uploadPill.style.display = "none";
@@ -903,6 +907,14 @@ function render(){
 
       const isRight = opt === q.correct;
 
+      // Track domain stats
+      const domain = q.domain || q.category || "General";
+      if (!domainStats[domain]) {
+        domainStats[domain] = { correct: 0, total: 0 };
+      }
+      domainStats[domain].total++;
+      if (isRight) domainStats[domain].correct++;
+
       // paint
       kids.forEach(k => {
         if (k.textContent === q.correct) k.classList.add("correct");
@@ -917,7 +929,8 @@ function render(){
           user_answer: opt,
           explanation: q.explanation || "",
           difficulty: q.difficulty || "",
-          wrongs: q.wrongs || []
+          wrongs: q.wrongs || [],
+          domain: domain
         });
       }
 
@@ -1043,15 +1056,31 @@ async function finishExam(){
     correct: q.correct_answer,
     explanation: q.explanation || "",
     difficulty: q.difficulty || "",
-    wrongs: q.wrongs || []
+    wrongs: q.wrongs || [],
+    domain: q.domain || "General"
   }));
+  
+  // Calculate domain_low_pct (lowest score among all domains)
+  let domain_low_pct = score_pct; // Default to total score
+  const domainScores = {};
+  
+  for (const domain in domainStats) {
+    const stats = domainStats[domain];
+    if (stats.total > 0) {
+      const domainPct = Math.round((stats.correct / stats.total) * 100);
+      domainScores[domain] = domainPct;
+      if (domainPct < domain_low_pct) {
+        domain_low_pct = domainPct;
+      }
+    }
+  }
   
   document.getElementById("doneText").innerHTML = `
     <div style="font-weight:900;font-size:18px">Score: ${correct}/${total} (${pct}%)</div>
     <div style="margin-top:6px">Time: ${fmtTime(time_sec)} (${time_sec}s)</div>
     ${missedCount > 0 ? `<div style="margin-top:6px;color:var(--danger)">${missedCount} question${missedCount > 1 ? 's' : ''} missed</div>` : `<div style="margin-top:6px;color:var(--ok)">Perfect! No missed questions!</div>`}
-    <div style="margin-top:10px;color:rgb(234,242,255,.72)">
-      Uploading result…
+    <div style="margin-top:10px;color:var(--muted);font-size:13px">
+      Uploading results & calculating readiness…
     </div>
     `;
 
@@ -1071,7 +1100,7 @@ async function finishExam(){
   nextBtn.disabled = true;
   finishBtn.disabled = true;
 
-  // Upload score
+  // Upload score (existing logic)
   uploadPill.style.display = "";
   uploadPill.textContent = "Uploading…";
   uploadPill.className = "badge";
@@ -1090,6 +1119,22 @@ async function finishExam(){
     uploadPill.className = "badge err";
   }
 
+  // Save attempt metrics for readiness tracking (NEW)
+  let readinessData = null;
+  try {
+    readinessData = await api("saveAttemptMetrics", {
+      token: getToken(),
+      exam: examSelect.value,
+      total_score_pct: score_pct,
+      domain_low_pct: domain_low_pct,
+      time_total_sec: time_sec,
+      question_count: total
+    });
+    console.log("Readiness metrics saved:", readinessData);
+  } catch(e) {
+    console.error("Failed to save attempt metrics:", e);
+  }
+
   // Log missed questions to spreadsheet (appends forever for review)
   if (missedThisSession.length > 0) {
     try {
@@ -1106,6 +1151,43 @@ async function finishExam(){
       console.error("Failed to log missed questions:", e);
     }
   }
+
+  // Update done screen with readiness info
+  let readinessHtml = "";
+  if (readinessData && readinessData.ok) {
+    const statusColor = readinessData.readiness_status === "READY" ? "var(--ok)" :
+                       readinessData.readiness_status === "BORDERLINE" ? "var(--accent)" :
+                       "var(--danger)";
+    
+    readinessHtml = `
+      <div style="margin-top:16px;padding:14px;border-radius:12px;border:1px solid var(--line);background:rgba(0,0,0,.14)">
+        <div style="font-weight:900;font-size:14px;margin-bottom:8px">📊 Readiness Metrics</div>
+        <div style="font-size:13px;color:var(--muted);line-height:1.6">
+          <div><strong>Recent Score:</strong> ${readinessData.total_score_pct.toFixed(1)}%</div>
+          <div><strong>Last 3 Avg:</strong> ${readinessData.last3_avg_pct.toFixed(1)}%</div>
+          <div><strong>Lowest Domain:</strong> ${readinessData.domain_low_pct.toFixed(1)}%</div>
+          <div><strong>Time/Question:</strong> ${readinessData.time_per_q_sec.toFixed(1)}s</div>
+          <div style="margin-top:10px;padding:8px;border-radius:8px;background:rgba(0,0,0,.2);border:1px solid ${statusColor}">
+            <strong style="color:${statusColor}">Status: ${readinessData.readiness_status}</strong><br/>
+            <span style="font-size:12px">Readiness Score: ${readinessData.readiness_score_pct.toFixed(1)}%</span>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  document.getElementById("doneText").innerHTML = `
+    <div style="font-weight:900;font-size:18px">Score: ${correct}/${total} (${pct}%)</div>
+    <div style="margin-top:6px">Time: ${fmtTime(time_sec)} (${time_sec}s)</div>
+    ${missedCount > 0 ? `<div style="margin-top:6px;color:var(--danger)">${missedCount} question${missedCount > 1 ? 's' : ''} missed</div>` : `<div style="margin-top:6px;color:var(--ok)">Perfect! No missed questions!</div>`}
+    ${Object.keys(domainScores).length > 0 ? `
+      <div style="margin-top:12px;font-size:13px;color:var(--muted2)">
+        <strong>Domain Scores:</strong><br/>
+        ${Object.entries(domainScores).map(([d, s]) => `${d}: ${s}%`).join(' • ')}
+      </div>
+    ` : ''}
+    ${readinessHtml}
+  `;
 
   // If in retake mode and got all correct, clear those questions
   if (isRetakeMode && missedThisSession.length === 0 && deck.length > 0) {
