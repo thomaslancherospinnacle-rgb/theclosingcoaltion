@@ -1321,12 +1321,12 @@
   },
   {
     "question": "A professional liability for which producers can be sued for mistakes of putting a policy into effect is called",
-    "correct": "fiduciary trust",
+    "correct": "errors and omissions",
     "explanation": "Errors and omissions is a professional liability for which producers can be sued for mistakes of putting a policy into effect.",
     "difficulty": "medium",
     "wrongs": [
+      "fiduciary trust",
       "fiduciary bond",
-      "errors and omissions",
       "errors and oversights"
     ]
   },
