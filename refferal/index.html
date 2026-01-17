@@ -398,7 +398,7 @@
       </div>
       <div class="user-info">
         <span class="pill" id="userDisplay">Loading...</span>
-        <a href="/home.html" class="btn-back">← Back to Home</a>
+        <a href="home.html" class="btn-back">← Back to Home</a>
       </div>
     </div>
   </div>
@@ -574,7 +574,20 @@
       return null;
     }
 
-    // Check if we have a stored username from previous visit
+    // ✅ PRIORITY 1: Check if username was stored at login!
+    const loginUsername = localStorage.getItem('cc_username');
+    if (loginUsername) {
+      console.log("✅ Using username from Closing Coalition login:", loginUsername);
+      // Also store in our backup key
+      storeUsername(loginUsername);
+      return {
+        username: loginUsername,
+        email: "",
+        token: token
+      };
+    }
+
+    // PRIORITY 2: Check if we have a stored username from previous visit (fallback)
     const storedUsername = getStoredUsername();
     if (storedUsername) {
       console.log("✅ Using stored username from previous visit:", storedUsername);
@@ -608,6 +621,8 @@
         console.log("✅ User verified from API:", data.username);
         // Store username for future use (won't need to prompt again!)
         storeUsername(data.username);
+        // Also store in cc_username for consistency
+        localStorage.setItem('cc_username', data.username);
         return {
           username: data.username,
           email: data.loginEmail || data.email || "",
@@ -638,6 +653,8 @@
       console.log("✅ Using manually entered username:", username.trim());
       // Store for future use - won't ask again on next visit!
       storeUsername(username.trim());
+      // Also store in cc_username for consistency
+      localStorage.setItem('cc_username', username.trim());
       return {
         username: username.trim(),
         email: "",
@@ -987,13 +1004,14 @@
   window.onload = async function() {
     console.log("=== Page loaded, starting initialization ===");
     console.log("Token in localStorage:", getToken() ? "EXISTS" : "MISSING");
-    console.log("Stored username:", getStoredUsername() || "NONE");
+    console.log("Username from login (cc_username):", localStorage.getItem('cc_username') || "NONE");
+    console.log("Stored username (referral_username):", getStoredUsername() || "NONE");
     
     // Show helpful console commands
     console.log("\n💡 Helpful commands:");
+    console.log("  To view login username: localStorage.getItem('cc_username')");
     console.log("  To clear stored username: localStorage.removeItem('referral_username')");
-    console.log("  To view stored username: localStorage.getItem('referral_username')");
-    console.log("  To manually set username: localStorage.setItem('referral_username', 'Your Name')");
+    console.log("  To manually set username: localStorage.setItem('cc_username', 'Your Name')");
     
     currentUser = await getCurrentUser();
     console.log("getCurrentUser returned:", currentUser);
