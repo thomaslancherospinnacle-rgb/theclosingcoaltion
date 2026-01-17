@@ -574,73 +574,80 @@
       return null;
     }
 
-    // ✅ PRIORITY 1: Check if username was stored at login!
-    const loginUsername = localStorage.getItem('cc_username');
-    if (loginUsername) {
-      console.log("✅ Using username from Closing Coalition login:", loginUsername);
-      // Also store in our backup key
-      storeUsername(loginUsername);
+    // ✅ PRIORITY 1: Check if username was stored at login or from previous entry
+    const storedName = localStorage.getItem('cc_username') || localStorage.getItem('referral_username');
+    if (storedName) {
+      console.log("✅ Using stored username:", storedName);
       return {
-        username: loginUsername,
+        username: storedName,
         email: "",
         token: token
       };
     }
 
-    // PRIORITY 2: Check if we have a stored username from previous visit (fallback)
-    const storedUsername = getStoredUsername();
-    if (storedUsername) {
-      console.log("✅ Using stored username from previous visit:", storedUsername);
-      return {
-        username: storedUsername,
-        email: "",
-        token: token
-      };
-    }
-
-    console.log("No stored username found, verifying with API...");
+    console.log("No stored username, calling API like exam.html does...");
 
     try {
-      // ✅ FIXED: Use getUserProfile instead of me - it returns username!
+      // ✅ Same as exam.html - call "me" endpoint
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 5000);
+      const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 seconds
 
       const res = await fetch(CC_API_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: "getUserProfile", token }),
+        body: JSON.stringify({ action: "me", token }),
         signal: controller.signal
       });
 
       clearTimeout(timeoutId);
 
+      if (!res.ok) {
+        throw new Error(`HTTP ${res.status}`);
+      }
+
       const data = await res.json();
-      console.log("API Response:", data);
+      console.log("✅ API Response:", data);
       
-      if (data.ok && data.username) {
-        console.log("✅ User verified from API:", data.username);
-        // Store username for future use (won't need to prompt again!)
-        storeUsername(data.username);
-        // Also store in cc_username for consistency
-        localStorage.setItem('cc_username', data.username);
-        return {
-          username: data.username,
-          email: data.email || "",
-          token: token
-        };
+      if (data.ok && data.loginEmail) {
+        // SUCCESS! Got loginEmail, now get username from Users sheet
+        console.log("✅ Session valid, getting username...");
+        
+        // Try getUserProfile to get actual username
+        const profile = await fetch(CC_API_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ action: "getUserProfile", token })
+        });
+        
+        const profileData = await profile.json();
+        console.log("Profile response:", profileData);
+        
+        if (profileData.ok && profileData.username) {
+          const username = profileData.username;
+          console.log("✅ Got username from profile:", username);
+          
+          // Store it!
+          localStorage.setItem('cc_username', username);
+          localStorage.setItem('referral_username', username);
+          
+          return {
+            username: username,
+            email: data.loginEmail,
+            token: token
+          };
+        }
+        
+        // If getUserProfile fails, prompt for name
+        throw new Error("Could not get username from profile");
+        
       } else {
         console.error("API returned error:", data);
-        throw new Error(data.error || data.message || "Invalid response from API");
+        throw new Error(data.error || "Invalid response");
       }
     } catch (e) {
       console.error("Failed to get user info:", e);
       
-      // If timeout or network error, prompt for manual entry
-      if (e.name === 'AbortError') {
-        console.error("⏱️ API call timed out after 5 seconds");
-      }
-      
-      // Prompt for username and store it for next time
+      // Last resort: prompt for username
       return await promptForUsername();
     }
   }
