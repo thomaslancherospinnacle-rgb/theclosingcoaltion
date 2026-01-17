@@ -397,8 +397,8 @@
         </div>
       </div>
       <div class="user-info">
-        <span class="pill" id="userDisplay">Loading...</span>
-        <a href="home.html" class="btn-back">← Back to Home</a>
+        <span class="pill" id="userDisplay">Checking login...</span>
+        <a href="./home.html" class="btn-back">← Back to Home</a>
       </div>
     </div>
   </div>
@@ -537,198 +537,109 @@
   // ============================================
   // CONFIGURATION
   // ============================================
-  // PASTE YOUR GOOGLE APPS SCRIPT URL HERE:
   const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyFC2gs5saqN_2wVlktcC0PrFHceoPKhep_SvYN7380FOeo4f-D962M59dkpk0JKZASdw/exec";
+  const CLOUD_FLARE_URL = "https://closing-coalition-api.thomaslancheros06.workers.dev";
   
-  // The Closing Coalition API (from your site)
-  const CC_API_URL = "https://closing-coalition-api.thomaslancheros06.workers.dev";
+  // ============================================
+  // AUTHENTICATION (COPIED EXACTLY FROM EXAM.HTML)
+  // ============================================
   const LS_TOKEN = "cc_token";
-
-  let referralData = [];
-  let currentUser = null;
-
-  // ============================================
-  // AUTHENTICATION
-  // ============================================
-  const LS_EXPIRES = "cc_expires_at"; // Add this for compatibility
+  const LS_EXPIRES = "cc_expires_at";
   
   function getToken() {
+    return localStorage.getItem(LS_TOKEN) || "";
+  }
+
+  async function api(action, payload) {
+    const res = await fetch(CLOUD_FLARE_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action, ...payload })
+    });
+    const txt = await res.text();
+    let data;
     try {
-      const token = localStorage.getItem(LS_TOKEN) || "";
-      console.log("Token check:", token ? `Found (${token.substring(0, 10)}...)` : "NOT FOUND");
-      return token;
-    } catch (e) {
-      console.error("localStorage error (iOS Safari?):", e);
-      alert("Storage access blocked. Please check Safari settings:\nSettings → Safari → Disable 'Prevent Cross-Site Tracking'");
-      return "";
+      data = JSON.parse(txt);
+    } catch {
+      throw new Error(txt || "Bad response");
     }
+    if (!data || data.ok !== true) {
+      const msg = (data && (data.error || data.detail))
+        ? (data.error + (data.detail ? " — " + data.detail : ""))
+        : "Request failed";
+      throw new Error(msg);
+    }
+    return data;
   }
 
-  // Get stored username from localStorage
-  function getStoredUsername() {
-    return localStorage.getItem('referral_username') || "";
-  }
+  let loginEmail = "";
+  let username = "";
 
-  // Store username for future use
-  function storeUsername(username) {
-    localStorage.setItem('referral_username', username);
-    console.log("Stored username for future use:", username);
-  }
-
-  async function getCurrentUser() {
-    console.log("=== getCurrentUser() called ===");
-    console.log("User-Agent:", navigator.userAgent);
-    console.log("Is iOS?", /iPhone|iPad|iPod/.test(navigator.userAgent));
-    
+  // EXACTLY like exam.html's requireLogin
+  async function requireLogin() {
     const token = getToken();
     if (!token) {
-      console.log("❌ No token found - checking if localStorage is blocked");
-      
-      // iOS Safari test - check if localStorage actually works
-      try {
-        localStorage.setItem('ios_test', '1');
-        localStorage.removeItem('ios_test');
-        console.log("localStorage works - user just not logged in");
-      } catch (e) {
-        console.error("❌ localStorage BLOCKED on iOS!", e);
-        alert("Storage is blocked.\n\nOn iPhone/iPad:\n• Settings → Safari\n• Turn OFF 'Prevent Cross-Site Tracking'\n• Turn OFF 'Block All Cookies'\n• Reload page");
-        return null;
-      }
-      
-      alert("Please login first");
-      window.location.href = "./index.html"; // Relative path for iOS
-      return null;
+      window.location.href = "index.html";
+      return;
     }
-
-    console.log("✅ Token found, length:", token.length);
-
-    // ✅ PRIORITY 1: Check if username was stored at login or from previous entry
-    const storedName = localStorage.getItem('cc_username') || localStorage.getItem('referral_username');
-    if (storedName) {
-      console.log("✅ Using stored username:", storedName);
-      return {
-        username: storedName,
-        email: "",
-        token: token
-      };
-    }
-
-    console.log("No stored username, calling API like exam.html does...");
 
     try {
-      // ✅ Same as exam.html - call "me" endpoint
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 seconds
-
-      const res = await fetch(CC_API_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: "me", token }),
-        signal: controller.signal
-      });
-
-      clearTimeout(timeoutId);
-
-      if (!res.ok) {
-        throw new Error(`HTTP ${res.status}`);
-      }
-
-      const data = await res.json();
-      console.log("✅ API Response:", data);
+      const me = await api("me", { token });
+      loginEmail = me.loginEmail || "";
       
-      if (data.ok && data.loginEmail) {
-        // SUCCESS! Got loginEmail, now get username from Users sheet
-        console.log("✅ Session valid, getting username...");
-        
-        // Try getUserProfile to get actual username
-        const profile = await fetch(CC_API_URL, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ action: "getUserProfile", token })
-        });
-        
-        const profileData = await profile.json();
-        console.log("Profile response:", profileData);
-        
-        if (profileData.ok && profileData.username) {
-          const username = profileData.username;
-          console.log("✅ Got username from profile:", username);
-          
-          // Store it (with iOS error handling)
-          try {
-            localStorage.setItem('cc_username', username);
-            localStorage.setItem('referral_username', username);
-            console.log("✅ Username stored in localStorage");
-          } catch (e) {
-            console.warn("Could not store username (iOS storage limit?):", e);
-            // Continue anyway - we have the username for this session
-          }
-          
-          return {
-            username: username,
-            email: data.loginEmail,
-            token: token
-          };
-        }
-        
-        // If getUserProfile fails, prompt for name
-        throw new Error("Could not get username from profile");
-        
-      } else {
-        console.error("API returned error:", data);
-        throw new Error(data.error || "Invalid response");
-      }
+      // Convert email to proper name
+      username = emailToUsername(loginEmail);
+      
+      console.log("✅ Logged in:", loginEmail);
+      console.log("✅ Username:", username);
+      
+      document.getElementById('userDisplay').textContent = username;
     } catch (e) {
-      console.error("Failed to get user info:", e);
-      
-      // Last resort: prompt for username
-      return await promptForUsername();
+      // token invalid or expired
+      console.error("Auth failed:", e);
+      localStorage.removeItem(LS_TOKEN);
+      localStorage.removeItem(LS_EXPIRES);
+      window.location.href = "index.html";
     }
   }
 
-  // Fallback: Prompt user to enter their name manually
-  async function promptForUsername() {
-    const username = prompt("The authentication system is not responding.\n\nPlease enter your full name exactly as it appears in the system\n(Example: Thomas Lancheros):");
-    
-    if (username && username.trim()) {
-      console.log("✅ Using manually entered username:", username.trim());
-      
-      // Store for future use (with iOS error handling)
-      try {
-        storeUsername(username.trim());
-        localStorage.setItem('cc_username', username.trim());
-        console.log("✅ Username stored");
-      } catch (e) {
-        console.warn("Could not store username (iOS storage?):", e);
-        // Continue anyway
-      }
-      
-      return {
-        username: username.trim(),
-        email: "",
-        token: getToken()
-      };
+  // Convert email to username
+  function emailToUsername(email) {
+    // Check stored username first
+    const stored = localStorage.getItem('cc_username') || localStorage.getItem('referral_username');
+    if (stored && stored !== email) {
+      return stored;
     }
     
-    alert("Username is required. Redirecting to login page.");
-    window.location.href = "./index.html"; // Relative path
-    return null;
+    // Convert: thomaslancheros.ail@gmail.com → Thomas Lancheros
+    let name = email.replace('.ail@gmail.com', '');
+    
+    // Handle camelCase: thomasLancheros → thomas lancheros
+    name = name.replace(/([a-z])([A-Z])/g, '$1 $2');
+    
+    // Capitalize: thomas lancheros → Thomas Lancheros
+    name = name.split(' ').map(word => 
+      word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+    ).join(' ');
+    
+    // Store it
+    try {
+      localStorage.setItem('cc_username', name);
+      localStorage.setItem('referral_username', name);
+    } catch (e) {
+      console.warn("Could not store username:", e);
+    }
+    
+    return name;
   }
+
+  let referralData = [];
 
   // ============================================
   // DATA LOADING
   // ============================================
   async function loadData() {
-    console.log("=== loadData() called ===");
-    console.log("GOOGLE_SCRIPT_URL:", GOOGLE_SCRIPT_URL);
-    console.log("currentUser:", currentUser);
-    
-    if (GOOGLE_SCRIPT_URL === "PASTE_YOUR_GOOGLE_SCRIPT_URL_HERE") {
-      showAlert('familyTree', '⚠️ Please configure GOOGLE_SCRIPT_URL at the top of this HTML file', 'error');
-      return;
-    }
-
-    if (!currentUser) {
+    if (!username) {
       showAlert('familyTree', 'Loading user info...', 'info');
       return;
     }
@@ -737,29 +648,21 @@
     treeDiv.innerHTML = '<div class="alert alert-info">⏳ Loading your network...</div>';
 
     try {
-      // Request data for this specific user
-      const url = `${GOOGLE_SCRIPT_URL}?user=${encodeURIComponent(currentUser.username)}`;
-      console.log("Fetching data from:", url);
-      
+      const url = `${GOOGLE_SCRIPT_URL}?user=${encodeURIComponent(username)}`;
       const response = await fetch(url);
-      console.log("Response status:", response.status);
-      
       const data = await response.json();
-      console.log("Data received:", data);
 
       if (Array.isArray(data)) {
-        console.log("Data is array with", data.length, "items");
         referralData = data;
         buildFamilyTree();
         updateSponsorDropdowns();
         updateStats();
       } else {
-        console.error("Data is not an array:", data);
         throw new Error('Invalid data format');
       }
     } catch (error) {
-      console.error("Error in loadData:", error);
-      treeDiv.innerHTML = `<div class="alert alert-error">❌ Error: ${error.message}<br><br>Make sure your Google Apps Script is deployed correctly.</div>`;
+      console.error("Error loading data:", error);
+      treeDiv.innerHTML = `<div class="alert alert-error">❌ Error: ${error.message}</div>`;
     }
   }
 
@@ -885,7 +788,7 @@
   // ============================================
   async function addReferral() {
     const refData = {
-      user: currentUser.username,
+      user: username,
       refName: document.getElementById('refName').value.trim(),
       refNumber: document.getElementById('refNumber').value.replace(/\D/g, ''),
       refRelation: document.getElementById('refRelation').value.trim(),
@@ -940,7 +843,7 @@
   // ============================================
   async function addSponsor() {
     const sponsorData = {
-      user: currentUser.username,
+      user: username,
       refName: document.getElementById('sponsorName').value.trim(),
       refNumber: document.getElementById('sponsorNumber').value.replace(/\D/g, ''),
       refRelation: 'Root/Sponsor',
@@ -1022,16 +925,10 @@
   }
 
   function switchTab(tabName) {
-    // Remove active from all tab contents
     document.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('active'));
-    
-    // Remove active from all tabs
     document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-    
-    // Activate the selected tab content
     document.getElementById(tabName).classList.add('active');
     
-    // Find and activate the corresponding tab button
     const tabs = document.querySelectorAll('.tab');
     if (tabName === 'tree') tabs[0].classList.add('active');
     else if (tabName === 'add-referral') tabs[1].classList.add('active');
@@ -1047,31 +944,18 @@
   }
 
   // ============================================
-  // INITIALIZATION
+  // INITIALIZATION (COPIED FROM EXAM.HTML)
   // ============================================
-  window.onload = async function() {
-    console.log("=== Page loaded, starting initialization ===");
-    console.log("Token in localStorage:", getToken() ? "EXISTS" : "MISSING");
-    console.log("Username from login (cc_username):", localStorage.getItem('cc_username') || "NONE");
-    console.log("Stored username (referral_username):", getStoredUsername() || "NONE");
-    
-    // Show helpful console commands
-    console.log("\n💡 Helpful commands:");
-    console.log("  To view login username: localStorage.getItem('cc_username')");
-    console.log("  To clear stored username: localStorage.removeItem('referral_username')");
-    console.log("  To manually set username: localStorage.setItem('cc_username', 'Your Name')");
-    
-    currentUser = await getCurrentUser();
-    console.log("getCurrentUser returned:", currentUser);
-    
-    if (currentUser) {
-      console.log("✅ User authenticated:", currentUser.username);
-      document.getElementById('userDisplay').textContent = currentUser.username;
+  async function boot() {
+    try {
+      await requireLogin();  // EXACTLY like exam.html
       await loadData();
-    } else {
-      console.error("❌ No user returned from getCurrentUser");
+    } catch (e) {
+      console.error("Boot failed:", e);
     }
-  };
+  }
+
+  boot();  // EXACTLY like exam.html
 </script>
 </body>
 </html>
