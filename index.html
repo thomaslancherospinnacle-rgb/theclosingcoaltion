@@ -334,6 +334,26 @@
   const LS_TOKEN = "cc_token";
   const LS_EXPIRES = "cc_expires_at";
 
+  // ============================================
+  // iOS-COMPATIBLE AUTH (Cookies + localStorage)
+  // ============================================
+  function setCookie(name, value, hours) {
+    const expires = new Date();
+    expires.setTime(expires.getTime() + hours * 60 * 60 * 1000);
+    document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/;SameSite=Lax`;
+  }
+
+  function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+    return null;
+  }
+
+  function deleteCookie(name) {
+    document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/;`;
+  }
+
   function setMsg(type, text){
     msg.className = "msg show " + (type === "ok" ? "ok" : type === "err" ? "err" : "");
     msg.textContent = text || "";
@@ -374,16 +394,46 @@
   tabs.forEach(t => t.addEventListener("click", () => setTab(t.dataset.tab)));
 
   function getToken(){
-    return localStorage.getItem(LS_TOKEN) || "";
+    // Check cookie first (iOS-compatible)
+    const cookieToken = getCookie(LS_TOKEN);
+    if (cookieToken) return cookieToken;
+    
+    // Fallback to localStorage
+    try {
+      const localToken = localStorage.getItem(LS_TOKEN);
+      if (localToken) {
+        // Migrate to cookie for iOS compatibility
+        setCookie(LS_TOKEN, localToken, 12);
+        return localToken;
+      }
+    } catch (e) {
+      // localStorage blocked on iOS
+    }
+    return "";
   }
   function setSession(token, expiresAt){
     if (!token){
-      localStorage.removeItem(LS_TOKEN);
-      localStorage.removeItem(LS_EXPIRES);
+      // Clear both cookie and localStorage
+      deleteCookie(LS_TOKEN);
+      deleteCookie(LS_EXPIRES);
+      try {
+        localStorage.removeItem(LS_TOKEN);
+        localStorage.removeItem(LS_EXPIRES);
+      } catch (e) {}
       return;
     }
-    localStorage.setItem(LS_TOKEN, token);
-    if (expiresAt) localStorage.setItem(LS_EXPIRES, expiresAt);
+    
+    // Save to COOKIE first (iOS-compatible)
+    setCookie(LS_TOKEN, token, 12);
+    if (expiresAt) setCookie(LS_EXPIRES, expiresAt, 12);
+    
+    // Also save to localStorage (backwards compatibility)
+    try {
+      localStorage.setItem(LS_TOKEN, token);
+      if (expiresAt) localStorage.setItem(LS_EXPIRES, expiresAt);
+    } catch (e) {
+      // iOS Private Mode - cookie still works!
+    }
   }
 
   function updateSessionUI(){
