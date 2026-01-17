@@ -579,8 +579,12 @@
   async function requireLogin() {
     const token = getToken();
     if (!token) {
-      window.location.href = "index.html";
-      return;
+      console.error("No token - redirecting to login");
+      // Prevent infinite loop - check if we're already on index.html
+      if (!window.location.href.includes('index.html')) {
+        window.location.href = "index.html";
+      }
+      throw new Error("Not logged in");
     }
 
     try {
@@ -599,7 +603,11 @@
       console.error("Auth failed:", e);
       localStorage.removeItem(LS_TOKEN);
       localStorage.removeItem(LS_EXPIRES);
-      window.location.href = "index.html";
+      // Prevent infinite loop
+      if (!window.location.href.includes('index.html')) {
+        window.location.href = "index.html";
+      }
+      throw e;
     }
   }
 
@@ -952,10 +960,20 @@
       await loadData();
     } catch (e) {
       console.error("Boot failed:", e);
+      // Don't retry - just show error in UI
+      const userDisplay = document.getElementById('userDisplay');
+      if (userDisplay) {
+        userDisplay.textContent = "Login failed";
+      }
     }
   }
 
-  boot();  // EXACTLY like exam.html
+  // Only boot once
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', boot);
+  } else {
+    boot();
+  }
 </script>
 </body>
 </html>
