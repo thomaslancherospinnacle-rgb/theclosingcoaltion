@@ -541,13 +541,46 @@
   const CLOUD_FLARE_URL = "https://closing-coalition-api.thomaslancheros06.workers.dev";
   
   // ============================================
-  // AUTHENTICATION (COPIED EXACTLY FROM EXAM.HTML)
+  // AUTHENTICATION (iOS-COMPATIBLE)
   // ============================================
   const LS_TOKEN = "cc_token";
   const LS_EXPIRES = "cc_expires_at";
   
+  // Cookie helper functions (iOS-compatible)
+  function setCookie(name, value, hours) {
+    const expires = new Date();
+    expires.setTime(expires.getTime() + hours * 60 * 60 * 1000);
+    document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/;SameSite=Lax`;
+  }
+
+  function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+    return null;
+  }
+
+  function deleteCookie(name) {
+    document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/;`;
+  }
+  
   function getToken() {
-    return localStorage.getItem(LS_TOKEN) || "";
+    // Check cookie first (iOS-compatible)
+    const cookieToken = getCookie(LS_TOKEN);
+    if (cookieToken) return cookieToken;
+    
+    // Fallback to localStorage
+    try {
+      const localToken = localStorage.getItem(LS_TOKEN);
+      if (localToken) {
+        // Migrate to cookie
+        setCookie(LS_TOKEN, localToken, 12);
+        return localToken;
+      }
+    } catch (e) {
+      // localStorage blocked on iOS
+    }
+    return "";
   }
 
   async function api(action, payload) {
@@ -573,22 +606,29 @@
   }
 
   let loginEmail = "";
-  let currentUser = ""; // This will be the EXACT display name
+  let currentUser = "User"; // Default fallback
 
-  // EXACTLY like exam.html's requireLogin
+  // NO-REDIRECT VERSION - never redirects, just works with what we have
   async function requireLogin() {
     console.log("=== requireLogin() called ===");
     
     const token = getToken();
     console.log("Token exists:", token ? "YES" : "NO");
+    console.log("Token source:", getCookie(LS_TOKEN) ? "COOKIE" : "localStorage");
     
     if (!token) {
-      console.error("No token - redirecting to login");
-      document.getElementById('userDisplay').textContent = "Not logged in - redirecting...";
-      if (!window.location.href.includes('index.html')) {
-        setTimeout(() => {
-          window.location.href = "index.html";
-        }, 1000);
+      console.error("❌ No token found");
+      // DON'T REDIRECT - just show message
+      document.getElementById('userDisplay').textContent = "Not logged in";
+      const familyTree = document.getElementById('familyTree');
+      if (familyTree) {
+        familyTree.innerHTML = `
+          <div class="alert alert-error">
+            <strong>❌ Not Logged In</strong><br><br>
+            You need to login first.<br><br>
+            <button class="btn btn-primary" onclick="location.href='index.html'">Go to Login</button>
+          </div>
+        `;
       }
       throw new Error("Not logged in");
     }
@@ -598,40 +638,65 @@
     try {
       console.log("Calling API with token...");
       const me = await api("me", { token });
-      console.log("API response:", me);
+      console.log("✅ API Response:", me);
+      
+      if (!me.ok) {
+        throw new Error(me.error || "API returned error");
+      }
       
       loginEmail = me.loginEmail || "";
       console.log("Login email:", loginEmail);
       
-      // ✅ EXACT DISPLAY NAME - this is what exam.html shows
-      // Convert: thomaslancheros.ail@gmail.com → Thomas Lancheros
-      currentUser = loginEmail.replace('.ail@gmail.com', '') // Remove domain
-                              .replace(/([a-z])([A-Z])/g, '$1 $2') // camelCase to spaces
+      // Convert email to display name
+      currentUser = loginEmail.replace('.ail@gmail.com', '')
+                              .replace(/([a-z])([A-Z])/g, '$1 $2')
                               .split(' ')
                               .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
                               .join(' ');
       
-      console.log("✅ Display Name (EXACT):", currentUser);
-      console.log("This EXACT name will be the Google Sheet tab name");
+      // Cache it for next time
+      try {
+        setCookie('cc_username', currentUser, 12);
+        localStorage.setItem('cc_username', currentUser);
+      } catch (e) {}
       
-      // Display it EXACTLY
+      console.log("✅ Display Name (EXACT):", currentUser);
       document.getElementById('userDisplay').textContent = currentUser;
       console.log("✅ Login successful!");
+      
     } catch (e) {
-      console.error("Auth failed:", e);
+      console.error("⚠️ Auth API failed:", e);
       console.error("Error details:", e.message);
       
-      document.getElementById('userDisplay').textContent = "Login expired - redirecting...";
+      // DON'T REDIRECT - try to use cached username instead
+      const cachedName = getCookie('cc_username') || localStorage.getItem('cc_username');
       
-      localStorage.removeItem(LS_TOKEN);
-      localStorage.removeItem(LS_EXPIRES);
-      
-      if (!window.location.href.includes('index.html')) {
-        setTimeout(() => {
-          window.location.href = "index.html";
-        }, 2000);
+      if (cachedName) {
+        console.log("✅ Using cached username:", cachedName);
+        currentUser = cachedName;
+        document.getElementById('userDisplay').textContent = cachedName + " (offline)";
+        // Continue - don't throw error
+      } else {
+        // No cached name - use generic username
+        console.log("⚠️ No cached username, using default");
+        currentUser = "User";
+        document.getElementById('userDisplay').textContent = "User (API offline)";
+        // Still continue - don't redirect
       }
-      throw e;
+      
+      // Show warning but don't block usage
+      const familyTree = document.getElementById('familyTree');
+      if (familyTree) {
+        familyTree.innerHTML = `
+          <div class="alert alert-warning">
+            <strong>⚠️ API Offline</strong><br>
+            Working in offline mode. Some features may be limited.<br>
+            Error: ${e.message}<br><br>
+            <button class="btn btn-primary" onclick="location.reload()">🔄 Try Again</button>
+            <button class="btn btn-primary" onclick="location.href='index.html'">Go to Login</button>
+          </div>
+        `;
+      }
     }
   }
 
@@ -960,36 +1025,53 @@
   }
 
   // ============================================
-  // INITIALIZATION (COPIED FROM EXAM.HTML)
+  // INITIALIZATION - NO REDIRECT VERSION
   // ============================================
   async function boot() {
     console.log("=== BOOT STARTED ===");
     console.log("Current URL:", window.location.href);
-    console.log("Token in localStorage:", localStorage.getItem(LS_TOKEN) ? "EXISTS" : "MISSING");
+    
+    // Check all possible token locations
+    const cookieToken = getCookie(LS_TOKEN);
+    let localToken = null;
+    try {
+      localToken = localStorage.getItem(LS_TOKEN);
+    } catch (e) {
+      console.warn("localStorage not accessible");
+    }
+    
+    console.log("Token in COOKIE:", cookieToken ? "EXISTS ✅" : "MISSING ❌");
+    console.log("Token in localStorage:", localToken ? "EXISTS" : "MISSING");
+    console.log("Cookies (all):", document.cookie || "NONE");
     
     try {
-      await requireLogin();  // EXACTLY like exam.html
+      await requireLogin();
       console.log("✅ Login successful, loading data...");
-      await loadData();
-      console.log("✅ Data loaded!");
     } catch (e) {
-      console.error("❌ Boot failed:", e);
-      console.error("Error message:", e.message);
-      // Don't retry - just show error in UI
-      const userDisplay = document.getElementById('userDisplay');
-      if (userDisplay) {
-        userDisplay.textContent = "Login failed - check console";
+      console.error("⚠️ requireLogin failed:", e);
+      // Don't stop - continue anyway
+    }
+    
+    // Try to load data even if requireLogin failed
+    if (currentUser) {
+      try {
+        await loadData();
+        console.log("✅ Data loaded!");
+      } catch (e) {
+        console.error("⚠️ loadData failed:", e);
       }
+    } else {
+      console.log("⚠️ No currentUser set, skipping data load");
     }
   }
 
   // Only boot once
   console.log("=== SCRIPT LOADED ===");
   console.log("\n💡 DEBUG COMMANDS:");
-  console.log("  Check token: localStorage.getItem('cc_token')");
-  console.log("  Check expiry: localStorage.getItem('cc_expires_at')");
-  console.log("  Clear all: localStorage.clear()");
-  console.log("  Manual test: requireLogin()");
+  console.log("  Check cookie: getCookie('cc_token')");
+  console.log("  Check localStorage: localStorage.getItem('cc_token')");
+  console.log("  Check all cookies: document.cookie");
+  console.log("  Test API: requireLogin()");
   console.log("");
   
   if (document.readyState === 'loading') {
