@@ -398,7 +398,7 @@
       </div>
       <div class="user-info">
         <span class="pill" id="userDisplay">Checking login...</span>
-        <a href="./home.html" class="btn-back">← Back to Home</a>
+        <a href="home.html" class="btn-back">← Back to Home</a>
       </div>
     </div>
   </div>
@@ -577,35 +577,54 @@
 
   // EXACTLY like exam.html's requireLogin
   async function requireLogin() {
+    console.log("=== requireLogin() called ===");
+    
     const token = getToken();
+    console.log("Token exists:", token ? "YES" : "NO");
+    
     if (!token) {
       console.error("No token - redirecting to login");
+      document.getElementById('userDisplay').textContent = "Not logged in - redirecting...";
       // Prevent infinite loop - check if we're already on index.html
       if (!window.location.href.includes('index.html')) {
-        window.location.href = "index.html";
+        setTimeout(() => {
+          window.location.href = "index.html";
+        }, 1000);
       }
       throw new Error("Not logged in");
     }
 
+    document.getElementById('userDisplay').textContent = "Verifying login...";
+
     try {
+      console.log("Calling API with token...");
       const me = await api("me", { token });
+      console.log("API response:", me);
+      
       loginEmail = me.loginEmail || "";
+      console.log("Login email:", loginEmail);
       
       // Convert email to proper name
       username = emailToUsername(loginEmail);
-      
-      console.log("✅ Logged in:", loginEmail);
-      console.log("✅ Username:", username);
+      console.log("Username:", username);
       
       document.getElementById('userDisplay').textContent = username;
+      console.log("✅ Login successful!");
     } catch (e) {
       // token invalid or expired
       console.error("Auth failed:", e);
+      console.error("Error details:", e.message);
+      
+      document.getElementById('userDisplay').textContent = "Login expired - redirecting...";
+      
       localStorage.removeItem(LS_TOKEN);
       localStorage.removeItem(LS_EXPIRES);
+      
       // Prevent infinite loop
       if (!window.location.href.includes('index.html')) {
-        window.location.href = "index.html";
+        setTimeout(() => {
+          window.location.href = "index.html";
+        }, 2000);
       }
       throw e;
     }
@@ -955,23 +974,40 @@
   // INITIALIZATION (COPIED FROM EXAM.HTML)
   // ============================================
   async function boot() {
+    console.log("=== BOOT STARTED ===");
+    console.log("Current URL:", window.location.href);
+    console.log("Token in localStorage:", localStorage.getItem(LS_TOKEN) ? "EXISTS" : "MISSING");
+    
     try {
       await requireLogin();  // EXACTLY like exam.html
+      console.log("✅ Login successful, loading data...");
       await loadData();
+      console.log("✅ Data loaded!");
     } catch (e) {
-      console.error("Boot failed:", e);
+      console.error("❌ Boot failed:", e);
+      console.error("Error message:", e.message);
       // Don't retry - just show error in UI
       const userDisplay = document.getElementById('userDisplay');
       if (userDisplay) {
-        userDisplay.textContent = "Login failed";
+        userDisplay.textContent = "Login failed - check console";
       }
     }
   }
 
   // Only boot once
+  console.log("=== SCRIPT LOADED ===");
+  console.log("\n💡 DEBUG COMMANDS:");
+  console.log("  Check token: localStorage.getItem('cc_token')");
+  console.log("  Check expiry: localStorage.getItem('cc_expires_at')");
+  console.log("  Clear all: localStorage.clear()");
+  console.log("  Manual test: requireLogin()");
+  console.log("");
+  
   if (document.readyState === 'loading') {
+    console.log("Waiting for DOM...");
     document.addEventListener('DOMContentLoaded', boot);
   } else {
+    console.log("DOM ready, booting now...");
     boot();
   }
 </script>
