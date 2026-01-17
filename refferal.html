@@ -1,0 +1,1004 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>My Referral Network — The Closing Coalition</title>
+  <style>
+    :root{
+      --bg1:#071423;
+      --bg2:#0a1a2b;
+      --card: rgba(255,255,255,.06);
+      --card2: rgba(255,255,255,.08);
+      --line: rgba(255,255,255,.10);
+      --text:#eaf2ff;
+      --muted: rgba(234,242,255,.72);
+      --muted2: rgba(234,242,255,.52);
+      --accent:#4fd1c5;
+      --accent2:#2dd4bf;
+      --danger:#ff5a7a;
+      --ok:#22c55e;
+      --shadow: 0 18px 60px rgba(0,0,0,.55);
+      --r:18px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:var(--sans);
+      color:var(--text);
+      background:
+        radial-gradient(1200px 700px at 20% 20%, rgba(79,209,197,.22), transparent 55%),
+        radial-gradient(1200px 700px at 80% 15%, rgba(45,212,191,.18), transparent 55%),
+        radial-gradient(900px 600px at 70% 80%, rgba(99,102,241,.16), transparent 55%),
+        linear-gradient(180deg, var(--bg1), var(--bg2));
+      min-height:100%;
+    }
+
+    .topbar{
+      position:sticky;
+      top:0;
+      z-index:10;
+      backdrop-filter: blur(12px);
+      background: linear-gradient(180deg, rgba(0,0,0,.35), rgba(0,0,0,.18));
+      border-bottom:1px solid var(--line);
+    }
+    .topbar-inner{
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 14px 18px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:14px;
+    }
+    .brand{
+      display:flex; align-items:center; gap:12px;
+    }
+    .dot{
+      width:38px; height:38px;
+      border-radius:12px;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.35), rgba(255,255,255,.06) 42%, rgba(79,209,197,.22) 100%),
+                  linear-gradient(180deg, rgba(79,209,197,.55), rgba(45,212,191,.12));
+      border:1px solid rgba(255,255,255,.14);
+    }
+    .title{font-weight:900; letter-spacing:.2px; line-height:1.05}
+    .sub{font-size:12px; color:var(--muted2); margin-top:2px}
+
+    .user-info{
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+    .pill{
+      font-family: var(--mono);
+      font-size:12px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(0,0,0,.14);
+      color: var(--muted);
+    }
+    .btn-back{
+      padding:10px 16px;
+      text-decoration:none;
+      font-weight:900;
+      border-radius:12px;
+      background: rgba(0,0,0,.18);
+      border: 1px solid var(--line);
+      color: var(--text);
+      cursor:pointer;
+      transition: filter .15s ease;
+    }
+    .btn-back:hover{filter:brightness(1.1)}
+
+    .tabs{
+      background: rgba(0,0,0,.2);
+      border-bottom:1px solid var(--line);
+      display:flex;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 18px;
+      overflow-x:auto;
+    }
+    .tab{
+      padding: 14px 20px;
+      cursor:pointer;
+      border:none;
+      background:transparent;
+      color: var(--muted);
+      font-weight:700;
+      font-size:15px;
+      transition: all .15s ease;
+      border-bottom: 3px solid transparent;
+      white-space:nowrap;
+    }
+    .tab:hover{
+      color: var(--text);
+      background: rgba(255,255,255,.03);
+    }
+    .tab.active{
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+    }
+
+    .content{
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 20px 18px;
+    }
+
+    .tab-content{display:none}
+    .tab-content.active{display:block}
+
+    .card{
+      background: linear-gradient(180deg, var(--card2), var(--card));
+      border:1px solid var(--line);
+      border-radius: var(--r);
+      box-shadow: var(--shadow);
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    .stats-bar{
+      display:grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap:16px;
+      margin-bottom:20px;
+    }
+    .stat-card{
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
+      padding:20px;
+      border-radius: var(--r);
+      text-align:center;
+    }
+    .stat-number{
+      font-size:32px;
+      font-weight:900;
+      margin-bottom:5px;
+    }
+    .stat-label{
+      font-size:13px;
+      opacity:0.9;
+    }
+
+    .form-group{margin-bottom:15px}
+    .form-group label{
+      display:block;
+      margin-bottom:5px;
+      font-weight:600;
+      font-size:13px;
+      color: var(--muted);
+    }
+    .form-group input,
+    .form-group select,
+    .form-group textarea{
+      width:100%;
+      padding:12px;
+      background: rgba(0,0,0,.2);
+      border:1px solid var(--line);
+      border-radius:10px;
+      color: var(--text);
+      font-size:14px;
+      font-family: var(--sans);
+    }
+    .form-group textarea{
+      min-height:80px;
+      resize:vertical;
+    }
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus{
+      outline:none;
+      border-color: var(--accent);
+    }
+    .form-row{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:15px;
+    }
+
+    .btn{
+      padding:12px 24px;
+      border:none;
+      border-radius:10px;
+      font-weight:700;
+      cursor:pointer;
+      transition: all .15s ease;
+      font-size:15px;
+    }
+    .btn-primary{
+      background: linear-gradient(180deg, rgba(79,209,197,.35), rgba(0,0,0,.18));
+      border: 1px solid rgba(79,209,197,.3);
+      color: var(--text);
+    }
+    .btn-primary:hover{filter:brightness(1.1)}
+    .btn-success{
+      background: var(--ok);
+      color:white;
+    }
+    .btn-success:hover{filter:brightness(1.1)}
+
+    .alert{
+      padding:15px;
+      border-radius:10px;
+      margin-bottom:15px;
+      border-left:4px solid;
+    }
+    .alert-success{
+      background: rgba(34, 197, 94, 0.1);
+      border-left-color: var(--ok);
+      color: var(--ok);
+    }
+    .alert-error{
+      background: rgba(255, 90, 122, 0.1);
+      border-left-color: var(--danger);
+      color: var(--danger);
+    }
+    .alert-info{
+      background: rgba(79, 209, 197, 0.1);
+      border-left-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .sponsor-group{
+      margin-bottom:40px;
+      padding:20px;
+      background: rgba(0,0,0,.15);
+      border-radius: var(--r);
+      border:1px solid var(--line);
+    }
+    .sponsor-card{
+      background: linear-gradient(135deg, var(--ok) 0%, #16a34a 100%);
+      color:white;
+      padding:25px;
+      border-radius: var(--r);
+      margin-bottom:20px;
+    }
+    .sponsor-name{
+      font-size:22px;
+      font-weight:900;
+      margin-bottom:10px;
+    }
+    .sponsor-info{
+      font-size:15px;
+      line-height:1.8;
+    }
+    .sponsor-info a{
+      color:white;
+      text-decoration:none;
+      font-weight:700;
+      border-bottom:2px solid rgba(255,255,255,0.4);
+    }
+    .sponsor-badge{
+      display:inline-block;
+      padding:5px 12px;
+      background: rgba(255,255,255,0.2);
+      border-radius:20px;
+      font-size:13px;
+      margin:5px 5px 0 0;
+    }
+
+    .referrals-container{
+      display:grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap:16px;
+    }
+    .referral-card{
+      background: linear-gradient(180deg, var(--card2), var(--card));
+      border:1px solid var(--line);
+      border-left:4px solid var(--accent);
+      border-radius: var(--r);
+      padding:20px;
+      transition: all .15s ease;
+    }
+    .referral-card:hover{
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0,0,0,.3);
+    }
+    .ref-name{
+      font-size:18px;
+      font-weight:900;
+      margin-bottom:10px;
+    }
+    .ref-detail{
+      margin:8px 0;
+      font-size:14px;
+      color: var(--muted);
+    }
+    .ref-detail a{
+      color: var(--accent);
+      text-decoration:none;
+      font-weight:600;
+    }
+    .ref-badge{
+      display:inline-block;
+      padding:4px 10px;
+      background: var(--accent);
+      color: var(--bg1);
+      border-radius:5px;
+      font-size:12px;
+      font-weight:700;
+    }
+    .ref-badge.hardcard{
+      background:#fbbf24;
+    }
+    .extension-box{
+      background: rgba(251, 191, 36, 0.1);
+      border-left:3px solid #fbbf24;
+      padding:12px;
+      margin:12px 0;
+      border-radius:8px;
+      font-style:italic;
+      color:#fbbf24;
+      font-size:13px;
+    }
+    .call-sponsor-btn{
+      width:100%;
+      padding:10px;
+      background: var(--ok);
+      color:white;
+      border:none;
+      border-radius:8px;
+      font-weight:700;
+      cursor:pointer;
+      margin-top:12px;
+      transition: all .15s ease;
+    }
+    .call-sponsor-btn:hover{filter:brightness(1.1)}
+
+    .sponsor-contact{
+      display:none;
+      background: rgba(34, 197, 94, 0.1);
+      border:1px solid var(--ok);
+      border-radius:8px;
+      padding:15px;
+      margin-top:10px;
+    }
+    .sponsor-contact.expanded{display:block}
+    .sponsor-contact-title{
+      font-weight:700;
+      color: var(--ok);
+      margin-bottom:8px;
+    }
+
+    .search-box{
+      width:100%;
+      padding:12px;
+      background: rgba(0,0,0,.2);
+      border:1px solid var(--line);
+      border-radius:10px;
+      color: var(--text);
+      font-size:14px;
+      margin-bottom:15px;
+    }
+    .search-box:focus{
+      outline:none;
+      border-color: var(--accent);
+    }
+
+    @media (max-width: 768px) {
+      .form-row{grid-template-columns:1fr}
+      .referrals-container{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+<body>
+  <!-- Top Bar -->
+  <div class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <div class="dot"></div>
+        <div>
+          <div class="title">The Referral Network</div>
+          <div class="sub">The Closing Coalition</div>
+        </div>
+      </div>
+      <div class="user-info">
+        <span class="pill" id="userDisplay">Checking login...</span>
+        <a href="home.html" class="btn-back">← Back to Home</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('tree')">🌳 My Network</button>
+    <button class="tab" onclick="switchTab('add-referral')">➕ Add Referral</button>
+    <button class="tab" onclick="switchTab('add-sponsor')">⭐ Add Sponsor</button>
+  </div>
+
+  <!-- Content -->
+  <div class="content">
+    <!-- Family Tree Tab -->
+    <div id="tree" class="tab-content active">
+      <div class="stats-bar" id="statsBar" style="display: none;">
+        <div class="stat-card">
+          <div class="stat-number" id="totalReferrals">0</div>
+          <div class="stat-label">Total Referrals</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="totalSponsors">0</div>
+          <div class="stat-label">Sponsors</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="hardcardCount">0</div>
+          <div class="stat-label">Hardcards</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <button class="btn btn-primary" onclick="loadData()" style="margin-right: 10px;">🔄 Refresh</button>
+        <input type="text" class="search-box" id="searchBox" placeholder="🔍 Search..." oninput="filterTree()">
+        <div id="familyTree"></div>
+      </div>
+    </div>
+
+    <!-- Add Referral Tab -->
+    <div id="add-referral" class="tab-content">
+      <div class="card">
+        <h2 style="margin-bottom: 20px; font-size: 20px;">Add New Referral</h2>
+        <div id="addRefStatus"></div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Referral Name *</label>
+            <input type="text" id="refName" placeholder="Full name">
+          </div>
+          <div class="form-group">
+            <label>Phone Number * (10 digits)</label>
+            <input type="tel" id="refNumber" placeholder="3046849355" maxlength="10">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Relationship *</label>
+            <input type="text" id="refRelation" placeholder="Son, Daughter, Friend, etc.">
+          </div>
+          <div class="form-group">
+            <label>Lead Type *</label>
+            <select id="refLeadType">
+              <option value="Hardcard">Hardcard</option>
+              <option value="Softcard">Softcard</option>
+              <option value="Referral">Referral</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Select Sponsor *</label>
+          <select id="refSponsor">
+            <option value="">Choose a sponsor...</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Extension (Why?) *</label>
+          <textarea id="refExtension" placeholder="e.g., Bene, interested in coverage, etc."></textarea>
+        </div>
+
+        <button class="btn btn-success" onclick="addReferral()">➕ Add Referral</button>
+      </div>
+    </div>
+
+    <!-- Add Sponsor Tab -->
+    <div id="add-sponsor" class="tab-content">
+      <div class="card">
+        <h2 style="margin-bottom: 20px; font-size: 20px;">Add New Sponsor</h2>
+        <div id="addSponsorStatus"></div>
+
+        <div class="alert alert-info">
+          <strong>Sponsors</strong> are root-level people in your network.
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Sponsor Name *</label>
+            <input type="text" id="sponsorName" placeholder="Full name">
+          </div>
+          <div class="form-group">
+            <label>Phone Number * (10 digits)</label>
+            <input type="tel" id="sponsorNumber" placeholder="3046849355" maxlength="10">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Lead Type *</label>
+            <select id="sponsorLeadType">
+              <option value="Hardcard">Hardcard</option>
+              <option value="Softcard">Softcard</option>
+              <option value="Referral">Referral</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Has Sponsor Position?</label>
+            <select id="sponsorPos">
+              <option value="NO">NO</option>
+              <option value="YES">YES</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Extension (Why?) *</label>
+          <textarea id="sponsorExtension" placeholder="e.g., Original contact, business owner, etc."></textarea>
+        </div>
+
+        <button class="btn btn-success" onclick="addSponsor()">⭐ Add Sponsor</button>
+      </div>
+    </div>
+  </div>
+
+<script>
+  // ============================================
+  // CONFIGURATION
+  // ============================================
+  const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyFC2gs5saqN_2wVlktcC0PrFHceoPKhep_SvYN7380FOeo4f-D962M59dkpk0JKZASdw/exec";
+  const CLOUD_FLARE_URL = "https://closing-coalition-api.thomaslancheros06.workers.dev";
+  
+  // ============================================
+  // AUTHENTICATION (COPIED EXACTLY FROM EXAM.HTML)
+  // ============================================
+  const LS_TOKEN = "cc_token";
+  const LS_EXPIRES = "cc_expires_at";
+  
+  function getToken() {
+    return localStorage.getItem(LS_TOKEN) || "";
+  }
+
+  async function api(action, payload) {
+    const res = await fetch(CLOUD_FLARE_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action, ...payload })
+    });
+    const txt = await res.text();
+    let data;
+    try {
+      data = JSON.parse(txt);
+    } catch {
+      throw new Error(txt || "Bad response");
+    }
+    if (!data || data.ok !== true) {
+      const msg = (data && (data.error || data.detail))
+        ? (data.error + (data.detail ? " — " + data.detail : ""))
+        : "Request failed";
+      throw new Error(msg);
+    }
+    return data;
+  }
+
+  let loginEmail = "";
+  let currentUser = ""; // This will be the EXACT display name
+
+  // EXACTLY like exam.html's requireLogin
+  async function requireLogin() {
+    console.log("=== requireLogin() called ===");
+    
+    const token = getToken();
+    console.log("Token exists:", token ? "YES" : "NO");
+    
+    if (!token) {
+      console.error("No token - redirecting to login");
+      document.getElementById('userDisplay').textContent = "Not logged in - redirecting...";
+      if (!window.location.href.includes('index.html')) {
+        setTimeout(() => {
+          window.location.href = "index.html";
+        }, 1000);
+      }
+      throw new Error("Not logged in");
+    }
+
+    document.getElementById('userDisplay').textContent = "Verifying login...";
+
+    try {
+      console.log("Calling API with token...");
+      const me = await api("me", { token });
+      console.log("API response:", me);
+      
+      loginEmail = me.loginEmail || "";
+      console.log("Login email:", loginEmail);
+      
+      // ✅ EXACT DISPLAY NAME - this is what exam.html shows
+      // Convert: thomaslancheros.ail@gmail.com → Thomas Lancheros
+      currentUser = loginEmail.replace('.ail@gmail.com', '') // Remove domain
+                              .replace(/([a-z])([A-Z])/g, '$1 $2') // camelCase to spaces
+                              .split(' ')
+                              .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+                              .join(' ');
+      
+      console.log("✅ Display Name (EXACT):", currentUser);
+      console.log("This EXACT name will be the Google Sheet tab name");
+      
+      // Display it EXACTLY
+      document.getElementById('userDisplay').textContent = currentUser;
+      console.log("✅ Login successful!");
+    } catch (e) {
+      console.error("Auth failed:", e);
+      console.error("Error details:", e.message);
+      
+      document.getElementById('userDisplay').textContent = "Login expired - redirecting...";
+      
+      localStorage.removeItem(LS_TOKEN);
+      localStorage.removeItem(LS_EXPIRES);
+      
+      if (!window.location.href.includes('index.html')) {
+        setTimeout(() => {
+          window.location.href = "index.html";
+        }, 2000);
+      }
+      throw e;
+    }
+  }
+
+  // ============================================
+  // DATA LOADING
+  // ============================================
+  async function loadData() {
+    if (!currentUser) {
+      showAlert('familyTree', 'Loading user info...', 'info');
+      return;
+    }
+
+    const treeDiv = document.getElementById('familyTree');
+    treeDiv.innerHTML = '<div class="alert alert-info">⏳ Loading your network...</div>';
+
+    try {
+      // ✅ Pass EXACT display name to Google Sheets
+      // Google Apps Script will look for/create tab with this EXACT name
+      console.log("=== LOADING DATA ===");
+      console.log("User (EXACT display name):", currentUser);
+      console.log("Google Sheet tab name:", currentUser);
+      console.log("If tab doesn't exist, it will be created automatically");
+      
+      const url = `${GOOGLE_SCRIPT_URL}?user=${encodeURIComponent(currentUser)}`;
+      const response = await fetch(url);
+      const data = await response.json();
+
+      if (Array.isArray(data)) {
+        referralData = data;
+        console.log(`✅ Loaded ${data.length} referrals from sheet tab: "${currentUser}"`);
+        buildFamilyTree();
+        updateSponsorDropdowns();
+        updateStats();
+      } else {
+        throw new Error('Invalid data format');
+      }
+    } catch (error) {
+      console.error("Error loading data:", error);
+      treeDiv.innerHTML = `<div class="alert alert-error">❌ Error: ${error.message}</div>`;
+    }
+  }
+
+  // ============================================
+  // FAMILY TREE BUILDING
+  // ============================================
+  function buildFamilyTree() {
+    const treeDiv = document.getElementById('familyTree');
+
+    if (referralData.length === 0) {
+      treeDiv.innerHTML = '<div class="alert alert-info">📝 No referrals yet. Add a sponsor to get started!</div>';
+      return;
+    }
+
+    const sponsorsFromColumn = [...new Set(referralData.map(r => r.sponsorName).filter(s => s))];
+    const rootSponsors = referralData.filter(r => !r.sponsorName || r.sponsorName.trim() === '').map(r => r.refName);
+    const allSponsors = [...new Set([...sponsorsFromColumn, ...rootSponsors])];
+
+    let html = '';
+    allSponsors.forEach(sponsorName => {
+      const referrals = referralData.filter(r => r.sponsorName === sponsorName);
+      const sponsorInfo = referralData.find(r => r.refName === sponsorName);
+      html += buildSponsorGroupHTML(sponsorName, sponsorInfo, referrals);
+    });
+
+    treeDiv.innerHTML = html;
+  }
+
+  function buildSponsorGroupHTML(sponsorName, sponsorInfo, referrals) {
+    const sponsor = sponsorInfo || {
+      refName: sponsorName,
+      refNumber: referrals[0]?.sponsorNumber || '',
+      leadType: referrals[0]?.leadType || '',
+      sponsorPos: referrals[0]?.sponsorPos || 'NO',
+      extension: ''
+    };
+
+    const cleanPhone = sponsor.refNumber.replace(/\D/g, '');
+
+    let html = `
+      <div class="sponsor-group">
+        <div class="sponsor-card">
+          <div class="sponsor-name">⭐ ${sponsorName}</div>
+          <div class="sponsor-info">
+            ${cleanPhone ? `📞 <a href="tel:${cleanPhone}">${cleanPhone}</a><br>` : ''}
+            ${sponsor.leadType ? `<span class="sponsor-badge">${sponsor.leadType}</span>` : ''}
+            ${sponsor.sponsorPos === 'YES' ? '<span class="sponsor-badge">SPONSOR POS</span>' : ''}
+            ${sponsor.extension ? `<br><br><strong>📝 Why:</strong> ${sponsor.extension}` : ''}
+          </div>
+        </div>
+    `;
+
+    if (referrals.length > 0) {
+      html += '<div class="referrals-container">';
+      referrals.forEach(ref => {
+        const cleanRefPhone = ref.refNumber.replace(/\D/g, '');
+        html += `
+          <div class="referral-card">
+            <div class="ref-name">${ref.refName}</div>
+            <div class="ref-detail">📞 <a href="tel:${cleanRefPhone}">${cleanRefPhone}</a></div>
+            <div class="ref-detail"><strong>Relation:</strong> ${ref.refRelation}</div>
+            <div class="ref-detail"><span class="ref-badge ${ref.leadType === 'Hardcard' ? 'hardcard' : ''}">${ref.leadType}</span></div>
+            ${ref.extension ? `<div class="extension-box"><strong>📝 Why:</strong> ${ref.extension}</div>` : ''}
+            <button class="call-sponsor-btn" onclick="toggleSponsorContact(this)">📞 Call Sponsor</button>
+            <div class="sponsor-contact">
+              <div class="sponsor-contact-title">Contact ${sponsor.refName}</div>
+              <div class="ref-detail">
+                📞 <a href="tel:${cleanPhone}">${cleanPhone}</a><br>
+                💬 "Hi ${sponsor.refName}, calling about ${ref.refName}"
+              </div>
+            </div>
+          </div>
+        `;
+      });
+      html += '</div>';
+    } else {
+      html += '<div class="alert alert-info">No referrals yet for this sponsor.</div>';
+    }
+
+    html += '</div>';
+    return html;
+  }
+
+  // ============================================
+  // SPONSOR DROPDOWNS
+  // ============================================
+  function updateSponsorDropdowns() {
+    const select = document.getElementById('refSponsor');
+    select.innerHTML = '<option value="">Choose a sponsor...</option>';
+
+    const sponsorsFromColumn = [...new Set(referralData.map(r => r.sponsorName).filter(s => s))];
+    const rootSponsors = referralData.filter(r => !r.sponsorName || r.sponsorName.trim() === '').map(r => r.refName);
+    const allSponsors = [...new Set([...sponsorsFromColumn, ...rootSponsors])];
+
+    allSponsors.sort().forEach(sponsorName => {
+      const sponsorData = referralData.find(r => r.refName === sponsorName);
+      const phone = sponsorData ? sponsorData.refNumber.replace(/\D/g, '') : '';
+      const option = document.createElement('option');
+      option.value = sponsorName;
+      option.textContent = phone ? `${sponsorName} (${phone})` : sponsorName;
+      select.appendChild(option);
+    });
+  }
+
+  // ============================================
+  // STATISTICS
+  // ============================================
+  function updateStats() {
+    const statsBar = document.getElementById('statsBar');
+    const totalReferrals = referralData.length;
+    const uniqueSponsors = [...new Set(referralData.map(r => r.sponsorName).filter(s => s))].length;
+    const hardcards = referralData.filter(r => r.leadType === 'Hardcard').length;
+
+    document.getElementById('totalReferrals').textContent = totalReferrals;
+    document.getElementById('totalSponsors').textContent = uniqueSponsors;
+    document.getElementById('hardcardCount').textContent = hardcards;
+
+    statsBar.style.display = totalReferrals > 0 ? 'grid' : 'none';
+  }
+
+  // ============================================
+  // ADD REFERRAL
+  // ============================================
+  async function addReferral() {
+    const refData = {
+      user: currentUser,  // ✅ EXACT display name - this is the sheet tab name
+      refName: document.getElementById('refName').value.trim(),
+      refNumber: document.getElementById('refNumber').value.replace(/\D/g, ''),
+      refRelation: document.getElementById('refRelation').value.trim(),
+      sponsorName: document.getElementById('refSponsor').value,
+      sponsorNumber: '',
+      leadType: document.getElementById('refLeadType').value,
+      sponsorPos: 'NO',
+      extension: document.getElementById('refExtension').value.trim()
+    };
+
+    if (!refData.refName || !refData.refNumber || !refData.refRelation || !refData.sponsorName || !refData.extension) {
+      showAlert('addRefStatus', '❌ Please fill in all fields', 'error');
+      return;
+    }
+
+    if (refData.refNumber.length !== 10) {
+      showAlert('addRefStatus', '❌ Phone must be 10 digits', 'error');
+      return;
+    }
+
+    const sponsor = referralData.find(r => r.refName === refData.sponsorName);
+    if (sponsor) refData.sponsorNumber = sponsor.refNumber;
+
+    console.log("=== ADDING REFERRAL ===");
+    console.log("Will be added to sheet tab:", currentUser);
+    console.log("Referral data:", refData);
+
+    showAlert('addRefStatus', '⏳ Adding...', 'info');
+
+    try {
+      const response = await fetch(GOOGLE_SCRIPT_URL, {
+        method: 'POST',
+        body: JSON.stringify({ action: 'addReferral', referralData: refData })
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        showAlert('addRefStatus', '✅ Referral added!', 'success');
+        document.getElementById('refName').value = '';
+        document.getElementById('refNumber').value = '';
+        document.getElementById('refRelation').value = '';
+        document.getElementById('refSponsor').value = '';
+        document.getElementById('refExtension').value = '';
+        setTimeout(() => loadData(), 1000);
+      } else {
+        showAlert('addRefStatus', '❌ ' + result.message, 'error');
+      }
+    } catch (error) {
+      showAlert('addRefStatus', '❌ Error: ' + error.message, 'error');
+    }
+  }
+
+  // ============================================
+  // ADD SPONSOR
+  // ============================================
+  async function addSponsor() {
+    const sponsorData = {
+      user: currentUser,  // ✅ EXACT display name - this is the sheet tab name
+      refName: document.getElementById('sponsorName').value.trim(),
+      refNumber: document.getElementById('sponsorNumber').value.replace(/\D/g, ''),
+      refRelation: 'Root/Sponsor',
+      sponsorName: '',
+      sponsorNumber: '',
+      leadType: document.getElementById('sponsorLeadType').value,
+      sponsorPos: document.getElementById('sponsorPos').value,
+      extension: document.getElementById('sponsorExtension').value.trim()
+    };
+
+    if (!sponsorData.refName || !sponsorData.refNumber || !sponsorData.extension) {
+      showAlert('addSponsorStatus', '❌ Please fill in all fields', 'error');
+      return;
+    }
+
+    if (sponsorData.refNumber.length !== 10) {
+      showAlert('addSponsorStatus', '❌ Phone must be 10 digits', 'error');
+      return;
+    }
+
+    console.log("=== ADDING SPONSOR ===");
+    console.log("Will be added to sheet tab:", currentUser);
+    console.log("Sponsor data:", sponsorData);
+
+    showAlert('addSponsorStatus', '⏳ Adding...', 'info');
+
+    try {
+      const response = await fetch(GOOGLE_SCRIPT_URL, {
+        method: 'POST',
+        body: JSON.stringify({ action: 'addReferral', referralData: sponsorData })
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        showAlert('addSponsorStatus', '✅ Sponsor added!', 'success');
+        document.getElementById('sponsorName').value = '';
+        document.getElementById('sponsorNumber').value = '';
+        document.getElementById('sponsorExtension').value = '';
+        setTimeout(() => loadData(), 1000);
+      } else {
+        showAlert('addSponsorStatus', '❌ ' + result.message, 'error');
+      }
+    } catch (error) {
+      showAlert('addSponsorStatus', '❌ Error: ' + error.message, 'error');
+    }
+  }
+
+  // ============================================
+  // SEARCH & FILTER
+  // ============================================
+  function filterTree() {
+    const searchTerm = document.getElementById('searchBox').value.toLowerCase();
+    const cards = document.querySelectorAll('.referral-card');
+    const groups = document.querySelectorAll('.sponsor-group');
+
+    if (!searchTerm) {
+      cards.forEach(card => card.style.display = 'block');
+      groups.forEach(group => group.style.display = 'block');
+      return;
+    }
+
+    cards.forEach(card => {
+      card.style.display = card.textContent.toLowerCase().includes(searchTerm) ? 'block' : 'none';
+    });
+
+    groups.forEach(group => {
+      const visibleCards = group.querySelectorAll('.referral-card[style*="display: block"]');
+      const sponsorCard = group.querySelector('.sponsor-card');
+      const sponsorText = sponsorCard ? sponsorCard.textContent.toLowerCase() : '';
+      
+      group.style.display = (visibleCards.length > 0 || sponsorText.includes(searchTerm)) ? 'block' : 'none';
+    });
+  }
+
+  // ============================================
+  // UI HELPERS
+  // ============================================
+  function toggleSponsorContact(button) {
+    const contact = button.nextElementSibling;
+    contact.classList.toggle('expanded');
+    button.textContent = contact.classList.contains('expanded') ? '✖️ Close' : '📞 Call Sponsor';
+  }
+
+  function switchTab(tabName) {
+    document.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.getElementById(tabName).classList.add('active');
+    
+    const tabs = document.querySelectorAll('.tab');
+    if (tabName === 'tree') tabs[0].classList.add('active');
+    else if (tabName === 'add-referral') tabs[1].classList.add('active');
+    else if (tabName === 'add-sponsor') tabs[2].classList.add('active');
+  }
+
+  function showAlert(elementId, message, type) {
+    const statusDiv = document.getElementById(elementId);
+    statusDiv.innerHTML = `<div class="alert alert-${type}">${message}</div>`;
+    if (type === 'success') {
+      setTimeout(() => statusDiv.innerHTML = '', 5000);
+    }
+  }
+
+  // ============================================
+  // INITIALIZATION (COPIED FROM EXAM.HTML)
+  // ============================================
+  async function boot() {
+    console.log("=== BOOT STARTED ===");
+    console.log("Current URL:", window.location.href);
+    console.log("Token in localStorage:", localStorage.getItem(LS_TOKEN) ? "EXISTS" : "MISSING");
+    
+    try {
+      await requireLogin();  // EXACTLY like exam.html
+      console.log("✅ Login successful, loading data...");
+      await loadData();
+      console.log("✅ Data loaded!");
+    } catch (e) {
+      console.error("❌ Boot failed:", e);
+      console.error("Error message:", e.message);
+      // Don't retry - just show error in UI
+      const userDisplay = document.getElementById('userDisplay');
+      if (userDisplay) {
+        userDisplay.textContent = "Login failed - check console";
+      }
+    }
+  }
+
+  // Only boot once
+  console.log("=== SCRIPT LOADED ===");
+  console.log("\n💡 DEBUG COMMANDS:");
+  console.log("  Check token: localStorage.getItem('cc_token')");
+  console.log("  Check expiry: localStorage.getItem('cc_expires_at')");
+  console.log("  Clear all: localStorage.clear()");
+  console.log("  Manual test: requireLogin()");
+  console.log("");
+  
+  if (document.readyState === 'loading') {
+    console.log("Waiting for DOM...");
+    document.addEventListener('DOMContentLoaded', boot);
+  } else {
+    console.log("DOM ready, booting now...");
+    boot();
+  }
+</script>
+</body>
+</html>
