@@ -538,7 +538,7 @@
   // CONFIGURATION
   // ============================================
   // PASTE YOUR GOOGLE APPS SCRIPT URL HERE:
-  const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyFC2gs5saqN_2wVlktcC0PrFHceoPKhep_SvYN7380FOeo4f-D962M59dkpk0JKZASdw/exec";
+  const GOOGLE_SCRIPT_URL = "PASTE_YOUR_GOOGLE_SCRIPT_URL_HERE";
   
   // The Closing Coalition API (from your site)
   const CC_API_URL = "https://closing-coalition-api.thomaslancheros06.workers.dev";
@@ -554,6 +554,17 @@
     return localStorage.getItem(LS_TOKEN) || "";
   }
 
+  // Get stored username from localStorage
+  function getStoredUsername() {
+    return localStorage.getItem('referral_username') || "";
+  }
+
+  // Store username for future use
+  function storeUsername(username) {
+    localStorage.setItem('referral_username', username);
+    console.log("Stored username for future use:", username);
+  }
+
   async function getCurrentUser() {
     const token = getToken();
     if (!token) {
@@ -563,7 +574,18 @@
       return null;
     }
 
-    console.log("Token found, verifying with API...");
+    // Check if we have a stored username from previous visit
+    const storedUsername = getStoredUsername();
+    if (storedUsername) {
+      console.log("✅ Using stored username from previous visit:", storedUsername);
+      return {
+        username: storedUsername,
+        email: "",
+        token: token
+      };
+    }
+
+    console.log("No stored username found, verifying with API...");
 
     try {
       // Add timeout to prevent hanging (5 seconds)
@@ -583,7 +605,9 @@
       console.log("API Response:", data);
       
       if (data.ok && data.username) {
-        console.log("User verified:", data.username);
+        console.log("✅ User verified from API:", data.username);
+        // Store username for future use (won't need to prompt again!)
+        storeUsername(data.username);
         return {
           username: data.username,
           email: data.loginEmail || data.email || "",
@@ -596,13 +620,12 @@
     } catch (e) {
       console.error("Failed to get user info:", e);
       
-      // If timeout or network error, offer manual entry
+      // If timeout or network error, prompt for manual entry
       if (e.name === 'AbortError') {
-        console.error("API call timed out after 5 seconds");
-        return await promptForUsername();
+        console.error("⏱️ API call timed out after 5 seconds");
       }
       
-      // For other errors, try manual entry
+      // Prompt for username and store it for next time
       return await promptForUsername();
     }
   }
@@ -612,7 +635,9 @@
     const username = prompt("The authentication system is not responding.\n\nPlease enter your full name exactly as it appears in the system\n(Example: Thomas Lancheros):");
     
     if (username && username.trim()) {
-      console.log("Using manually entered username:", username.trim());
+      console.log("✅ Using manually entered username:", username.trim());
+      // Store for future use - won't ask again on next visit!
+      storeUsername(username.trim());
       return {
         username: username.trim(),
         email: "",
@@ -962,16 +987,23 @@
   window.onload = async function() {
     console.log("=== Page loaded, starting initialization ===");
     console.log("Token in localStorage:", getToken() ? "EXISTS" : "MISSING");
+    console.log("Stored username:", getStoredUsername() || "NONE");
+    
+    // Show helpful console commands
+    console.log("\n💡 Helpful commands:");
+    console.log("  To clear stored username: localStorage.removeItem('referral_username')");
+    console.log("  To view stored username: localStorage.getItem('referral_username')");
+    console.log("  To manually set username: localStorage.setItem('referral_username', 'Your Name')");
     
     currentUser = await getCurrentUser();
     console.log("getCurrentUser returned:", currentUser);
     
     if (currentUser) {
-      console.log("User authenticated:", currentUser.username);
+      console.log("✅ User authenticated:", currentUser.username);
       document.getElementById('userDisplay').textContent = currentUser.username;
       await loadData();
     } else {
-      console.error("No user returned from getCurrentUser");
+      console.error("❌ No user returned from getCurrentUser");
     }
   };
 </script>
