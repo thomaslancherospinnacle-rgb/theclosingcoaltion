@@ -538,7 +538,7 @@
   // CONFIGURATION
   // ============================================
   // PASTE YOUR GOOGLE APPS SCRIPT URL HERE:
-  const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwepyis6AX8OjMxSbLzNcbmxOQZbplzPC8DB-PGD-OLdnJ5EfXkZKeEgRKkapqVxRYzuA/exec";
+  const GOOGLE_SCRIPT_URL = "PASTE_YOUR_GOOGLE_SCRIPT_URL_HERE";
   
   // The Closing Coalition API (from your site)
   const CC_API_URL = "https://closing-coalition-api.thomaslancheros06.workers.dev";
@@ -880,10 +880,20 @@
   }
 
   function switchTab(tabName) {
+    // Remove active from all tab contents
     document.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('active'));
+    
+    // Remove active from all tabs
     document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    
+    // Activate the selected tab content
     document.getElementById(tabName).classList.add('active');
-    event.target.classList.add('active');
+    
+    // Find and activate the corresponding tab button
+    const tabs = document.querySelectorAll('.tab');
+    if (tabName === 'tree') tabs[0].classList.add('active');
+    else if (tabName === 'add-referral') tabs[1].classList.add('active');
+    else if (tabName === 'add-sponsor') tabs[2].classList.add('active');
   }
 
   function showAlert(elementId, message, type) {
