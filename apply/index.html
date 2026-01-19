@@ -446,7 +446,7 @@
 
     <script>
         // ⚠️ UPDATE THIS WITH YOUR GOOGLE APPS SCRIPT URL ⚠️
-        const RECRUITING_API_URL = 'https://script.google.com/macros/s/AKfycbxxP4e7Rb-tBy98JUSblu_oA-ixqwYjfmPNedXYoeRdCwzKnrCh6qgPhsXDUzdJ-uH4/exec';
+        const RECRUITING_API_URL = 'https://script.google.com/macros/s/AKfycbwd2h_vdsWbr4tZfnNBkDoGK0pGKri2_DybQ9dFwvguGORcBN9-sQ1EhyIufos1CIAy/exec';
         
         // Capture referral code from URL
         // Supports both formats:
@@ -512,7 +512,7 @@
             try {
                 const response = await fetch(RECRUITING_API_URL, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: { 'Content-Type': 'text/plain' },
                     body: JSON.stringify(formData)
                 });
                 
