@@ -451,7 +451,7 @@
         // Capture referral code from URL
         window.addEventListener('DOMContentLoaded', () => {
             const urlParams = new URLSearchParams(window.location.search);
-            const ref = urlParams.get('ref');
+            const ref = window.location.search.substring(1);
             
             if (ref) {
                 document.getElementById('referralCode').value = ref;
