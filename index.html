@@ -40,7 +40,6 @@
       padding:24px;
     }
     .wrap{width:min(980px, 100%); display:grid; grid-template-columns: 1fr; gap:18px;}
-    @media (min-width: 920px){ .wrap{grid-template-columns: 1.05fr .95fr;} }
 
     .card{
       background: linear-gradient(180deg, var(--card2), var(--card));
@@ -265,37 +264,6 @@
         </div>
       </div>
     </div>
-
-    <!-- SIDE -->
-    <div class="card">
-      <div class="side">
-        <h3>Account status</h3>
-
-        <div class="statusRow">
-          <span>Session</span>
-          <span id="sessBadge" class="badge">Not logged in</span>
-        </div>
-
-        <div class="divider"></div>
-
-        <p>
-          First time: create a password, send a verification code, then verify.<br/>
-          After that: login with password.
-        </p>
-
-        <div class="divider"></div>
-
-        <div class="statusRow">
-          <span>Derived email</span>
-          <span id="derivedMini" class="badge">—</span>
-        </div>
-
-        <div class="hint" style="margin-top:12px;">
-          If you don’t control the derived inbox, you won’t receive the code.
-        </div>
-      </div>
-    </div>
-
   </div>
 
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
