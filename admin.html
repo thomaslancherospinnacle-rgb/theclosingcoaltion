@@ -91,9 +91,6 @@
                     <button onclick="showTab('users')" class="tab-btn px-4 py-2 rounded hover:bg-gray-100 whitespace-nowrap">
                         User List
                     </button>
-                    <button onclick="showTab('recruiters')" class="tab-btn px-4 py-2 rounded hover:bg-gray-100 whitespace-nowrap">
-                        👥 Recruiters
-                    </button>
                     <button onclick="showTab('recruits')" class="tab-btn px-4 py-2 rounded hover:bg-gray-100 whitespace-nowrap">
                         📊 Recruits
                     </button>
@@ -141,9 +138,9 @@
                             <h3 class="font-semibold text-blue-600 mb-1">📋 View Users</h3>
                             <p class="text-sm text-gray-600">View and manage user list from Google Sheets</p>
                         </button>
-                        <button onclick="showTab('recruiters')" class="p-4 border-2 border-purple-500 rounded-lg hover:bg-purple-50 transition text-left">
-                            <h3 class="font-semibold text-purple-600 mb-1">👥 Manage Recruiters</h3>
-                            <p class="text-sm text-gray-600">Promote users to recruiter status</p>
+                        <button onclick="showTab('recruits')" class="p-4 border-2 border-purple-500 rounded-lg hover:bg-purple-50 transition text-left">
+                            <h3 class="font-semibold text-purple-600 mb-1">📊 View Recruits</h3>
+                            <p class="text-sm text-gray-600">See all recruiters and their prospects</p>
                         </button>
                         <button onclick="showTab('email')" class="p-4 border-2 border-green-500 rounded-lg hover:bg-green-50 transition text-left">
                             <h3 class="font-semibold text-green-600 mb-1">✉️ Send Email</h3>
@@ -205,80 +202,6 @@
                     </div>
 
                     <div id="userCount" class="mt-4 text-sm text-gray-600"></div>
-                </div>
-            </div>
-
-            <!-- RECRUITERS TAB -->
-            <div id="recruitersTab" class="tab-content">
-                <div class="bg-white p-6 rounded-lg shadow mb-6">
-                    <h2 class="text-2xl font-bold mb-6">Recruiter Management</h2>
-                    
-                    <!-- Promote to Recruiter Section -->
-                    <div class="bg-gradient-to-r from-blue-50 to-purple-50 border-2 border-blue-200 rounded-lg p-6 mb-6">
-                        <h3 class="text-lg font-bold mb-4 text-blue-800">✨ Promote User to Recruiter</h3>
-                        <p class="text-sm text-gray-700 mb-4">
-                            Enter the user's full name (lowercase). A new Google Sheets tab will be created with their name,
-                            and they'll get a unique referral URL.
-                        </p>
-                        
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-                            <div>
-                                <label class="block text-sm font-medium mb-2">Full Name *</label>
-                                <input type="text" id="recruiterFullName" 
-                                       placeholder="thomas lancheros"
-                                       class="w-full border-2 border-gray-300 rounded px-3 py-2 focus:border-blue-500 focus:outline-none">
-                                <p class="text-xs text-gray-500 mt-1">Use lowercase (e.g., "thomas lancheros")</p>
-                            </div>
-                            
-                            <div>
-                                <label class="block text-sm font-medium mb-2">User Email (optional)</label>
-                                <input type="email" id="recruiterEmail" 
-                                       placeholder="thomas@example.com"
-                                       class="w-full border-2 border-gray-300 rounded px-3 py-2 focus:border-blue-500 focus:outline-none">
-                                <p class="text-xs text-gray-500 mt-1">For your reference</p>
-                            </div>
-                            
-                            <div class="flex items-end">
-                                <button onclick="promoteToRecruiter()" 
-                                        class="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-2 rounded-lg font-semibold hover:from-blue-700 hover:to-purple-700 transition">
-                                    ✓ Create Recruiter
-                                </button>
-                            </div>
-                        </div>
-                        
-                        <div id="promotionResult" class="hidden mt-4"></div>
-                    </div>
-                    
-                    <!-- Current Recruiters List -->
-                    <div class="bg-white rounded-lg border-2 border-gray-200">
-                        <div class="bg-gray-50 px-6 py-4 border-b border-gray-200 flex justify-between items-center">
-                            <h3 class="text-lg font-bold text-gray-800">Current Recruiters</h3>
-                            <button onclick="loadRecruiters()" class="text-sm text-blue-600 hover:underline font-semibold">
-                                🔄 Refresh
-                            </button>
-                        </div>
-                        
-                        <div class="overflow-x-auto">
-                            <table class="w-full">
-                                <thead class="bg-gray-50">
-                                    <tr>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Name</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tab Name</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Total Leads</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Referral URL</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="recruitersTableBody">
-                                    <tr>
-                                        <td colspan="5" class="px-6 py-8 text-center text-gray-500">
-                                            Click "Refresh" to load recruiters
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
                 </div>
             </div>
 
@@ -548,8 +471,7 @@
         const API_URL = 'https://closing-coalition-api.thomaslancheros06.workers.dev/';
         
         // ⚠️ UPDATE THIS - Recruiting API (Google Apps Script)
-        // Deploy CompleteTracker.gs and paste URL here:
-        const RECRUITING_API_URL = 'https://script.google.com/macros/s/AKfycbwYD77Hfj70YbwQeNz1qSpihYzXLijsxVbyISD59Dv7FIe1GnLSJOdbs_oyM7xR0oqN/exec';
+        const RECRUITING_API_URL = 'https://script.google.com/macros/s/AKfycbydU_8O0FFMVGataWlIcchIOt-5QPmWPpcetXLMZvF7r9yUJ_vRgn54HMqPeXqWm891/exec';
         
         const ADMIN_EMAIL = 'thomaslancheros.ail@gmail.com';
         
@@ -722,10 +644,6 @@
                 updateRecipientList();
             }
             
-            if (tabName === 'recruiters') {
-                loadRecruiters();
-            }
-            
             // Auto-load recruits data when tab is shown
             if (tabName === 'recruits' && allRecruitsData.length === 0) {
                 loadAllRecruits();
@@ -857,7 +775,7 @@
         function updateStats() {
             document.getElementById('totalUsers').textContent = users.length;
             document.getElementById('selectedUsers').textContent = selectedUserEmails.size;
-            document.getElementById('totalRecruiters').textContent = recruiters.length;
+            document.getElementById('totalRecruiters').textContent = allRecruitsData.length;
             
             const emailsSent = localStorage.getItem('emailsSentToday') || 0;
             document.getElementById('emailsSent').textContent = emailsSent;
@@ -1111,168 +1029,11 @@
         }
 
         // ============================================================
-        // RECRUITER MANAGEMENT
-        // ============================================================
-        async function promoteToRecruiter() {
-            const fullName = document.getElementById('recruiterFullName').value.trim();
-            const email = document.getElementById('recruiterEmail').value.trim();
-            
-            if (!fullName) {
-                alert('Please enter the full name');
-                return;
-            }
-
-            if (RECRUITING_API_URL === 'YOUR_DEPLOYMENT_URL_HERE') {
-                alert('⚠️ Recruiting API not configured!\n\nPlease update RECRUITING_API_URL at the top of this file.');
-                return;
-            }
-            
-            if (!confirm(`Create recruiter account for: "${fullName}"?\n\nThis will:\n• Create a new Google Sheets tab\n• Generate a referral URL\n• Allow them to access the pipeline`)) {
-                return;
-            }
-            
-            const resultDiv = document.getElementById('promotionResult');
-            resultDiv.innerHTML = '<div class="text-blue-600 font-semibold">Creating recruiter account...</div>';
-            resultDiv.classList.remove('hidden');
-            
-            try {
-                const response = await fetch(RECRUITING_API_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'text/plain' },
-                    body: JSON.stringify({
-                        action: 'promoteToRecruiter',
-                        fullName: fullName,
-                        email: email
-                    })
-                });
-                
-                const result = await response.json();
-                
-                if (result.success) {
-                    resultDiv.innerHTML = `
-                        <div class="bg-green-50 border-2 border-green-500 rounded-lg p-4">
-                            <div class="flex items-start">
-                                <div class="text-2xl mr-3">✅</div>
-                                <div class="flex-1">
-                                    <h4 class="font-bold text-green-800 mb-2">Recruiter Created Successfully!</h4>
-                                    <div class="space-y-2 text-sm text-green-700">
-                                        <p><strong>Name:</strong> ${result.fullName}</p>
-                                        <p><strong>Tab Created:</strong> ${result.tabName}</p>
-                                        <p><strong>Referral URL:</strong></p>
-                                        <div class="bg-white p-2 rounded border border-green-300 font-mono text-xs break-all">
-                                            ${result.recruiterUrl}
-                                        </div>
-                                    </div>
-                                    <button onclick="copyText('${result.recruiterUrl}')" class="mt-3 bg-green-600 text-white px-4 py-2 rounded text-sm hover:bg-green-700">
-                                        📋 Copy Referral URL
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                    
-                    document.getElementById('recruiterFullName').value = '';
-                    document.getElementById('recruiterEmail').value = '';
-                    await loadRecruiters();
-                    
-                } else {
-                    resultDiv.innerHTML = `
-                        <div class="bg-red-50 border-2 border-red-500 rounded-lg p-4">
-                            <div class="flex items-start">
-                                <div class="text-2xl mr-3">⚠️</div>
-                                <div>
-                                    <h4 class="font-bold text-red-800 mb-1">Error</h4>
-                                    <p class="text-red-700 text-sm">${result.message}</p>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                }
-            } catch (error) {
-                console.error('Error promoting recruiter:', error);
-                resultDiv.innerHTML = `
-                    <div class="bg-red-50 border-2 border-red-500 rounded-lg p-4">
-                        <div class="flex items-start">
-                            <div class="text-2xl mr-3">⚠️</div>
-                            <div>
-                                <h4 class="font-bold text-red-800 mb-1">Network Error</h4>
-                                <p class="text-red-700 text-sm">Could not connect. Check RECRUITING_API_URL.</p>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            }
-        }
-
-        async function loadRecruiters() {
-            if (RECRUITING_API_URL === 'YOUR_DEPLOYMENT_URL_HERE') {
-                const tbody = document.getElementById('recruitersTableBody');
-                tbody.innerHTML = '<tr><td colspan="5" class="px-6 py-8 text-center text-yellow-600">⚠️ Update RECRUITING_API_URL first</td></tr>';
-                return;
-            }
-
-            const tbody = document.getElementById('recruitersTableBody');
-            tbody.innerHTML = '<tr><td colspan="5" class="px-6 py-8 text-center text-gray-500">Loading...</td></tr>';
-            
-            try {
-                const response = await fetch(RECRUITING_API_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'text/plain' },
-                    body: JSON.stringify({
-                        action: 'getAllRecruiters'
-                    })
-                });
-                
-                const result = await response.json();
-                
-                if (result.success && result.recruiters.length > 0) {
-                    recruiters = result.recruiters;
-                    tbody.innerHTML = result.recruiters.map(recruiter => `
-                        <tr class="border-t hover:bg-gray-50">
-                            <td class="px-6 py-4">
-                                <div class="font-medium text-gray-800">${capitalizeWords(recruiter.fullName)}</div>
-                            </td>
-                            <td class="px-6 py-4">
-                                <code class="bg-gray-100 px-2 py-1 rounded text-sm">${recruiter.tabName}</code>
-                            </td>
-                            <td class="px-6 py-4">
-                                <span class="bg-blue-100 text-blue-700 px-2 py-1 rounded-full text-xs font-semibold">
-                                    ${recruiter.leadCount} leads
-                                </span>
-                            </td>
-                            <td class="px-6 py-4">
-                                <div class="flex items-center gap-2">
-                                    <code class="text-xs text-gray-600 truncate max-w-xs">${recruiter.referralUrl}</code>
-                                    <button onclick="copyText('${recruiter.referralUrl}')" 
-                                            class="text-blue-600 hover:text-blue-800 text-xs">
-                                        📋
-                                    </button>
-                                </div>
-                            </td>
-                            <td class="px-6 py-4">
-                                <button onclick="alert('Open Google Sheets and find tab: ${recruiter.tabName}')" 
-                                        class="text-sm text-blue-600 hover:underline">
-                                    View Sheet
-                                </button>
-                            </td>
-                        </tr>
-                    `).join('');
-                    updateStats();
-                } else {
-                    tbody.innerHTML = '<tr><td colspan="5" class="px-6 py-8 text-center text-gray-500">No recruiters found</td></tr>';
-                }
-            } catch (error) {
-                console.error('Error loading recruiters:', error);
-                tbody.innerHTML = '<tr><td colspan="5" class="px-6 py-8 text-center text-red-500">Error loading. Check RECRUITING_API_URL.</td></tr>';
-            }
-        }
-
-        // ============================================================
         // RECRUITS TAB FUNCTIONS
         // ============================================================
         async function loadAllRecruits() {
             if (RECRUITING_API_URL === 'YOUR_DEPLOYMENT_URL_HERE') {
-                alert('⚠️ Recruiting API not configured!\n\nPlease update RECRUITING_API_URL at the top of this file.');
+                alert('⚠️ Recruiting API not configured!\n\nPlease update RECRUITING_API_URL in this file.');
                 return;
             }
 
@@ -1292,7 +1053,7 @@
                 const recruitersResult = await recruitersResponse.json();
 
                 if (!recruitersResult.success || !recruitersResult.recruiters || recruitersResult.recruiters.length === 0) {
-                    container.innerHTML = '<div class="text-center py-12 text-gray-500">No recruiters found. Create recruiters first.</div>';
+                    container.innerHTML = '<div class="text-center py-12 text-gray-500">No recruiters found. Recruiters are created automatically when someone uses a referral link.</div>';
                     return;
                 }
 
@@ -1388,7 +1149,7 @@
 
                         <div id="recruiter-${index}" class="prospects-list hidden">
                             ${recruiter.prospects.length === 0 ? 
-                                '<div class="p-8 text-center text-gray-500">No prospects yet. Share this recruiter\'s referral link to get started!</div>' 
+                                '<div class="p-8 text-center text-gray-500">No prospects yet</div>' 
                                 : 
                                 `<div class="overflow-x-auto">
                                     <table class="w-full">
@@ -1518,9 +1279,6 @@
             displayRecruits(filteredData);
         }
 
-        // ============================================================
-        // UTILITY FUNCTIONS
-        // ============================================================
         function copyText(text) {
             navigator.clipboard.writeText(text).then(() => {
                 alert('✅ Copied to clipboard:\n\n' + text);
