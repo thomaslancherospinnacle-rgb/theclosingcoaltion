@@ -1,10 +1,9 @@
-
 <!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Non-Forfeiture Financial — Login</title>
+  <title>Non-Forfeiture Financial — Protecting American Families</title>
   <style>
     :root{
       --bg1:#071423;
@@ -24,10 +23,9 @@
       --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
       --sans: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
     }
-    *{box-sizing:border-box}
-    html,body{height:100%}
+    *{box-sizing:border-box; margin:0; padding:0}
+    html{scroll-behavior:smooth}
     body{
-      margin:0;
       font-family:var(--sans);
       color:var(--text);
       background:
@@ -35,577 +33,681 @@
         radial-gradient(1200px 700px at 80% 15%, rgba(45,212,191,.18), transparent 55%),
         radial-gradient(900px 600px at 70% 80%, rgba(99,102,241,.16), transparent 55%),
         linear-gradient(180deg, var(--bg1), var(--bg2));
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding:24px;
+      line-height:1.6;
     }
-    .wrap{width:min(980px, 100%); display:grid; grid-template-columns: 1fr; gap:18px;}
 
-    .card{
-      background: linear-gradient(180deg, var(--card2), var(--card));
-      border:1px solid var(--line);
-      border-radius: var(--r);
-      box-shadow: var(--shadow);
-      overflow:hidden;
+    /* HEADER */
+    .header{
+      padding:24px 0;
+      border-bottom:1px solid var(--line);
+      background: rgba(7,20,35,.85);
+      backdrop-filter: blur(12px);
+      position:sticky;
+      top:0;
+      z-index:100;
     }
-    .head{
-      padding:18px 18px 12px;
+    .header .container{
+      max-width:1200px;
+      margin:0 auto;
+      padding:0 24px;
       display:flex;
       align-items:center;
       justify-content:space-between;
-      border-bottom:1px solid var(--line);
+      flex-wrap:wrap;
+      gap:18px;
     }
     .brand{
-      display:flex; gap:12px; align-items:center;
+      display:flex;
+      gap:14px;
+      align-items:center;
     }
     .logo{
-      width:60px;
-      height:60px;
+      width:55px;
+      height:55px;
       object-fit:contain;
     }
-    .title{font-weight:800; letter-spacing:.2px; line-height:1.05}
-    .sub{font-size:12px; color:var(--muted2); margin-top:2px}
-
-    .tabs{
+    .brand-text .title{
+      font-weight:800;
+      font-size:18px;
+      letter-spacing:.3px;
+      line-height:1.1;
+    }
+    .brand-text .org-chain{
+      font-size:11px;
+      color:var(--muted2);
+      margin-top:3px;
+      font-family: var(--mono);
+    }
+    .nav{
       display:flex;
-      gap:10px;
-      padding:12px 18px 0;
+      gap:16px;
+      align-items:center;
     }
-    .tab{
-      flex:1;
-      border:1px solid var(--line);
-      background: rgba(0,0,0,.18);
-      color: var(--muted);
-      padding:10px 12px;
-      border-radius: 14px;
-      font-weight:700;
-      cursor:pointer;
-      user-select:none;
+    .nav a{
+      color:var(--muted);
+      text-decoration:none;
+      font-weight:600;
+      font-size:14px;
+      padding:8px 14px;
+      border-radius:10px;
+      transition: all .2s ease;
+    }
+    .nav a:hover{
+      color:var(--text);
+      background: rgba(79,209,197,.12);
+    }
+    .nav .btn{
+      background: linear-gradient(180deg, rgba(79,209,197,.35), rgba(0,0,0,.18));
+      border:1px solid rgba(79,209,197,.28);
+      color:var(--text);
+      padding:10px 18px;
+      font-weight:800;
+    }
+    .nav .btn:hover{
+      background: linear-gradient(180deg, rgba(79,209,197,.45), rgba(0,0,0,.25));
+    }
+
+    /* SECTIONS */
+    .section{
+      padding:80px 24px;
+    }
+    .container{
+      max-width:1200px;
+      margin:0 auto;
+    }
+
+    /* HERO */
+    .hero{
       text-align:center;
-      transition: all .15s ease;
+      padding:100px 24px 80px;
     }
-    .tab.active{
-      background: linear-gradient(180deg, rgba(79,209,197,.26), rgba(0,0,0,.20));
-      color: var(--text);
+    .hero h1{
+      font-size:clamp(32px, 5vw, 56px);
+      font-weight:900;
+      letter-spacing:.5px;
+      line-height:1.1;
+      margin-bottom:18px;
+      background: linear-gradient(135deg, var(--text), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero .subtitle{
+      font-size:clamp(16px, 2.5vw, 22px);
+      color:var(--muted);
+      margin-bottom:32px;
+      max-width:800px;
+      margin-left:auto;
+      margin-right:auto;
+    }
+    .hero .ctas{
+      display:flex;
+      gap:14px;
+      justify-content:center;
+      flex-wrap:wrap;
+      margin-top:36px;
+    }
+    .hero .ctas .btn{
+      padding:16px 32px;
+      border-radius:14px;
+      font-weight:800;
+      font-size:16px;
+      text-decoration:none;
+      cursor:pointer;
+      border:none;
+      transition: transform .1s ease;
+    }
+    .hero .ctas .btn:active{transform: translateY(1px)}
+    .hero .ctas .primary{
+      background: linear-gradient(180deg, rgba(79,209,197,.40), rgba(0,0,0,.20));
+      border:1px solid rgba(79,209,197,.35);
+      color:var(--text);
+    }
+    .hero .ctas .secondary{
+      background: rgba(0,0,0,.25);
+      border:1px solid var(--line);
+      color:var(--muted);
+    }
+
+    /* STATS GRID */
+    .stats{
+      display:grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap:18px;
+      margin-top:48px;
+    }
+    .stat-card{
+      background: linear-gradient(180deg, var(--card2), var(--card));
+      border:1px solid var(--line);
+      border-radius: var(--r);
+      padding:24px;
+      box-shadow: var(--shadow);
+    }
+    .stat-card .number{
+      font-size:48px;
+      font-weight:900;
+      color:var(--accent);
+      line-height:1;
+      margin-bottom:8px;
+    }
+    .stat-card .label{
+      font-size:14px;
+      color:var(--muted);
+      line-height:1.4;
+    }
+    .stat-card .source{
+      font-size:11px;
+      color:var(--muted2);
+      font-style:italic;
+      margin-top:8px;
+      display:block;
+    }
+
+    /* CONTENT SECTIONS */
+    .content-section{
+      margin-bottom:60px;
+    }
+    .content-section h2{
+      font-size:clamp(28px, 4vw, 38px);
+      font-weight:800;
+      margin-bottom:18px;
+      color:var(--text);
+    }
+    .content-section h3{
+      font-size:clamp(20px, 3vw, 26px);
+      font-weight:700;
+      margin:32px 0 14px;
+      color:var(--accent2);
+    }
+    .content-section p{
+      color:var(--muted);
+      margin-bottom:16px;
+      font-size:16px;
+      line-height:1.7;
+    }
+    .content-section ul{
+      list-style:none;
+      margin:16px 0;
+    }
+    .content-section ul li{
+      padding:10px 0;
+      padding-left:28px;
+      position:relative;
+      color:var(--muted);
+      font-size:15px;
+    }
+    .content-section ul li:before{
+      content:"✓";
+      position:absolute;
+      left:0;
+      color:var(--ok);
+      font-weight:900;
+    }
+
+    /* CARD GRID */
+    .card-grid{
+      display:grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap:24px;
+      margin:40px 0;
+    }
+    .info-card{
+      background: linear-gradient(180deg, var(--card2), var(--card));
+      border:1px solid var(--line);
+      border-radius: var(--r);
+      padding:28px;
+      box-shadow: var(--shadow);
+    }
+    .info-card h4{
+      font-size:20px;
+      font-weight:700;
+      margin-bottom:12px;
+      color:var(--accent2);
+    }
+    .info-card p{
+      font-size:14px;
+      color:var(--muted);
+      line-height:1.6;
+      margin-bottom:8px;
+    }
+    .info-card .highlight{
+      background: rgba(79,209,197,.12);
+      border:1px solid rgba(79,209,197,.25);
+      border-radius:10px;
+      padding:14px;
+      margin-top:12px;
+      font-size:14px;
+      color:var(--text);
+    }
+
+    /* TRUST BOX */
+    .trust-box{
+      background: linear-gradient(135deg, rgba(79,209,197,.15), rgba(99,102,241,.12));
+      border:1px solid rgba(79,209,197,.25);
+      border-radius: var(--r);
+      padding:32px;
+      text-align:center;
+      margin:60px 0;
+      box-shadow: var(--shadow);
+    }
+    .trust-box p{
+      font-size:18px;
+      color:var(--text);
+      line-height:1.7;
+      font-weight:500;
+    }
+
+    /* ORG STRUCTURE */
+    .org-structure{
+      background: linear-gradient(180deg, var(--card2), var(--card));
+      border:1px solid var(--line);
+      border-radius: var(--r);
+      padding:32px;
+      margin:40px 0;
+      box-shadow: var(--shadow);
+    }
+    .org-structure h3{
+      text-align:center;
+      margin-bottom:28px;
+      font-size:22px;
+      color:var(--accent);
+    }
+    .org-chain{
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      max-width:600px;
+      margin:0 auto;
+    }
+    .org-level{
+      background: rgba(0,0,0,.25);
+      border:1px solid var(--line);
+      border-radius:12px;
+      padding:16px 20px;
+      text-align:center;
+      position:relative;
+    }
+    .org-level:not(:last-child):after{
+      content:"↓";
+      position:absolute;
+      bottom:-24px;
+      left:50%;
+      transform: translateX(-50%);
+      color:var(--accent2);
+      font-size:20px;
+      font-weight:900;
+    }
+    .org-level .name{
+      font-weight:800;
+      font-size:16px;
+      color:var(--text);
+    }
+    .org-level .desc{
+      font-size:12px;
+      color:var(--muted2);
+      margin-top:4px;
+    }
+    .org-level.highlight{
+      background: linear-gradient(135deg, rgba(79,209,197,.20), rgba(0,0,0,.25));
       border-color: rgba(79,209,197,.35);
     }
 
-    .body{padding:16px 18px 18px}
-    .grid{display:grid; grid-template-columns:1fr; gap:12px}
-    .row2{display:grid; grid-template-columns:1fr; gap:12px}
-    @media (min-width: 520px){ .row2{grid-template-columns: 1fr 1fr;} }
-
-    label{display:block; font-size:12px; color:var(--muted2); margin:0 0 6px}
-    input{
-      width:100%;
-      padding:12px 12px;
-      border-radius: 14px;
-      border: 1px solid var(--line);
-      background: rgba(0,0,0,.18);
-      color: var(--text);
-      outline:none;
-      font-size:14px;
+    /* CTA SECTION */
+    .cta-section{
+      background: linear-gradient(135deg, rgba(79,209,197,.15), rgba(99,102,241,.12));
+      border:1px solid rgba(79,209,197,.25);
+      border-radius: var(--r);
+      padding:60px 32px;
+      text-align:center;
+      margin:80px 0;
+      box-shadow: var(--shadow);
     }
-    input:focus{border-color: rgba(79,209,197,.45); box-shadow:0 0 0 4px rgba(79,209,197,.10)}
-    .pill{
-      font-family: var(--mono);
-      font-size: 12px;
-      padding: 12px;
-      border-radius: 14px;
-      border: 1px solid var(--line);
-      background: rgba(0,0,0,.12);
-      color: var(--text);
-      overflow:hidden;
-      white-space:nowrap;
-      text-overflow:ellipsis;
+    .cta-section h2{
+      font-size:clamp(28px, 4vw, 42px);
+      margin-bottom:18px;
+      color:var(--text);
     }
-
-    .actions{display:flex; gap:10px; margin-top:6px; flex-wrap:wrap}
-    button{
-      border:none;
+    .cta-section p{
+      font-size:18px;
+      color:var(--muted);
+      margin-bottom:32px;
+    }
+    .cta-section .cta-buttons{
+      display:flex;
+      gap:14px;
+      justify-content:center;
+      flex-wrap:wrap;
+    }
+    .cta-section .cta-buttons .btn{
+      padding:16px 32px;
+      border-radius:14px;
+      font-weight:800;
+      font-size:16px;
+      text-decoration:none;
       cursor:pointer;
-      padding:12px 14px;
-      border-radius: 14px;
-      font-weight:800;
-      color: var(--text);
-      background: linear-gradient(180deg, rgba(79,209,197,.35), rgba(0,0,0,.18));
-      border:1px solid rgba(79,209,197,.28);
-      transition: transform .05s ease, filter .15s ease;
-      min-width: 160px;
+      border:none;
+      transition: transform .1s ease;
+      display:inline-block;
     }
-    button:active{transform: translateY(1px)}
-    button.secondary{
-      background: rgba(0,0,0,.18);
+    .cta-section .cta-buttons .btn:active{transform: translateY(1px)}
+    .cta-section .cta-buttons .primary{
+      background: linear-gradient(180deg, rgba(79,209,197,.40), rgba(0,0,0,.20));
+      border:1px solid rgba(79,209,197,.35);
+      color:var(--text);
+    }
+    .cta-section .cta-buttons .secondary{
+      background: rgba(0,0,0,.35);
       border:1px solid var(--line);
-      color: var(--muted);
-      min-width: 120px;
-    }
-    button:disabled{
-      opacity:.55;
-      cursor:not-allowed;
+      color:var(--muted);
     }
 
-    .msg{
-      margin-top:12px;
-      padding:12px;
-      border-radius: 14px;
-      border:1px solid var(--line);
-      background: rgba(0,0,0,.14);
-      color: var(--muted);
-      display:none;
+    /* FOOTER */
+    .footer{
+      border-top:1px solid var(--line);
+      padding:40px 24px;
+      text-align:center;
     }
-    .msg.show{display:block}
-    .msg.ok{border-color: rgba(34,197,94,.35); color: rgba(220,255,233,.92)}
-    .msg.err{border-color: rgba(255,90,122,.35); color: rgba(255,220,228,.92)}
-    .hint{
-      margin-top:10px;
-      font-size:12px;
-      color: var(--muted2);
-      line-height:1.35;
-    }
-
-    .side{
-      padding:18px;
-    }
-    .side h3{margin:0 0 10px; font-size:16px}
-    .side p{margin:0; color: var(--muted); font-size:13px; line-height:1.55}
-    .divider{height:1px; background: var(--line); margin:14px 0}
-    .statusRow{
-      display:flex; justify-content:space-between; align-items:center;
-      gap:12px;
-      padding:10px 12px;
-      border:1px solid var(--line);
-      border-radius: 14px;
-      background: rgba(0,0,0,.12);
+    .footer p{
+      color:var(--muted2);
       font-size:13px;
-      color: var(--muted);
+      margin-bottom:8px;
     }
-    .badge{
-      font-size:12px;
-      font-weight:800;
-      padding:6px 10px;
-      border-radius: 999px;
-      border:1px solid var(--line);
-      background: rgba(0,0,0,.18);
-      color: var(--muted);
+    .footer .org-path{
+      font-family: var(--mono);
+      font-size:11px;
+      color:var(--muted2);
+      margin-top:12px;
     }
-    .badge.ok{border-color: rgba(34,197,94,.35); color: rgba(220,255,233,.92)}
+
+    @media (max-width: 768px){
+      .nav{
+        width:100%;
+        justify-content:center;
+      }
+      .org-chain{
+        gap:20px;
+      }
+    }
   </style>
 </head>
 <body>
-  <div class="wrap">
 
-    <!-- MAIN -->
-    <div class="card">
-      <div class="head">
-        <div class="brand">
-          <img src="logo.png" alt="Non-Forfeiture Financial Logo" class="logo">
-          <div>
-            <div class="title">Non-Forfeiture Financial</div>
-            <div class="sub">Login / Signup (verification-first)</div>
-          </div>
+  <!-- HEADER -->
+  <div class="header">
+    <div class="container">
+      <div class="brand">
+        <img src="logo.png" alt="Non-Forfeiture Financial Logo" class="logo">
+        <div class="brand-text">
+          <div class="title">Non-Forfeiture Financial</div>
+          <div class="org-chain">Renaissance Z → Arias Org → AIL → Globe Life</div>
         </div>
       </div>
-
-      <div class="tabs">
-        <div class="tab" data-tab="login">Login</div>
-        <div class="tab active" data-tab="first">First-time</div>
-        <div class="tab" data-tab="verify">Verify</div>
-      </div>
-
-      <div class="body">
-        <div class="grid">
-
-          <div class="row2">
-            <div>
-              <label for="name">Name (First Last)</label>
-              <input id="name" autocomplete="name" placeholder="First Last" />
-            </div>
-
-            <div>
-              <label>Derived login email</label>
-              <div id="derived" class="pill">—</div>
-            </div>
-          </div>
-
-          <div id="loginBlock" style="display:none">
-            <label for="loginPass">Password</label>
-            <input id="loginPass" type="password" autocomplete="current-password" placeholder="Enter password" />
-            <div class="actions">
-              <button id="btnLogin">Login</button>
-              <button id="btnLogout" class="secondary" style="display:none">Logout</button>
-            </div>
-          </div>
-
-          <div id="firstBlock">
-            <label for="firstPass">Create password</label>
-            <input id="firstPass" type="password" autocomplete="new-password" placeholder="Create a password" />
-            <div class="actions">
-              <button id="btnSignup">Send verification code</button>
-            </div>
-            <div class="hint">
-              The verification code is sent to your derived inbox: <span style="font-family:var(--mono); color:rgba(234,242,255,.85)"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="98fef1eaebecf4f9ebecb6f9f1f4d8fff5f9f1f4b6fbf7f5">[email&#160;protected]</a></span>
-            </div>
-          </div>
-
-          <div id="verifyBlock" style="display:none">
-            <label for="code">Verification code</label>
-            <input id="code" inputmode="numeric" autocomplete="one-time-code" placeholder="6-digit code" />
-            <div class="actions">
-              <button id="btnVerify">Verify code</button>
-              <button id="btnResend" class="secondary">Resend</button>
-            </div>
-          </div>
-
-          <div id="msg" class="msg"></div>
-
-        </div>
-      </div>
+      <nav class="nav">
+        <a href="#about">About</a>
+        <a href="#protection">Protection</a>
+        <a href="#team">Our Team</a>
+        <a href="#contact" class="btn">Get Protected</a>
+      </nav>
     </div>
   </div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-  /**********************
-   * CONFIG
-   **********************/
-  const API_URL = "https://closing-coalition-api.thomaslancheros06.workers.dev"; // <-- YOUR WORKER URL
-
-  /**********************
-   * UI
-   **********************/
-  const $ = (id) => document.getElementById(id);
-
-  const tabs = Array.from(document.querySelectorAll(".tab"));
-  const nameEl = $("name");
-  const derivedEl = $("derived");
-  const derivedMini = $("derivedMini");
-
-  const loginBlock = $("loginBlock");
-  const firstBlock = $("firstBlock");
-  const verifyBlock = $("verifyBlock");
-
-  const loginPass = $("loginPass");
-  const firstPass = $("firstPass");
-  const codeEl = $("code");
-
-  const btnLogin = $("btnLogin");
-  const btnLogout = $("btnLogout");
-  const btnSignup = $("btnSignup");
-  const btnVerify = $("btnVerify");
-  const btnResend = $("btnResend");
-
-  const msg = $("msg");
-  const sessBadge = $("sessBadge");
-
-  const LS_TOKEN = "cc_token";
-  const LS_EXPIRES = "cc_expires_at";
-
-  // ============================================
-  // iOS-COMPATIBLE AUTH (Cookies + localStorage)
-  // ============================================
-  function setCookie(name, value, hours) {
-    const expires = new Date();
-    expires.setTime(expires.getTime() + hours * 60 * 60 * 1000);
-    document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/;SameSite=Lax`;
-  }
-
-  function getCookie(name) {
-    const value = `; ${document.cookie}`;
-    const parts = value.split(`; ${name}=`);
-    if (parts.length === 2) return parts.pop().split(';').shift();
-    return null;
-  }
-
-  function deleteCookie(name) {
-    document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/;`;
-  }
-
-  function setMsg(type, text){
-    msg.className = "msg show " + (type === "ok" ? "ok" : type === "err" ? "err" : "");
-    msg.textContent = text || "";
-  }
-  function clearMsg(){
-    msg.className = "msg";
-    msg.textContent = "";
-  }
-
-  function normalizeName(raw){
-    return String(raw || "").trim().replace(/\s+/g, " ");
-  }
-
-  function derivedEmailFromName(name){
-    // letters/spaces only, remove spaces, lowercase
-    const clean = normalizeName(name)
-      .toLowerCase()
-      .replace(/[^a-z\s]/g, "")
-      .replace(/\s+/g, "");
-    return clean ? `${clean}.ail@gmail.com` : "";
-  }
-
-  function setLoading(btn, loading){
-    btn.disabled = !!loading;
-    btn.dataset._old = btn.dataset._old || btn.textContent;
-    btn.textContent = loading ? "Working..." : btn.dataset._old;
-  }
-
-  function setTab(tab){
-    tabs.forEach(t => t.classList.toggle("active", t.dataset.tab === tab));
-    clearMsg();
-
-    loginBlock.style.display = (tab === "login") ? "" : "none";
-    firstBlock.style.display = (tab === "first") ? "" : "none";
-    verifyBlock.style.display = (tab === "verify") ? "" : "none";
-  }
-
-  tabs.forEach(t => t.addEventListener("click", () => setTab(t.dataset.tab)));
-
-  function getToken(){
-    // Check cookie first (iOS-compatible)
-    const cookieToken = getCookie(LS_TOKEN);
-    if (cookieToken) return cookieToken;
-    
-    // Fallback to localStorage
-    try {
-      const localToken = localStorage.getItem(LS_TOKEN);
-      if (localToken) {
-        // Migrate to cookie for iOS compatibility
-        setCookie(LS_TOKEN, localToken, 12);
-        return localToken;
-      }
-    } catch (e) {
-      // localStorage blocked on iOS
-    }
-    return "";
-  }
-  function setSession(token, expiresAt){
-    if (!token){
-      // Clear both cookie and localStorage
-      deleteCookie(LS_TOKEN);
-      deleteCookie(LS_EXPIRES);
-      try {
-        localStorage.removeItem(LS_TOKEN);
-        localStorage.removeItem(LS_EXPIRES);
-      } catch (e) {}
-      return;
-    }
-    
-    // Save to COOKIE first (iOS-compatible)
-    setCookie(LS_TOKEN, token, 12);
-    if (expiresAt) setCookie(LS_EXPIRES, expiresAt, 12);
-    
-    // Also save to localStorage (backwards compatibility)
-    try {
-      localStorage.setItem(LS_TOKEN, token);
-      if (expiresAt) localStorage.setItem(LS_EXPIRES, expiresAt);
-    } catch (e) {
-      // iOS Private Mode - cookie still works!
-    }
-  }
-
-  function updateSessionUI(){
-    const token = getToken();
-    if (token){
-      sessBadge.textContent = "Logged in";
-      sessBadge.classList.add("ok");
-      btnLogout.style.display = "";
-    } else {
-      sessBadge.textContent = "Not logged in";
-      sessBadge.classList.remove("ok");
-      btnLogout.style.display = "none";
-    }
-  }
-
-  function updateDerived(){
-    const email = derivedEmailFromName(nameEl.value);
-    derivedEl.textContent = email || "—";
-    derivedMini.textContent = email ? email.split("@")[0] : "—";
-  }
-
-  nameEl.addEventListener("input", updateDerived);
-  updateDerived();
-  updateSessionUI();
-
-  /**********************
-   * API
-   **********************/
-  async function api(action, payload){
-    console.log('API Request:', { action, payload }); // Debug log
-    
-    const res = await fetch(API_URL, {
-      method: "POST",
-      headers: { "Content-Type":"application/json" },
-      body: JSON.stringify({ action, ...payload })
-    });
-
-    const text = await res.text();
-    console.log('API Response:', text); // Debug log
-    
-    let data;
-    try { data = JSON.parse(text); }
-    catch { throw new Error(text || "Invalid response"); }
-
-    if (!data || data.ok !== true){
-      const err = (data && (data.error || data.detail)) ? (data.error + (data.detail ? ` — ${data.detail}` : "")) : "Request failed";
-      throw new Error(err);
-    }
-    return data;
-  }
-
-  /**********************
-   * ACTIONS
-   **********************/
-  btnSignup.addEventListener("click", async () => {
-    clearMsg();
-
-    const username = normalizeName(nameEl.value);
-    const password = String(firstPass.value || "");
-    const email = derivedEmailFromName(nameEl.value); // Add derived email
-
-    if (!username){
-      setMsg("err", "Enter your name (First Last).");
-      return;
-    }
-    if (password.length < 6){
-      setMsg("err", "Password must be at least 6 characters.");
-      return;
-    }
-
-    setLoading(btnSignup, true);
-    try{
-      await api("signup", { username, password, email });
-      setMsg("ok", "Verification code sent. Go to Verify.");
-      setTab("verify");
-      codeEl.focus();
-    } catch(e){
-      setMsg("err", e.message || "Signup failed.");
-    } finally {
-      setLoading(btnSignup, false);
-    }
-  });
-
-  btnResend.addEventListener("click", async () => {
-    clearMsg();
-
-    const username = normalizeName(nameEl.value);
-    const password = String(firstPass.value || "");
-    const email = derivedEmailFromName(nameEl.value); // Add derived email
-
-    if (!username){
-      setMsg("err", "Enter your name (First Last).");
-      return;
-    }
-    if (password.length < 6){
-      setMsg("err", "Enter your password (same one you created).");
-      return;
-    }
-
-    setLoading(btnResend, true);
-    try{
-      await api("signup", { username, password, email });
-      setMsg("ok", "Verification code re-sent.");
-    } catch(e){
-      setMsg("err", e.message || "Resend failed.");
-    } finally {
-      setLoading(btnResend, false);
-    }
-  });
-
-  btnVerify.addEventListener("click", async () => {
-    clearMsg();
-
-    const username = normalizeName(nameEl.value);
-    const code = String(codeEl.value || "").trim();
-    const email = derivedEmailFromName(nameEl.value); // Add derived email
-
-    if (!username){
-      setMsg("err", "Enter your name (First Last).");
-      return;
-    }
-    if (!/^\d{6}$/.test(code)){
-      setMsg("err", "Enter the 6-digit code.");
-      return;
-    }
-
-    setLoading(btnVerify, true);
-    try{
-      await api("verify", { username, code, email });
-      setMsg("ok", "Verified. You can now login.");
-      setTab("login");
-      loginPass.focus();
-    } catch(e){
-      setMsg("err", e.message || "Verification failed.");
-    } finally {
-      setLoading(btnVerify, false);
-    }
-  });
-
-  btnLogin.addEventListener("click", async () => {
-    clearMsg();
-
-    const username = normalizeName(nameEl.value);
-    const password = String(loginPass.value || "");
-    const email = derivedEmailFromName(nameEl.value); // Add derived email
-
-    if (!username){
-      setMsg("err", "Enter your name (First Last).");
-      return;
-    }
-    if (!password){
-      setMsg("err", "Enter your password.");
-      return;
-    }
-
-    setLoading(btnLogin, true);
-    try{
-      // Send both username and email to backend
-      const out = await api("login", { username, password, email });
-      setSession(out.token, out.expires_at);
-      updateSessionUI();
-      setMsg("ok", "Logged in.");
+  <!-- HERO -->
+  <section class="hero">
+    <div class="container">
+      <h1>The Hidden Financial Risk<br>Facing American Families</h1>
+      <p class="subtitle">Most Americans are financially exposed — even when they think they're covered. We're here to close that gap with clarity, affordability, and real protection.</p>
       
-      window.location.href = "home.html";
+      <div class="ctas">
+        <a href="#check" class="btn primary">Check What I Have</a>
+        <a href="#quote" class="btn secondary">Get a Simple Quote</a>
+      </div>
 
-      // Optional redirect:
-      // window.location.href = "app.html";
-    } catch(e){
-      setMsg("err", e.message || "Login failed.");
-    } finally {
-      setLoading(btnLogin, false);
-    }
-  });
+      <!-- STATS -->
+      <div class="stats">
+        <div class="stat-card">
+          <div class="number">1 in 3</div>
+          <div class="label">Workers don't know if they have employer life insurance</div>
+          <span class="source">LIMRA 2025 Workplace Benefits Report</span>
+        </div>
+        <div class="stat-card">
+          <div class="number">47%</div>
+          <div class="label">Americans overestimate the cost of life insurance</div>
+          <span class="source">Corebridge Financial Research</span>
+        </div>
+        <div class="stat-card">
+          <div class="number">49%</div>
+          <div class="label">Families with only workplace coverage would struggle financially within 6 months</div>
+          <span class="source">LIMRA Industry Data</span>
+        </div>
+      </div>
+    </div>
+  </section>
 
-  btnLogout.addEventListener("click", async () => {
-    clearMsg();
-    const token = getToken();
-    setLoading(btnLogout, true);
-    try{
-      if (token){
-        // best-effort
-        await api("logout", { token }).catch(()=>{});
-      }
-      setSession("", "");
-      updateSessionUI();
-      setMsg("ok", "Logged out.");
-    } finally {
-      setLoading(btnLogout, false);
-    }
-  });
+  <!-- ORG STRUCTURE -->
+  <section class="section" id="team">
+    <div class="container">
+      <div class="org-structure">
+        <h3>Our Organizational Structure</h3>
+        <div class="org-chain">
+          <div class="org-level">
+            <div class="name">Globe Life</div>
+            <div class="desc">Parent Insurance Corporation</div>
+          </div>
+          <div class="org-level">
+            <div class="name">American Income Life (AIL)</div>
+            <div class="desc">Specialized Insurance Provider</div>
+          </div>
+          <div class="org-level">
+            <div class="name">Arias Organization</div>
+            <div class="desc">Regional Network</div>
+          </div>
+          <div class="org-level">
+            <div class="name">Renaissance Z</div>
+            <div class="desc">Team Division</div>
+          </div>
+          <div class="org-level highlight">
+            <div class="name">Non-Forfeiture Financial</div>
+            <div class="desc">Your Protection Team</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-  // On load, validate token silently (best effort)
-  (async () => {
-    const token = getToken();
-    if (token){
-      try {
-        await api("me", { token });
-        updateSessionUI();
-      } catch(e) {
-        // Token invalid, clear it
-        setSession("", "");
-        updateSessionUI();
-      }
-    }
-  })();
-</script>
+  <!-- MAIN CONTENT -->
+  <section class="section" id="about">
+    <div class="container">
+      
+      <div class="content-section">
+        <h2>Americans Often Don't Know What Life Insurance They Have</h2>
+        <p>According to LIMRA's 2025 Life Insurance Workplace Benefits report, <strong>more than 1 in 3 workers are not fully aware they even have employer-provided life insurance.</strong> National surveys reveal millions of adults don't know if they have life insurance at all.</p>
+        
+        <div class="card-grid">
+          <div class="info-card">
+            <h4>Knowledge Gap</h4>
+            <p>41% of Americans say they are only somewhat or not at all knowledgeable about life insurance.</p>
+            <p class="highlight"><strong>Most families are unknowingly under-protected.</strong></p>
+          </div>
+          <div class="info-card">
+            <h4>Coverage Misconception</h4>
+            <p>Among people who do have life insurance, 22–40% admit they don't have enough coverage.</p>
+            <p class="highlight">Employer coverage is usually only 1–2× annual salary and ends when employment ends.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="content-section" id="protection">
+        <h2>The Financial Burden on Working-Class Families</h2>
+        <p>When income stops, bills don't. For regular working families, the loss of a spouse or parent means immediate financial crisis:</p>
+        
+        <div class="card-grid">
+          <div class="info-card">
+            <h4>Immediate Losses</h4>
+            <ul>
+              <li>Income replacement lost</li>
+              <li>Mortgage or rent payments continue</li>
+              <li>Car loans and insurance due</li>
+              <li>Credit cards and personal debt</li>
+              <li>Childcare and education costs</li>
+            </ul>
+          </div>
+          <div class="info-card">
+            <h4>Funeral & Final Expenses</h4>
+            <p>Average funeral cost in the U.S.: <strong>$7,000–$10,000+</strong></p>
+            <p>Without life insurance, families often rely on:</p>
+            <ul>
+              <li>Credit cards</li>
+              <li>Fundraisers</li>
+              <li>Personal loans</li>
+            </ul>
+            <p class="highlight">Life insurance prevents families from being forced into debt at the worst possible moment.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="content-section">
+        <h2>Military & Service Families Face Unique Risks</h2>
+        <p>Military families often assume government benefits alone are sufficient — but gaps are common.</p>
+        
+        <h3>Common Challenges</h3>
+        <ul>
+          <li>Frequent relocation</li>
+          <li>Deployment risks</li>
+          <li>Income changes during service transitions</li>
+          <li>Benefits that may not fully replace long-term civilian income</li>
+        </ul>
+        
+        <div class="info-card">
+          <p>Even when service members have coverage, it may:</p>
+          <ul>
+            <li>Not travel with them after service</li>
+            <li>Not be enough for mortgage + children + spouse</li>
+            <li>Require additional planning outside military benefits</li>
+          </ul>
+          <p class="highlight"><strong>Life insurance ensures long-term stability, not just short-term assistance.</strong></p>
+        </div>
+      </div>
+
+      <div class="content-section">
+        <h2>Cost Is the #1 Myth Stopping Families</h2>
+        <p>Corebridge Financial research shows that <strong>nearly half of Americans overestimate the cost of life insurance or aren't sure how much it costs.</strong></p>
+        
+        <div class="card-grid">
+          <div class="info-card">
+            <h4>The Reality</h4>
+            <p>Healthy young adults often overestimate premiums by <strong>7–12 times the actual cost.</strong></p>
+            <p>Only about 25% of adults can correctly estimate the cost of a basic term policy.</p>
+          </div>
+          <div class="info-card">
+            <h4>Actual Cost</h4>
+            <p>Many families can secure coverage for far less than expected, often comparable to:</p>
+            <ul>
+              <li>A streaming subscription</li>
+              <li>A phone bill add-on</li>
+              <li>Weekly coffee purchases</li>
+            </ul>
+            <p class="highlight">Families delay protection — not because they don't care — but because they've been misinformed.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="content-section">
+        <h2>What Life Insurance Actually Protects</h2>
+        <p>Life insurance isn't about death — it's about continuity.</p>
+        
+        <div class="card-grid">
+          <div class="info-card">
+            <h4>Income & Stability</h4>
+            <ul>
+              <li>Income replacement</li>
+              <li>Mortgage or rent coverage</li>
+              <li>Children's education</li>
+              <li>Long-term family stability</li>
+            </ul>
+          </div>
+          <div class="info-card">
+            <h4>Debts & Expenses</h4>
+            <ul>
+              <li>Outstanding debts</li>
+              <li>Funeral and final expenses</li>
+              <li>Medical bills</li>
+              <li>Day-to-day living costs</li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="trust-box">
+          <p><strong>It gives families time, options, and dignity.</strong></p>
+        </div>
+      </div>
+
+      <div class="content-section">
+        <h2>Why Non-Forfeiture Financial Is Different</h2>
+        
+        <h3>Discounted Life Insurance for Real Families</h3>
+        <p>We specialize in affordable coverage designed for:</p>
+        <ul>
+          <li>Working-class families</li>
+          <li>First-time buyers</li>
+          <li>Military members and veterans</li>
+          <li>Families who've been told it's "too expensive"</li>
+        </ul>
+        
+        <h3>Exclusive Benefits (Plan-Dependent)</h3>
+        <div class="card-grid">
+          <div class="info-card">
+            <h4>Built-In Protections</h4>
+            <ul>
+              <li>Accelerated death benefits</li>
+              <li>Conversion options (term → permanent)</li>
+              <li>Guaranteed issue or simplified underwriting programs</li>
+              <li>Coverage that stays with you — even if your job changes</li>
+            </ul>
+          </div>
+          <div class="info-card">
+            <h4>Our Approach</h4>
+            <p>Maximum protection at the lowest reasonable cost.</p>
+            <p>These benefits exist to protect families when life changes, not just when things go perfectly.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- TRUST MESSAGE -->
+  <section class="section">
+    <div class="container">
+      <div class="trust-box">
+        <p>"Many Americans have life insurance — but millions don't know what they have or whether it's enough. Our mission is to close that gap with clarity, affordability, and real protection."</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA SECTION -->
+  <section class="cta-section" id="contact">
+    <div class="container">
+      <h2>You Shouldn't Have to Guess</h2>
+      <p>If your family is protected. If your coverage is enough. If your benefits disappear when your job changes.</p>
+      <p><strong>Life insurance replaces uncertainty with clarity and control.</strong></p>
+      
+      <div class="cta-buttons">
+        <a href="#check" class="btn primary">Check What I Have</a>
+        <a href="#covered" class="btn secondary">See If I'm Under-Covered</a>
+        <a href="#protect" class="btn secondary">Protect My Family</a>
+        <a href="#quote" class="btn secondary">Get a Simple Quote</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; 2025 Non-Forfeiture Financial. All rights reserved.</p>
+      <p>Protecting American families through affordable, transparent life insurance.</p>
+      <div class="org-path">Non-Forfeiture Financial → Renaissance Z → Arias Organization → American Income Life → Globe Life</div>
+    </div>
+  </footer>
+
 </body>
 </html>
