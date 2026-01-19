@@ -58,12 +58,14 @@
     .brand{
       display:flex; gap:12px; align-items:center;
     }
-    .dot{
-      width:40px; height:40px;
+    .logo{
+      width:40px;
+      height:40px;
+      object-fit:contain;
       border-radius:12px;
-      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.35), rgba(255,255,255,.06) 42%, rgba(79,209,197,.22) 100%),
-                  linear-gradient(180deg, rgba(79,209,197,.55), rgba(45,212,191,.12));
       border:1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.04);
+      padding:6px;
     }
     .title{font-weight:800; letter-spacing:.2px; line-height:1.05}
     .sub{font-size:12px; color:var(--muted2); margin-top:2px}
@@ -201,7 +203,7 @@
     <div class="card">
       <div class="head">
         <div class="brand">
-          <div class="dot"></div>
+          <img src="logo.png" alt="Non-Forfeiture Financial Logo" class="logo">
           <div>
             <div class="title">Non-Forfeiture Financial</div>
             <div class="sub">Login / Signup (verification-first)</div>
