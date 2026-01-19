@@ -3,7 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Join Our Team - Application</title>
+    <title>Join Globe Life American Income Life - Career Opportunity</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -12,28 +15,140 @@
         }
         
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
+            font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
         }
         
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #003087 0%, #0047AB 100%);
+            color: white;
+            padding: 20px 0;
+            box-shadow: 0 2px 10px rgba(0, 48, 135, 0.2);
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+        
+        .header-badge {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: 600;
+            backdrop-filter: blur(10px);
+        }
+        
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #003087 0%, #0047AB 100%);
+            color: white;
+            padding: 80px 20px;
+            text-align: center;
+        }
+        
+        .hero-content {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .hero h1 {
+            font-size: 56px;
+            font-weight: 900;
+            line-height: 1.2;
+            margin-bottom: 20px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .hero-subtitle {
+            font-size: 22px;
+            font-weight: 400;
+            opacity: 0.95;
+            margin-bottom: 40px;
+            line-height: 1.5;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            max-width: 900px;
+            margin: 50px auto 0;
+        }
+        
+        .stat-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            padding: 30px 20px;
+            border-radius: 15px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .stat-number {
+            font-size: 48px;
+            font-weight: 900;
+            color: #FFD700;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        .stat-label {
+            font-size: 16px;
+            font-weight: 600;
+            opacity: 0.95;
+        }
+        
+        /* Container */
         .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Video Section */
+        .video-section {
             background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            max-width: 600px;
-            width: 100%;
-            overflow: hidden;
+            padding: 80px 20px;
+            text-align: center;
+        }
+        
+        .section-title {
+            font-size: 42px;
+            font-weight: 800;
+            color: #003087;
+            margin-bottom: 15px;
+        }
+        
+        .section-subtitle {
+            font-size: 18px;
+            color: #666;
+            margin-bottom: 40px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
         }
         
         .video-container {
-            width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 48, 135, 0.2);
             background: #000;
-            position: relative;
         }
         
         .video-container video {
@@ -42,69 +157,185 @@
             display: block;
         }
         
-        .form-content {
-            padding: 40px;
+        /* Benefits Section */
+        .benefits-section {
+            background: #f5f7fa;
+            padding: 80px 20px;
         }
         
-        h1 {
-            color: #333;
-            font-size: 32px;
-            margin-bottom: 10px;
-            text-align: center;
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            max-width: 1000px;
+            margin: 50px auto 0;
         }
         
-        .subtitle {
+        .benefit-card {
+            background: white;
+            padding: 35px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 48, 135, 0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .benefit-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 48, 135, 0.15);
+        }
+        
+        .benefit-icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+        
+        .benefit-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #003087;
+            margin-bottom: 12px;
+        }
+        
+        .benefit-description {
+            font-size: 16px;
             color: #666;
+            line-height: 1.6;
+        }
+        
+        /* Earnings Section */
+        .earnings-section {
+            background: linear-gradient(135deg, #003087 0%, #0047AB 100%);
+            color: white;
+            padding: 80px 20px;
             text-align: center;
+        }
+        
+        .earnings-box {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 50px 40px;
+            max-width: 800px;
+            margin: 40px auto;
+        }
+        
+        .earnings-highlight {
+            font-size: 72px;
+            font-weight: 900;
+            color: #FFD700;
+            margin-bottom: 20px;
+            text-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        .earnings-text {
+            font-size: 24px;
+            font-weight: 600;
             margin-bottom: 30px;
+        }
+        
+        .earnings-details {
+            text-align: left;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .earnings-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 15px;
             font-size: 16px;
         }
         
+        .earnings-item::before {
+            content: "✓";
+            color: #FFD700;
+            font-size: 24px;
+            font-weight: 900;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+        
+        /* Form Section */
+        .form-section {
+            background: white;
+            padding: 80px 20px;
+        }
+        
+        .form-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border: 3px solid #003087;
+            border-radius: 20px;
+            padding: 50px;
+            box-shadow: 0 20px 60px rgba(0, 48, 135, 0.15);
+        }
+        
+        .form-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .form-title {
+            font-size: 36px;
+            font-weight: 800;
+            color: #003087;
+            margin-bottom: 10px;
+        }
+        
+        .form-subtitle {
+            font-size: 16px;
+            color: #666;
+        }
+        
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
         
         label {
             display: block;
-            color: #333;
-            font-weight: 600;
+            font-weight: 700;
+            color: #003087;
             margin-bottom: 8px;
-            font-size: 14px;
+            font-size: 15px;
         }
         
         input {
             width: 100%;
-            padding: 14px;
+            padding: 16px;
             border: 2px solid #e0e0e0;
             border-radius: 10px;
             font-size: 16px;
-            transition: all 0.3s ease;
-            font-family: inherit;
+            font-family: 'Montserrat', sans-serif;
+            transition: all 0.3s;
         }
         
         input:focus {
             outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            border-color: #003087;
+            box-shadow: 0 0 0 3px rgba(0, 48, 135, 0.1);
         }
         
         .submit-btn {
             width: 100%;
-            padding: 16px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 18px;
+            background: linear-gradient(135deg, #003087 0%, #0047AB 100%);
             color: white;
             border: none;
             border-radius: 10px;
             font-size: 18px;
             font-weight: 700;
             cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-            margin-top: 10px;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 10px 30px rgba(0, 48, 135, 0.3);
         }
         
         .submit-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 15px 40px rgba(0, 48, 135, 0.4);
         }
         
         .submit-btn:active {
@@ -117,14 +348,14 @@
             transform: none;
         }
         
-        .error-message {
-            color: #e74c3c;
-            font-size: 14px;
-            margin-top: 5px;
-            display: none;
+        .privacy-note {
+            text-align: center;
+            font-size: 12px;
+            color: #999;
+            margin-top: 20px;
         }
         
-        /* Success Page Styles */
+        /* Success Page */
         .success-page {
             display: none;
             text-align: center;
@@ -134,123 +365,117 @@
             display: block;
         }
         
-        .checkmark {
-            width: 80px;
-            height: 80px;
+        .success-checkmark {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
             border-radius: 50%;
-            display: block;
-            stroke-width: 3;
-            stroke: #4caf50;
-            stroke-miterlimit: 10;
-            margin: 0 auto 20px;
-            box-shadow: inset 0px 0px 0px #4caf50;
-            animation: fill .4s ease-in-out .4s forwards, scale .3s ease-in-out .9s both;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 30px;
+            font-size: 60px;
+            color: white;
+            animation: scaleIn 0.5s ease-out;
         }
         
-        .checkmark-circle {
-            stroke-dasharray: 166;
-            stroke-dashoffset: 166;
-            stroke-width: 3;
-            stroke-miterlimit: 10;
-            stroke: #4caf50;
-            fill: none;
-            animation: stroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
-        }
-        
-        .checkmark-check {
-            transform-origin: 50% 50%;
-            stroke-dasharray: 48;
-            stroke-dashoffset: 48;
-            animation: stroke 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.8s forwards;
-        }
-        
-        @keyframes stroke {
-            100% {
-                stroke-dashoffset: 0;
-            }
-        }
-        
-        @keyframes scale {
-            0%, 100% {
-                transform: none;
+        @keyframes scaleIn {
+            0% {
+                transform: scale(0);
+                opacity: 0;
             }
             50% {
-                transform: scale3d(1.1, 1.1, 1);
+                transform: scale(1.1);
             }
-        }
-        
-        @keyframes fill {
             100% {
-                box-shadow: inset 0px 0px 0px 30px #4caf50;
+                transform: scale(1);
+                opacity: 1;
             }
         }
         
         .success-title {
-            color: #4caf50;
-            font-size: 28px;
+            font-size: 36px;
+            font-weight: 800;
+            color: #28a745;
             margin-bottom: 15px;
-            font-weight: 700;
         }
         
         .success-message {
+            font-size: 18px;
             color: #666;
-            font-size: 16px;
-            margin-bottom: 30px;
-            line-height: 1.6;
+            margin-bottom: 40px;
         }
         
+        /* Meeting Section */
         .meeting-box {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #003087 0%, #0047AB 100%);
             color: white;
-            padding: 30px;
-            border-radius: 15px;
-            margin: 30px 0;
-            text-align: left;
+            padding: 40px;
+            border-radius: 20px;
+            margin: 40px 0;
+            box-shadow: 0 10px 40px rgba(0, 48, 135, 0.3);
         }
         
-        .meeting-box h2 {
-            font-size: 24px;
-            margin-bottom: 20px;
+        .meeting-title {
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 30px;
             text-align: center;
         }
         
         .meeting-info {
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 20px;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 25px;
         }
         
         .meeting-info-item {
-            margin: 12px 0;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 15px;
+            margin: 15px 0;
+            font-size: 16px;
         }
         
-        .meeting-info-item strong {
-            min-width: 100px;
-            font-weight: 600;
+        .meeting-label {
+            font-weight: 700;
+            min-width: 120px;
         }
         
-        .meeting-link {
-            word-break: break-all;
-            color: #fff;
-            text-decoration: underline;
+        .zoom-btn {
+            display: block;
+            background: #FFD700;
+            color: #003087;
+            padding: 18px 40px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 800;
+            font-size: 18px;
+            text-align: center;
+            margin: 25px 0;
+            transition: all 0.3s;
+            box-shadow: 0 5px 20px rgba(255, 215, 0, 0.4);
+        }
+        
+        .zoom-btn:hover {
+            background: #FFC700;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 215, 0, 0.5);
         }
         
         .calendar-buttons {
-            display: flex;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
             gap: 15px;
-            margin-top: 20px;
+            margin-top: 25px;
         }
         
         .calendar-btn {
-            flex: 1;
-            padding: 14px 20px;
+            padding: 16px 20px;
             background: white;
-            color: #667eea;
+            color: #003087;
             border: none;
             border-radius: 10px;
             font-size: 16px;
@@ -261,55 +486,226 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
+            gap: 10px;
         }
         
         .calendar-btn:hover {
+            background: #f0f0f0;
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(255, 255, 255, 0.3);
         }
         
-        .important-note {
-            background: #fff3cd;
-            border: 2px solid #ffc107;
-            color: #856404;
+        .required-badge {
+            background: #FFD700;
+            color: #003087;
             padding: 20px;
-            border-radius: 10px;
-            margin-top: 20px;
-            font-weight: 600;
+            border-radius: 12px;
+            margin-top: 25px;
+            font-weight: 700;
+            font-size: 16px;
             text-align: center;
         }
         
-        @media (max-width: 600px) {
-            .form-content {
-                padding: 30px 20px;
+        /* Footer */
+        .footer {
+            background: #1a1a1a;
+            color: #ccc;
+            padding: 40px 20px;
+            text-align: center;
+        }
+        
+        .footer p {
+            margin: 5px 0;
+            font-size: 14px;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 36px;
             }
             
-            h1 {
-                font-size: 24px;
+            .hero-subtitle {
+                font-size: 18px;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .benefits-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .section-title {
+                font-size: 32px;
+            }
+            
+            .earnings-highlight {
+                font-size: 48px;
+            }
+            
+            .form-container {
+                padding: 30px 25px;
             }
             
             .calendar-buttons {
-                flex-direction: column;
+                grid-template-columns: 1fr;
+            }
+            
+            .header-badge {
+                display: none;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <!-- Video Section -->
-        <div class="video-container">
-            <video controls>
-                <source src="video.mp4" type="video/mp4">
-                Your browser does not support the video tag.
-            </video>
+    <!-- Header -->
+    <div class="header">
+        <div class="header-content">
+            <div class="logo">GLOBE LIFE AMERICAN INCOME LIFE</div>
+            <div class="header-badge">🏆 A+ Rated by Better Business Bureau</div>
         </div>
-        
-        <!-- Form Section -->
-        <div class="form-content">
+    </div>
+    
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Build a Six-Figure Career<br>Protecting Families</h1>
+            <p class="hero-subtitle">
+                Join America's #1 supplemental benefits provider and create unlimited income 
+                while making a real difference in people's lives.
+            </p>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">$100K+</div>
+                    <div class="stat-label">Average Agent Earnings</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">500+</div>
+                    <div class="stat-label">Active Agents</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">70+</div>
+                    <div class="stat-label">Years in Business</div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Video Section -->
+    <section class="video-section">
+        <div class="container">
+            <h2 class="section-title">Watch: Your Path to Success</h2>
+            <p class="section-subtitle">
+                See how our agents are building thriving careers while helping families secure their futures
+            </p>
+            
+            <div class="video-container">
+                <video controls controlsList="nodownload">
+                    <source src="video.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Earnings Section -->
+    <section class="earnings-section">
+        <div class="container">
+            <h2 class="section-title" style="color: white;">Unlimited Earning Potential</h2>
+            
+            <div class="earnings-box">
+                <div class="earnings-highlight">$100,000+</div>
+                <div class="earnings-text">Average Annual Income for Our Agents</div>
+                
+                <div class="earnings-details">
+                    <div class="earnings-item">First-year agents consistently earn $40,000-$60,000</div>
+                    <div class="earnings-item">Top performers earn $150,000-$300,000+ annually</div>
+                    <div class="earnings-item">Unlimited income potential - no salary cap</div>
+                    <div class="earnings-item">Residual income from renewal commissions</div>
+                    <div class="earnings-item">Weekly commission payments</div>
+                    <div class="earnings-item">Performance bonuses and incentives</div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Benefits Section -->
+    <section class="benefits-section">
+        <div class="container">
+            <h2 class="section-title">Why Join Our Team?</h2>
+            <p class="section-subtitle">
+                We provide everything you need to build a successful career in insurance
+            </p>
+            
+            <div class="benefits-grid">
+                <div class="benefit-card">
+                    <div class="benefit-icon">🎓</div>
+                    <div class="benefit-title">Comprehensive Training</div>
+                    <div class="benefit-description">
+                        Full licensing support, paid training program, and ongoing mentorship from top performers. 
+                        We'll teach you everything you need to succeed - no experience required.
+                    </div>
+                </div>
+                
+                <div class="benefit-card">
+                    <div class="benefit-icon">📈</div>
+                    <div class="benefit-title">Pre-Set Appointments</div>
+                    <div class="benefit-description">
+                        We set the appointments for you! No cold calling or door knocking. 
+                        Focus on helping families while we handle lead generation.
+                    </div>
+                </div>
+                
+                <div class="benefit-card">
+                    <div class="benefit-icon">🏆</div>
+                    <div class="benefit-title">Career Advancement</div>
+                    <div class="benefit-description">
+                        Clear path to management positions. Build your own agency, recruit your team, 
+                        and earn overrides on their production. Leadership opportunities available.
+                    </div>
+                </div>
+                
+                <div class="benefit-card">
+                    <div class="benefit-icon">💼</div>
+                    <div class="benefit-title">Flexible Schedule</div>
+                    <div class="benefit-description">
+                        Work when you want, where you want. Perfect for parents, students, 
+                        or anyone seeking work-life balance. Full-time or part-time options.
+                    </div>
+                </div>
+                
+                <div class="benefit-card">
+                    <div class="benefit-icon">🛡️</div>
+                    <div class="benefit-title">Industry-Leading Products</div>
+                    <div class="benefit-description">
+                        Sell products people actually need: life insurance, accident coverage, 
+                        supplemental health benefits. Backed by an A+ rated carrier.
+                    </div>
+                </div>
+                
+                <div class="benefit-card">
+                    <div class="benefit-icon">🎯</div>
+                    <div class="benefit-title">Support & Resources</div>
+                    <div class="benefit-description">
+                        24/7 back-office support, marketing materials, CRM system, mobile app, 
+                        and a nationwide network of successful agents ready to help you.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Form Section -->
+    <section class="form-section" id="formSection">
+        <div class="form-container">
             <div id="applicationForm">
-                <h1>Join Our Team</h1>
-                <p class="subtitle">Start your journey with us today</p>
+                <div class="form-header">
+                    <h3 class="form-title">Start Your Application</h3>
+                    <p class="form-subtitle">Join hundreds of successful agents building their future</p>
+                </div>
                 
                 <form id="applyForm" onsubmit="handleSubmit(event)">
                     <div class="form-group">
@@ -321,7 +717,6 @@
                             required 
                             placeholder="Enter your full name"
                         >
-                        <div class="error-message" id="nameError">Please enter your name</div>
                     </div>
                     
                     <div class="form-group">
@@ -333,52 +728,50 @@
                             required 
                             placeholder="(555) 123-4567"
                         >
-                        <div class="error-message" id="phoneError">Please enter a valid phone number</div>
                     </div>
                     
                     <button type="submit" class="submit-btn" id="submitBtn">
                         Submit Application
                     </button>
+                    
+                    <p class="privacy-note">
+                        We respect your privacy. Your information is secure and will never be shared.
+                    </p>
                 </form>
             </div>
             
             <!-- Success Page -->
             <div id="successPage" class="success-page">
-                <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
-                    <circle class="checkmark-circle" cx="26" cy="26" r="25" fill="none"/>
-                    <path class="checkmark-check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
-                </svg>
+                <div class="success-checkmark">✓</div>
                 
-                <h2 class="success-title">Application Submitted!</h2>
+                <h3 class="success-title">Application Received!</h3>
                 <p class="success-message">
-                    Thank you, <strong id="submittedName"></strong>! Your application has been received.
+                    Thank you, <strong id="submittedName"></strong>! We're excited to have you join our team.
                 </p>
                 
                 <div class="meeting-box">
-                    <h2>🎯 REQUIRED: Join Our Team Meeting</h2>
+                    <h4 class="meeting-title">🎯 NEXT STEP: Join Our Team Meeting</h4>
                     
                     <div class="meeting-info">
                         <div class="meeting-info-item">
-                            <strong>📅 When:</strong>
-                            <span>Mondays & Tuesdays at 7:00 PM EST</span>
+                            <span class="meeting-label">📅 When:</span>
+                            <span>Every Monday & Tuesday at 7:00 PM EST</span>
                         </div>
                         <div class="meeting-info-item">
-                            <strong>🔗 Zoom Link:</strong>
-                            <a href="https://us06web.zoom.us/j/3811708278?pwd=eEI4b2VBU2lmNktRS0ZCTlNYdW9yUT09" 
-                               target="_blank" 
-                               class="meeting-link">
-                                Join Zoom Meeting
-                            </a>
-                        </div>
-                        <div class="meeting-info-item">
-                            <strong>🔢 Meeting ID:</strong>
+                            <span class="meeting-label">🔢 Meeting ID:</span>
                             <span>381 170 8278</span>
                         </div>
                         <div class="meeting-info-item">
-                            <strong>🔐 Passcode:</strong>
+                            <span class="meeting-label">🔐 Passcode:</span>
                             <span>rz123</span>
                         </div>
                     </div>
+                    
+                    <a href="https://us06web.zoom.us/j/3811708278?pwd=eEI4b2VBU2lmNktRS0ZCTlNYdW9yUT09" 
+                       target="_blank" 
+                       class="zoom-btn">
+                        🎥 JOIN ZOOM MEETING
+                    </a>
                     
                     <div class="calendar-buttons">
                         <a href="#" id="googleCalendarLink" class="calendar-btn" target="_blank">
@@ -388,21 +781,34 @@
                             🍎 Add to Apple Calendar
                         </a>
                     </div>
-                </div>
-                
-                <div class="important-note">
-                    ⚠️ IMPORTANT: You must join this meeting to complete your onboarding process!
+                    
+                    <div class="required-badge">
+                        ⚠️ ATTENDANCE REQUIRED: This meeting is mandatory to complete your onboarding!
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p><strong>Globe Life American Income Life</strong></p>
+            <p>© 2025 Closing Coalition - Arias Organization</p>
+            <p>Independent Contractor Opportunity • Equal Opportunity Employer</p>
+            <p style="margin-top: 20px; font-size: 12px;">
+                This is an independent contractor position. Earnings are based on individual performance. 
+                Past performance is not a guarantee of future results.
+            </p>
+        </div>
+    </footer>
 
     <script>
         // Get recruiter reference from URL
         const urlParams = new URLSearchParams(window.location.search);
         const recruiterRef = urlParams.get('ref') || 'direct';
         
-        // API endpoint - UPDATE THIS URL
+        // API endpoint
         const API_URL = 'https://script.google.com/macros/s/AKfycbydU_8O0FFMVGataWlIcchIOt-5QPmWPpcetXLMZvF7r9yUJ_vRgn54HMqPeXqWm891/exec';
         
         async function handleSubmit(event) {
@@ -412,13 +818,11 @@
             const name = document.getElementById('name').value.trim();
             const phone = document.getElementById('phone').value.trim();
             
-            // Validate inputs
             if (!name || !phone) {
                 alert('Please fill in all fields');
                 return;
             }
             
-            // Disable button and show loading
             submitBtn.disabled = true;
             submitBtn.textContent = 'Submitting...';
             
@@ -439,13 +843,19 @@
                 const result = await response.json();
                 
                 if (result.success) {
-                    // Show success page
                     document.getElementById('applicationForm').style.display = 'none';
                     document.getElementById('successPage').classList.add('active');
                     document.getElementById('submittedName').textContent = name;
                     
-                    // Generate calendar links
                     generateCalendarLinks(name);
+                    
+                    // Scroll to success message
+                    setTimeout(() => {
+                        document.getElementById('formSection').scrollIntoView({ 
+                            behavior: 'smooth', 
+                            block: 'center' 
+                        });
+                    }, 300);
                 } else {
                     alert('Error: ' + (result.message || 'Failed to submit application'));
                     submitBtn.disabled = false;
@@ -464,15 +874,12 @@
             const meetingId = '381 170 8278';
             const passcode = 'rz123';
             
-            // Get next Monday at 7 PM EST
-            const nextMonday = getNextWeekday(1); // 1 = Monday
-            nextMonday.setHours(19, 0, 0, 0); // 7 PM
+            const nextMonday = getNextWeekday(1);
+            nextMonday.setHours(19, 0, 0, 0);
             
-            // Google Calendar Link
             const googleCalendarUrl = generateGoogleCalendarUrl(nextMonday, zoomLink, meetingId, passcode);
             document.getElementById('googleCalendarLink').href = googleCalendarUrl;
             
-            // Apple Calendar (ICS) Link
             const icsContent = generateICSFile(nextMonday, zoomLink, meetingId, passcode);
             const blob = new Blob([icsContent], { type: 'text/calendar' });
             const url = URL.createObjectURL(blob);
@@ -480,13 +887,12 @@
         }
         
         function getNextWeekday(dayOfWeek) {
-            // dayOfWeek: 0 = Sunday, 1 = Monday, etc.
             const today = new Date();
             const currentDay = today.getDay();
             let daysToAdd = dayOfWeek - currentDay;
             
             if (daysToAdd <= 0) {
-                daysToAdd += 7; // Get next week's occurrence
+                daysToAdd += 7;
             }
             
             const nextDate = new Date(today);
@@ -495,7 +901,6 @@
         }
         
         function formatDateForCalendar(date) {
-            // Format: YYYYMMDDTHHmmss
             const year = date.getFullYear();
             const month = String(date.getMonth() + 1).padStart(2, '0');
             const day = String(date.getDate()).padStart(2, '0');
@@ -508,15 +913,20 @@
         
         function generateGoogleCalendarUrl(startDate, zoomLink, meetingId, passcode) {
             const endDate = new Date(startDate);
-            endDate.setHours(startDate.getHours() + 1); // 1 hour meeting
+            endDate.setHours(startDate.getHours() + 1);
             
-            const title = encodeURIComponent('Team Meeting - Onboarding Required');
+            const title = encodeURIComponent('Globe Life - Required Team Meeting');
             const details = encodeURIComponent(
-                `Join our team meeting to complete your onboarding!\n\n` +
+                `REQUIRED MEETING: Complete your onboarding by joining this team meeting!\n\n` +
                 `Zoom Link: ${zoomLink}\n` +
                 `Meeting ID: ${meetingId}\n` +
                 `Passcode: ${passcode}\n\n` +
-                `This meeting occurs every Monday and Tuesday at 7:00 PM EST.`
+                `This meeting occurs every Monday and Tuesday at 7:00 PM EST.\n\n` +
+                `What to expect:\n` +
+                `• Overview of Globe Life and our products\n` +
+                `• Training schedule and next steps\n` +
+                `• Q&A with successful agents\n` +
+                `• Licensing information`
             );
             const location = encodeURIComponent(zoomLink);
             const dates = `${formatDateForCalendar(startDate)}/${formatDateForCalendar(endDate)}`;
@@ -535,14 +945,14 @@
             
             return `BEGIN:VCALENDAR
 VERSION:2.0
-PRODID:-//Team Meeting//EN
+PRODID:-//Globe Life American Income Life//EN
 BEGIN:VEVENT
-UID:${timestamp}@closingcoalition.space
+UID:${timestamp}@globelife
 DTSTAMP:${timestamp}
 DTSTART:${icsStart}
 DTEND:${icsEnd}
-SUMMARY:Team Meeting - Onboarding Required
-DESCRIPTION:Join our team meeting to complete your onboarding!\\n\\nZoom Link: ${zoomLink}\\nMeeting ID: ${meetingId}\\nPasscode: ${passcode}\\n\\nThis meeting occurs every Monday and Tuesday at 7:00 PM EST.
+SUMMARY:Globe Life - Required Team Meeting
+DESCRIPTION:REQUIRED MEETING: Complete your onboarding by joining this team meeting!\\n\\nZoom Link: ${zoomLink}\\nMeeting ID: ${meetingId}\\nPasscode: ${passcode}\\n\\nThis meeting occurs every Monday and Tuesday at 7:00 PM EST.\\n\\nWhat to expect:\\n• Overview of Globe Life and our products\\n• Training schedule and next steps\\n• Q&A with successful agents\\n• Licensing information
 LOCATION:${zoomLink}
 RRULE:FREQ=WEEKLY;BYDAY=MO,TU
 STATUS:CONFIRMED
@@ -550,13 +960,13 @@ SEQUENCE:0
 BEGIN:VALARM
 TRIGGER:-PT15M
 ACTION:DISPLAY
-DESCRIPTION:Reminder: Team Meeting in 15 minutes
+DESCRIPTION:Reminder: Globe Life Team Meeting in 15 minutes
 END:VALARM
 END:VEVENT
 END:VCALENDAR`;
         }
         
-        // Phone number formatting (optional enhancement)
+        // Phone number formatting
         document.getElementById('phone').addEventListener('input', function(e) {
             let value = e.target.value.replace(/\D/g, '');
             if (value.length > 10) value = value.slice(0, 10);
