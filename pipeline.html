@@ -72,6 +72,15 @@
     </style>
 </head>
 <body class="text-white">
+    <!-- Auth Loading Overlay -->
+    <div id="authOverlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, #071423, #0a1a2b); z-index: 10000; display: flex; align-items: center; justify-content: center; flex-direction: column;">
+        <div style="text-align: center;">
+            <div style="font-size: 48px; margin-bottom: 20px;">🔐</div>
+            <div style="font-size: 24px; font-weight: bold; margin-bottom: 10px;">Verifying Access...</div>
+            <div id="authStatus" style="font-size: 14px; color: #4fd1c5;"></div>
+        </div>
+    </div>
+
     <!-- Header -->
     <header class="bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-4 shadow-lg sticky top-0 z-10">
         <div class="container mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
@@ -178,7 +187,7 @@
         const LS_EXPIRES = "cc_expires_at";
         
         // ⚠️ UPDATE THIS WITH YOUR GOOGLE APPS SCRIPT URL ⚠️
-        const RECRUITING_API_URL = 'https://script.google.com/macros/s/AKfycbxvwtBSUiy1wTed5iR4hsNLPqhzA9g-FKH9Lfe-ZKA07RBFEFMVY2-E-qCOtdido_V0/exec';
+        const RECRUITING_API_URL = 'https://script.google.com/macros/s/AKfycbydU_8O0FFMVGataWlIcchIOt-5QPmWPpcetXLMZvF7r9yUJ_vRgn54HMqPeXqWm891/exec';
         
         const $ = (id) => document.getElementById(id);
         
@@ -199,13 +208,28 @@
                 headers: { "Content-Type":"application/json" },
                 body: JSON.stringify({ action, ...payload })
             });
+            
+            if (!res.ok) {
+                console.error('API HTTP error:', res.status, res.statusText);
+                throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+            }
+            
             const text = await res.text();
+            console.log('API response text:', text.substring(0, 200));
+            
             let data;
-            try { data = JSON.parse(text); }
-            catch { throw new Error(text || "Invalid response"); }
+            try { 
+                data = JSON.parse(text); 
+            } catch (parseError) { 
+                console.error('JSON parse error:', parseError, 'Text:', text);
+                throw new Error(text || "Invalid response"); 
+            }
+
+            console.log('API response data:', data);
 
             if (!data || data.ok !== true){
                 const err = (data && (data.error || data.detail)) ? (data.error + (data.detail ? ` — ${data.detail}` : "")) : "Request failed";
+                console.error('API data error:', err);
                 throw new Error(err);
             }
             return data;
@@ -237,41 +261,76 @@
         /**********************
          * PAGE PROTECTION & INIT - MATCH home.html PATTERN
          **********************/
-        (async () => {
+        function updateAuthStatus(message) {
+            const statusEl = document.getElementById('authStatus');
+            if (statusEl) {
+                statusEl.textContent = message;
+            }
+            console.log('Auth status:', message);
+        }
+
+        function hideAuthOverlay() {
+            const overlay = document.getElementById('authOverlay');
+            if (overlay) {
+                overlay.style.display = 'none';
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', async () => {
+            updateAuthStatus('Checking authentication...');
+            
             const token = getToken();
             const exp = getExpires();
 
+            console.log('Pipeline init - Token found:', !!token);
+
             if (!token){
-                goLogin();
+                console.log('No token, redirecting to login');
+                updateAuthStatus('No session found. Redirecting to login...');
+                setTimeout(() => goLogin(), 1000);
                 return;
             }
 
             try{
+                updateAuthStatus('Verifying session with server...');
+                console.log('Verifying token with API...');
+                
                 // Get current user - same as home.html
                 const me = await api("me", { token });
+                console.log('Token verified, user:', me);
                 currentUser = me;
+                
+                updateAuthStatus('Session verified! Loading your pipeline...');
                 
                 // Display user email
                 $("userEmail").textContent = me.loginEmail || "—";
                 
                 // Determine recruiter reference from email
-                // Use the part before @ as the recruiter reference (e.g., thomas.lancheros@gmail.com -> thomaslancheros)
                 recruiterRef = me.loginEmail.split('@')[0].toLowerCase().replace(/[^a-z0-9]/g, '');
+                console.log('Recruiter ref:', recruiterRef);
                 
                 // Generate referral URL
                 const referralUrl = window.location.origin + '/apply?ref=' + recruiterRef;
                 $("myReferralUrl").textContent = referralUrl;
+                
+                // Hide overlay before loading pipeline
+                hideAuthOverlay();
                 
                 // Load pipeline data
                 await loadPipeline();
                 
             } catch (e){
                 // Token invalid/expired - same as home.html
-                logoutLocal();
-                alert("Session expired. Please log in again.");
-                goLogin();
+                console.error('Auth error:', e);
+                updateAuthStatus('Session expired: ' + e.message);
+                
+                setTimeout(() => {
+                    logoutLocal();
+                    alert("Session expired. Please log in again.");
+                    goLogin();
+                }, 1500);
             }
-        })();
+        });
 
         /**********************
          * PIPELINE LOADING
