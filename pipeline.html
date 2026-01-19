@@ -6,6 +6,22 @@
     <title>My Pipeline - Closing Coalition</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
+        :root{
+            --bg1:#071423;
+            --bg2:#0a1a2b;
+            --card: rgba(255,255,255,.06);
+            --accent:#4fd1c5;
+            --accent2:#2dd4bf;
+        }
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background: 
+                radial-gradient(1200px 700px at 20% 20%, rgba(79,209,197,.22), transparent 55%),
+                radial-gradient(1200px 700px at 80% 15%, rgba(45,212,191,.18), transparent 55%),
+                radial-gradient(900px 600px at 70% 80%, rgba(99,102,241,.16), transparent 55%),
+                linear-gradient(180deg, var(--bg1), var(--bg2));
+            min-height: 100vh;
+        }
         .stage-column {
             min-width: 280px;
             max-width: 320px;
@@ -19,18 +35,20 @@
         }
     </style>
 </head>
-<body class="bg-gray-50 min-h-screen">
+<body class="text-white">
     <!-- Header -->
     <header class="bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-4 shadow-lg sticky top-0 z-10">
         <div class="container mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
             <div class="text-center md:text-left">
                 <h1 class="text-2xl font-bold">📊 My Recruiting Pipeline</h1>
-                <p class="text-sm opacity-90">Recruiter: <span id="recruiterName" class="font-semibold"></span></p>
+                <p class="text-sm opacity-90">
+                    Recruiter: <span id="userEmail" class="font-semibold">—</span>
+                </p>
             </div>
             <div class="flex gap-4 items-center flex-wrap justify-center">
                 <div class="text-center bg-white/10 backdrop-blur-sm px-4 py-2 rounded-lg">
                     <div class="text-xs opacity-75">My Referral Link</div>
-                    <div class="font-mono font-bold text-sm" id="myReferralUrl"></div>
+                    <div class="font-mono font-bold text-sm" id="myReferralUrl">—</div>
                     <button onclick="copyReferralLink()" class="text-xs underline mt-1 hover:text-yellow-300">
                         📋 Copy Link
                     </button>
@@ -41,29 +59,32 @@
                 <button onclick="goHome()" class="bg-white/10 backdrop-blur-sm px-4 py-2 rounded-lg hover:bg-white/20 transition">
                     🏠 Home
                 </button>
+                <button onclick="logout()" class="bg-red-500/20 backdrop-blur-sm px-4 py-2 rounded-lg hover:bg-red-500/30 transition">
+                    🚪 Logout
+                </button>
             </div>
         </div>
     </header>
 
     <!-- Stats Bar -->
-    <div class="bg-white border-b shadow-sm">
+    <div class="bg-white/5 border-b border-white/10 shadow-sm">
         <div class="container mx-auto p-4">
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <div class="text-center p-3 bg-blue-50 rounded-lg">
-                    <div class="text-2xl font-bold text-blue-600" id="countProspects">0</div>
-                    <div class="text-xs text-gray-600 font-medium">Prospects</div>
+                <div class="text-center p-3 bg-blue-500/10 rounded-lg border border-blue-500/20">
+                    <div class="text-2xl font-bold text-blue-400" id="countProspects">0</div>
+                    <div class="text-xs text-gray-300 font-medium">Prospects</div>
                 </div>
-                <div class="text-center p-3 bg-purple-50 rounded-lg">
-                    <div class="text-2xl font-bold text-purple-600" id="countInCourse">0</div>
-                    <div class="text-xs text-gray-600 font-medium">In Course</div>
+                <div class="text-center p-3 bg-purple-500/10 rounded-lg border border-purple-500/20">
+                    <div class="text-2xl font-bold text-purple-400" id="countInCourse">0</div>
+                    <div class="text-xs text-gray-300 font-medium">In Course</div>
                 </div>
-                <div class="text-center p-3 bg-orange-50 rounded-lg">
-                    <div class="text-2xl font-bold text-orange-600" id="countTesting">0</div>
-                    <div class="text-xs text-gray-600 font-medium">Testing</div>
+                <div class="text-center p-3 bg-orange-500/10 rounded-lg border border-orange-500/20">
+                    <div class="text-2xl font-bold text-orange-400" id="countTesting">0</div>
+                    <div class="text-xs text-gray-300 font-medium">Testing</div>
                 </div>
-                <div class="text-center p-3 bg-green-50 rounded-lg">
-                    <div class="text-2xl font-bold text-green-600" id="countLicensed">0</div>
-                    <div class="text-xs text-gray-600 font-medium">Licensed</div>
+                <div class="text-center p-3 bg-green-500/10 rounded-lg border border-green-500/20">
+                    <div class="text-2xl font-bold text-green-400" id="countLicensed">0</div>
+                    <div class="text-xs text-gray-300 font-medium">Licensed</div>
                 </div>
             </div>
         </div>
@@ -72,7 +93,7 @@
     <!-- Pipeline Board -->
     <div class="container mx-auto p-6">
         <div id="loadingMessage" class="text-center py-12">
-            <div class="text-xl font-semibold text-gray-600">Loading your pipeline...</div>
+            <div class="text-xl font-semibold text-gray-300">Loading your pipeline...</div>
         </div>
         <div id="pipelineBoard" class="hidden flex gap-4 overflow-x-auto pb-4">
             <!-- Columns will be populated here -->
@@ -80,45 +101,111 @@
     </div>
 
     <script>
-        // ⚠️ UPDATE THIS WITH YOUR GOOGLE APPS SCRIPT URL ⚠️
-        const RECRUITING_API_URL = 'https://script.google.com/macros/s/AKfycbwYD77Hfj70YbwQeNz1qSpihYzXLijsxVbyISD59Dv7FIe1GnLSJOdbs_oyM7xR0oqN/exec';
+        /**********************
+         * CONFIG - MATCH home.html EXACTLY
+         **********************/
+        const API_URL = "https://closing-coalition-api.thomaslancheros06.workers.dev";
+        const LS_TOKEN = "cc_token";
+        const LS_EXPIRES = "cc_expires_at";
         
-        let currentRecruiter = null;
+        // ⚠️ UPDATE THIS WITH YOUR GOOGLE APPS SCRIPT URL ⚠️
+        const RECRUITING_API_URL = 'YOUR_DEPLOYMENT_URL_HERE';
+        
+        const $ = (id) => document.getElementById(id);
+        
+        let currentUser = null;
         let recruiterRef = null;
         let allProspects = [];
 
-        // Check authentication on page load
-        window.addEventListener('DOMContentLoaded', async () => {
-            await checkAuth();
-            await loadPipeline();
-        });
+        /**********************
+         * AUTH HELPERS - MATCH home.html EXACTLY
+         **********************/
+        function getToken(){ return localStorage.getItem(LS_TOKEN) || ""; }
+        function getExpires(){ return localStorage.getItem(LS_EXPIRES) || ""; }
 
-        async function checkAuth() {
-            // Get current user from localStorage
-            const userEmail = localStorage.getItem('userEmail');
-            
-            if (!userEmail) {
-                alert('Please log in first');
-                window.location.href = 'index.html';
-                return;
+        async function api(action, payload){
+            const res = await fetch(API_URL, {
+                method: "POST",
+                headers: { "Content-Type":"application/json" },
+                body: JSON.stringify({ action, ...payload })
+            });
+            const text = await res.text();
+            let data;
+            try { data = JSON.parse(text); }
+            catch { throw new Error(text || "Invalid response"); }
+
+            if (!data || data.ok !== true){
+                const err = (data && (data.error || data.detail)) ? (data.error + (data.detail ? ` — ${data.detail}` : "")) : "Request failed";
+                throw new Error(err);
             }
-            
-            // Get recruiter name - you can adjust this based on your auth system
-            // Option 1: Use email username
-            recruiterRef = userEmail.split('@')[0].toLowerCase();
-            
-            // Option 2: If you have a specific recruiterRef in localStorage
-            // recruiterRef = localStorage.getItem('recruiterRef');
-            
-            // Display recruiter info
-            currentRecruiter = localStorage.getItem('fullName') || userEmail;
-            document.getElementById('recruiterName').textContent = currentRecruiter;
-            
-            // Generate referral URL
-            const referralUrl = window.location.origin + '/apply?ref=' + recruiterRef;
-            document.getElementById('myReferralUrl').textContent = referralUrl;
+            return data;
         }
 
+        function logoutLocal(){
+            localStorage.removeItem(LS_TOKEN);
+            localStorage.removeItem(LS_EXPIRES);
+        }
+
+        function goLogin(){
+            window.location.href = "index.html";
+        }
+
+        function goHome(){
+            window.location.href = "home.html";
+        }
+
+        async function logout(){
+            const token = getToken();
+            try{
+                if (token) { await api("logout", { token }).catch(()=>{}); }
+            } finally {
+                logoutLocal();
+                goLogin();
+            }
+        }
+
+        /**********************
+         * PAGE PROTECTION & INIT - MATCH home.html PATTERN
+         **********************/
+        (async () => {
+            const token = getToken();
+            const exp = getExpires();
+
+            if (!token){
+                goLogin();
+                return;
+            }
+
+            try{
+                // Get current user - same as home.html
+                const me = await api("me", { token });
+                currentUser = me;
+                
+                // Display user email
+                $("userEmail").textContent = me.loginEmail || "—";
+                
+                // Determine recruiter reference from email
+                // Use the part before @ as the recruiter reference (e.g., thomas.lancheros@gmail.com -> thomaslancheros)
+                recruiterRef = me.loginEmail.split('@')[0].toLowerCase().replace(/[^a-z0-9]/g, '');
+                
+                // Generate referral URL
+                const referralUrl = window.location.origin + '/apply?ref=' + recruiterRef;
+                $("myReferralUrl").textContent = referralUrl;
+                
+                // Load pipeline data
+                await loadPipeline();
+                
+            } catch (e){
+                // Token invalid/expired - same as home.html
+                logoutLocal();
+                alert("Session expired. Please log in again.");
+                goLogin();
+            }
+        })();
+
+        /**********************
+         * PIPELINE LOADING
+         **********************/
         async function loadPipeline() {
             if (!recruiterRef) {
                 return;
@@ -131,30 +218,35 @@
                 
                 if (data.success) {
                     allProspects = data.prospects || [];
-                    document.getElementById('loadingMessage').style.display = 'none';
-                    document.getElementById('pipelineBoard').classList.remove('hidden');
+                    $("loadingMessage").style.display = 'none';
+                    $("pipelineBoard").classList.remove('hidden');
                     renderPipeline();
                     updateStats();
                 } else {
-                    console.error('API Error:', data.message);
-                    document.getElementById('loadingMessage').innerHTML = 
-                        '<div class="text-red-600">Error: ' + data.message + '</div>';
+                    $("loadingMessage").innerHTML = 
+                        '<div class="text-orange-400">No prospects found yet. Share your referral link to get started!</div>';
+                    $("pipelineBoard").classList.remove('hidden');
+                    renderPipeline();
                 }
             } catch (error) {
                 console.error('Error loading pipeline:', error);
-                document.getElementById('loadingMessage').innerHTML = 
-                    '<div class="text-red-600">Error loading prospects. Check console for details.</div>';
+                $("loadingMessage").innerHTML = 
+                    '<div class="text-red-400">Error loading prospects. Make sure your Google Apps Script is deployed correctly.</div>' +
+                    '<div class="text-sm text-gray-400 mt-2">Error: ' + error.message + '</div>';
             }
         }
 
         async function refreshPipeline() {
-            document.getElementById('loadingMessage').style.display = 'block';
-            document.getElementById('loadingMessage').innerHTML = 
-                '<div class="text-xl font-semibold text-gray-600">Refreshing...</div>';
-            document.getElementById('pipelineBoard').classList.add('hidden');
+            $("loadingMessage").style.display = 'block';
+            $("loadingMessage").innerHTML = 
+                '<div class="text-xl font-semibold text-gray-300">Refreshing...</div>';
+            $("pipelineBoard").classList.add('hidden');
             await loadPipeline();
         }
 
+        /**********************
+         * PIPELINE RENDERING
+         **********************/
         function renderPipeline() {
             const stages = [
                 { id: 'Prospect', name: 'Prospects', color: 'blue' },
@@ -163,7 +255,7 @@
                 { id: 'Licensed', name: 'Licensed', color: 'green' }
             ];
             
-            const board = document.getElementById('pipelineBoard');
+            const board = $("pipelineBoard");
             board.innerHTML = '';
             
             stages.forEach(stage => {
@@ -174,16 +266,16 @@
 
         function createStageColumn(stage, prospects) {
             const column = document.createElement('div');
-            column.className = 'stage-column bg-gray-100 rounded-lg p-4';
+            column.className = 'stage-column bg-white/5 rounded-lg p-4 border border-white/10';
             
             const prospectCards = prospects.length > 0 
                 ? prospects.map(prospect => createProspectCard(prospect, stage.color)).join('') 
-                : '<div class="text-center text-gray-400 text-sm py-8">No prospects yet<br><small>Share your referral link!</small></div>';
+                : '<div class="text-center text-gray-400 text-sm py-8">No prospects yet<br><small class="text-xs">Share your referral link!</small></div>';
             
             column.innerHTML = `
                 <div class="flex justify-between items-center mb-4">
-                    <h3 class="font-bold uppercase text-sm text-gray-700">${stage.name}</h3>
-                    <span class="bg-${stage.color}-600 text-white text-xs px-2 py-1 rounded-full font-bold">${prospects.length}</span>
+                    <h3 class="font-bold uppercase text-sm text-gray-300">${stage.name}</h3>
+                    <span class="bg-${stage.color}-500 text-white text-xs px-2 py-1 rounded-full font-bold">${prospects.length}</span>
                 </div>
                 <div class="space-y-3">
                     ${prospectCards}
@@ -201,15 +293,15 @@
             });
             
             return `
-                <div class="prospect-card bg-white rounded-lg shadow-sm p-4 border-l-4 border-${color}-500">
-                    <div class="font-semibold text-gray-800 mb-2">${prospect.name}</div>
-                    <div class="text-sm text-gray-600 mb-2">📞 ${prospect.phone}</div>
-                    <div class="text-xs text-gray-500 mb-3">Added: ${formattedDate}</div>
+                <div class="prospect-card bg-white/10 rounded-lg shadow-sm p-4 border-l-4 border-${color}-500">
+                    <div class="font-semibold text-white mb-2">${prospect.name}</div>
+                    <div class="text-sm text-gray-300 mb-2">📞 ${prospect.phone}</div>
+                    <div class="text-xs text-gray-400 mb-3">Added: ${formattedDate}</div>
                     
                     <div class="mb-2">
-                        <label class="text-xs text-gray-600 font-medium">Change Status:</label>
+                        <label class="text-xs text-gray-400 font-medium">Change Status:</label>
                         <select onchange="updateProspectStatus(${prospect.row}, this.value)" 
-                                class="w-full mt-1 text-sm border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-${color}-500">
+                                class="w-full mt-1 text-sm bg-white/10 border border-white/20 text-white rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-${color}-500">
                             <option value="Prospect" ${prospect.status === 'Prospect' ? 'selected' : ''}>Prospect</option>
                             <option value="In Course" ${prospect.status === 'In Course' ? 'selected' : ''}>In Course</option>
                             <option value="Testing" ${prospect.status === 'Testing' ? 'selected' : ''}>Testing</option>
@@ -239,44 +331,45 @@
                     // Reload pipeline to show updated status
                     await loadPipeline();
                     
-                    // Show success message briefly
-                    const message = document.createElement('div');
-                    message.className = 'fixed top-20 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50';
-                    message.textContent = '✓ Status updated!';
-                    document.body.appendChild(message);
-                    setTimeout(() => message.remove(), 2000);
+                    // Show success message
+                    showToast('✓ Status updated!', 'success');
                 } else {
-                    alert('Error updating status: ' + data.message);
+                    showToast('Error: ' + data.message, 'error');
                 }
             } catch (error) {
                 console.error('Error updating status:', error);
-                alert('Failed to update status. Please try again.');
+                showToast('Failed to update status', 'error');
             }
         }
 
         function updateStats() {
-            document.getElementById('countProspects').textContent = 
+            $("countProspects").textContent = 
                 allProspects.filter(p => p.status === 'Prospect').length;
-            document.getElementById('countInCourse').textContent = 
+            $("countInCourse").textContent = 
                 allProspects.filter(p => p.status === 'In Course').length;
-            document.getElementById('countTesting').textContent = 
+            $("countTesting").textContent = 
                 allProspects.filter(p => p.status === 'Testing').length;
-            document.getElementById('countLicensed').textContent = 
+            $("countLicensed").textContent = 
                 allProspects.filter(p => p.status === 'Licensed').length;
         }
 
         function copyReferralLink() {
-            const url = document.getElementById('myReferralUrl').textContent;
+            const url = $("myReferralUrl").textContent;
             navigator.clipboard.writeText(url).then(() => {
-                alert('✓ Referral link copied to clipboard!\n\n' + url);
+                showToast('✓ Link copied to clipboard!', 'success');
             }).catch(err => {
                 console.error('Error copying:', err);
                 alert('Link: ' + url);
             });
         }
 
-        function goHome() {
-            window.location.href = 'home.html';
+        function showToast(message, type) {
+            const toast = document.createElement('div');
+            toast.className = 'fixed top-20 right-4 px-6 py-3 rounded-lg shadow-lg z-50 ' + 
+                (type === 'success' ? 'bg-green-500' : 'bg-red-500') + ' text-white';
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 2000);
         }
     </script>
 </body>
