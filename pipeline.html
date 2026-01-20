@@ -24,28 +24,39 @@
             min-height: 100vh;
         }
         .stage-column {
-            min-width: 360px;
-            max-width: 400px;
+            min-width: 280px;
+            max-width: 320px;
         }
         .prospect-card {
             transition: all 0.2s;
+            position: relative;
         }
         .prospect-card:hover {
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
         }
-        
-        .editable-field {
+        .update-warning {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            width: 24px;
+            height: 24px;
+            background: #ff5252;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: pulse 2s infinite;
             cursor: pointer;
-            padding: 4px 8px;
-            border-radius: 4px;
-            transition: background 0.2s;
+            z-index: 10;
         }
-        .editable-field:hover {
-            background: rgba(255,255,255,0.1);
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.1); }
         }
         
-        .qr-modal {
+        /* Modal Styles */
+        .modal {
             display: none;
             position: fixed;
             top: 0;
@@ -58,16 +69,15 @@
             justify-content: center;
             align-items: center;
         }
-        .qr-modal.active {
+        .modal.active {
             display: flex;
         }
-        .qr-modal-content {
+        .modal-content {
             background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
             border-radius: 20px;
             padding: 40px;
             max-width: 500px;
             width: 90%;
-            text-align: center;
             border: 2px solid rgba(79, 209, 197, 0.3);
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
         }
@@ -128,7 +138,7 @@
     <!-- Stats Bar -->
     <div class="bg-white/5 border-b border-white/10 shadow-sm">
         <div class="container mx-auto p-4">
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
                 <div class="text-center p-3 bg-blue-500/10 rounded-lg border border-blue-500/20">
                     <div class="text-2xl font-bold text-blue-400" id="countProspects">0</div>
                     <div class="text-xs text-gray-300 font-medium">Prospects</div>
@@ -145,6 +155,10 @@
                     <div class="text-2xl font-bold text-green-400" id="countLicensed">0</div>
                     <div class="text-xs text-gray-300 font-medium">Licensed</div>
                 </div>
+                <div class="text-center p-3 bg-red-500/10 rounded-lg border border-red-500/20">
+                    <div class="text-2xl font-bold text-red-400" id="countNeedingUpdate">0</div>
+                    <div class="text-xs text-gray-300 font-medium">Need Update</div>
+                </div>
             </div>
         </div>
     </div>
@@ -160,8 +174,8 @@
     </div>
 
     <!-- QR Code Modal -->
-    <div id="qrModal" class="qr-modal" onclick="closeQRCode(event)">
-        <div class="qr-modal-content" onclick="event.stopPropagation()">
+    <div id="qrModal" class="modal" onclick="closeQRCode(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
             <h2 class="text-2xl font-bold mb-2 bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">
                 📱 Your Referral QR Code
             </h2>
@@ -169,7 +183,7 @@
                 People can scan this to apply instantly!
             </p>
             
-            <div id="qrcode"></div>
+            <div id="qrcode" class="text-center"></div>
             
             <div class="bg-white/10 rounded-lg p-3 mb-4">
                 <p class="text-xs text-gray-400 mb-1">Referral Link:</p>
@@ -187,22 +201,48 @@
         </div>
     </div>
 
+    <!-- Update Modal -->
+    <div id="updateModal" class="modal">
+        <div class="modal-content">
+            <h2 class="text-2xl font-bold mb-2 bg-gradient-to-r from-orange-400 to-red-400 bg-clip-text text-transparent">
+                ⚠️ Add Update
+            </h2>
+            <p class="text-sm text-gray-400 mb-4">
+                This recruit needs a status update
+            </p>
+            
+            <div class="bg-white/10 rounded-lg p-4 mb-4">
+                <p class="font-semibold text-lg" id="updateProspectName"></p>
+                <p class="text-sm text-gray-400">Current Status: <span id="updateProspectStatus" class="text-cyan-400"></span></p>
+                <p class="text-xs text-gray-500 mt-1">Last Update: <span id="updateLastUpdate"></span></p>
+            </div>
+            
+            <div class="mb-4">
+                <label class="block text-sm font-medium mb-2">Update Comment:</label>
+                <textarea id="updateComment" rows="4" 
+                    class="w-full bg-white/10 border border-white/20 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500"
+                    placeholder="Enter your update here..."></textarea>
+            </div>
+            
+            <div class="flex gap-3 justify-center">
+                <button onclick="submitUpdate()" class="bg-gradient-to-r from-green-500 to-emerald-500 px-6 py-2 rounded-lg hover:from-green-600 hover:to-emerald-600 transition font-semibold">
+                    ✅ Submit Update
+                </button>
+                <button onclick="closeUpdateModal()" class="bg-white/10 px-6 py-2 rounded-lg hover:bg-white/20 transition">
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+
     <script>
+        /**********************
+         * CONFIG
+         **********************/
         const API_URL = "https://closing-coalition-api.thomaslancheros06.workers.dev";
         const LS_TOKEN = "cc_token";
         const LS_EXPIRES = "cc_expires_at";
-        
-        // ⚠️ UPDATE THIS WITH YOUR GOOGLE APPS SCRIPT URL ⚠️
-        const RECRUITING_API_URL = 'https://script.google.com/macros/s/AKfycbzuu_BSxGqgMf0RZo9lzW05gBUddYW-id0T8Zt0Z8qfKl1lAIHN9oPZa60Ot93SJqn4/exec';
-        
-        // Checklist labels (edit these anytime!)
-        const CHECKLIST_LABELS = [
-            'Checklist Item 1',
-            'Checklist Item 2',
-            'Checklist Item 3',
-            'Checklist Item 4',
-            'Checklist Item 5'
-        ];
+        const RECRUITING_API_URL = 'https://script.google.com/macros/s/AKfycbxvwtBSUiy1wTed5iR4hsNLPqhzA9g-FKH9Lfe-ZKA07RBFEFMVY2-E-qCOtdido_V0/exec';
         
         const $ = (id) => document.getElementById(id);
         
@@ -210,7 +250,11 @@
         let recruiterRef = null;
         let allProspects = [];
         let qrCodeInstance = null;
+        let currentUpdateProspect = null;
 
+        /**********************
+         * AUTH HELPERS
+         **********************/
         function getToken(){ return localStorage.getItem(LS_TOKEN) || ""; }
         function getExpires(){ return localStorage.getItem(LS_EXPIRES) || ""; }
 
@@ -263,23 +307,21 @@
             }
         }
 
+        /**********************
+         * PAGE PROTECTION & INIT
+         **********************/
         function updateAuthStatus(message) {
             const statusEl = $('authStatus');
-            if (statusEl) {
-                statusEl.textContent = message;
-            }
+            if (statusEl) statusEl.textContent = message;
         }
 
         function hideAuthOverlay() {
             const overlay = $('authOverlay');
-            if (overlay) {
-                overlay.style.display = 'none';
-            }
+            if (overlay) overlay.style.display = 'none';
         }
 
         window.addEventListener('DOMContentLoaded', async () => {
             updateAuthStatus('Checking authentication...');
-            
             const token = getToken();
 
             if (!token){
@@ -290,26 +332,21 @@
 
             try{
                 updateAuthStatus('Verifying session with server...');
-                
                 const me = await api("me", { token });
                 currentUser = me;
-                
                 updateAuthStatus('Session verified! Loading your pipeline...');
                 
                 $("userEmail").textContent = me.loginEmail || "—";
-                
                 recruiterRef = me.loginEmail.split('@')[0].toLowerCase().replace(/[^a-z0-9]/g, '');
                 
                 const referralUrl = window.location.origin + '/apply?ref=' + recruiterRef;
                 $("myReferralUrl").textContent = referralUrl;
                 
                 hideAuthOverlay();
-                
                 await loadPipeline();
                 
             } catch (e){
                 updateAuthStatus('Session expired: ' + e.message);
-                
                 setTimeout(() => {
                     logoutLocal();
                     alert("Session expired. Please log in again.");
@@ -318,14 +355,14 @@
             }
         });
 
+        /**********************
+         * PIPELINE LOADING
+         **********************/
         async function loadPipeline() {
-            if (!recruiterRef) {
-                return;
-            }
+            if (!recruiterRef) return;
             
             try {
                 const response = await fetch(RECRUITING_API_URL + '?action=getProspects&recruiterRef=' + recruiterRef);
-                
                 const data = await response.json();
                 
                 if (data.success) {
@@ -343,17 +380,29 @@
             } catch (error) {
                 console.error('Error loading pipeline:', error);
                 $("loadingMessage").innerHTML = 
-                    '<div class="text-red-400">Error loading prospects. Make sure your Google Apps Script is deployed correctly.</div>' +
+                    '<div class="text-red-400">Error loading prospects.</div>' +
                     '<div class="text-sm text-gray-400 mt-2">Error: ' + error.message + '</div>';
             }
         }
 
         async function refreshPipeline() {
             $("loadingMessage").style.display = 'block';
-            $("loadingMessage").innerHTML = 
-                '<div class="text-xl font-semibold text-gray-300">Refreshing...</div>';
+            $("loadingMessage").innerHTML = '<div class="text-xl font-semibold text-gray-300">Refreshing...</div>';
             $("pipelineBoard").classList.add('hidden');
             await loadPipeline();
+        }
+
+        /**********************
+         * PIPELINE RENDERING
+         **********************/
+        function needsUpdate(prospect) {
+            if (prospect.status === 'Licensed') return false;
+            
+            const now = new Date();
+            const lastUpdate = new Date(prospect.lastUpdate);
+            const hoursDiff = (now - lastUpdate) / (1000 * 60 * 60);
+            
+            return hoursDiff >= 48;
         }
 
         function renderPipeline() {
@@ -396,59 +445,28 @@
 
         function createProspectCard(prospect, color) {
             const formattedDate = new Date(prospect.datetime).toLocaleDateString('en-US', { 
-                month: 'short', 
-                day: 'numeric',
-                year: 'numeric'
+                month: 'short', day: 'numeric', year: 'numeric'
             });
             
-            // Calculate age in days
-            const ageInDays = Math.floor((new Date() - new Date(prospect.datetime)) / (1000 * 60 * 60 * 24));
+            const lastUpdateFormatted = new Date(prospect.lastUpdate).toLocaleDateString('en-US', {
+                month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit'
+            });
             
-            // Format dates for display
-            const lastContact = prospect.lastContact ? new Date(prospect.lastContact).toLocaleDateString('en-US', {month: 'short', day: 'numeric'}) : 'Not set';
-            const nextFollowup = prospect.nextFollowup ? new Date(prospect.nextFollowup).toLocaleDateString('en-US', {month: 'short', day: 'numeric'}) : 'Not set';
-            
-            // Build checklist HTML
-            const checklistHTML = CHECKLIST_LABELS.map((label, idx) => {
-                const checkNum = idx + 1;
-                const isChecked = prospect['check' + checkNum];
-                return `
-                    <label class="flex items-center gap-2 text-sm cursor-pointer hover:bg-white/5 p-1 rounded">
-                        <input type="checkbox" 
-                               ${isChecked ? 'checked' : ''} 
-                               onchange="updateCheckbox(${prospect.row}, ${checkNum}, this.checked)"
-                               class="w-4 h-4 cursor-pointer">
-                        <span class="text-gray-300">${label}</span>
-                    </label>
-                `;
-            }).join('');
+            const showWarning = needsUpdate(prospect);
             
             return `
-                <div class="prospect-card bg-white/10 rounded-lg shadow-sm p-4 border-l-4 border-${color}-500">
-                    <!-- Name (editable) -->
-                    <div class="font-semibold text-white mb-2 editable-field" 
-                         onclick="editField(${prospect.row}, 'name', '${prospect.name.replace(/'/g, "\\'")}', this)">
-                        ${prospect.name}
-                    </div>
+                <div class="prospect-card bg-white/10 rounded-lg shadow-sm p-4 border-l-4 border-${color}-500" 
+                     onclick="handleCardClick(${prospect.row}, ${showWarning})">
+                    ${showWarning ? '<div class="update-warning" title="Needs update!">⚠️</div>' : ''}
                     
-                    <!-- Phone (editable with tel link) -->
-                    <div class="text-sm text-gray-300 mb-2">
-                        📞 <a href="tel:${prospect.phone}" class="hover:text-cyan-400">${prospect.phone}</a>
-                        <span class="text-xs text-gray-500 cursor-pointer ml-2" 
-                              onclick="editField(${prospect.row}, 'phone', '${prospect.phone}', this.previousElementSibling)">
-                            ✏️
-                        </span>
-                    </div>
+                    <div class="font-semibold text-white mb-2">${prospect.name}</div>
+                    <div class="text-sm text-gray-300 mb-2">📞 ${prospect.phone}</div>
+                    <div class="text-xs text-gray-400 mb-1">Added: ${formattedDate}</div>
+                    <div class="text-xs text-gray-400 mb-3">Last Update: ${lastUpdateFormatted}</div>
                     
-                    <!-- Age Badge -->
-                    <div class="text-xs text-gray-400 mb-3">
-                        Added: ${formattedDate} <span class="bg-white/10 px-2 py-0.5 rounded ml-2">${ageInDays} days old</span>
-                    </div>
-                    
-                    <!-- Status Dropdown -->
-                    <div class="mb-3">
-                        <label class="text-xs text-gray-400 font-medium">Status:</label>
-                        <select onchange="updateProspectStatus(${prospect.row}, this.value)" 
+                    <div class="mb-2">
+                        <label class="text-xs text-gray-400 font-medium">Change Status:</label>
+                        <select onchange="updateProspectStatus(${prospect.row}, this.value); event.stopPropagation();" 
                                 class="w-full mt-1 text-sm bg-white/10 border border-white/20 text-white rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-${color}-500">
                             <option value="Prospect" ${prospect.status === 'Prospect' ? 'selected' : ''}>Prospect</option>
                             <option value="In Course" ${prospect.status === 'In Course' ? 'selected' : ''}>In Course</option>
@@ -456,45 +474,17 @@
                             <option value="Licensed" ${prospect.status === 'Licensed' ? 'selected' : ''}>Licensed</option>
                         </select>
                     </div>
-                    
-                    <!-- Notes (editable) -->
-                    <div class="mb-3">
-                        <label class="text-xs text-gray-400 font-medium">Notes:</label>
-                        <div class="text-sm text-gray-300 bg-white/5 rounded p-2 mt-1 min-h-[60px] cursor-pointer hover:bg-white/10"
-                             onclick="editNotes(${prospect.row}, '${(prospect.notes || '').replace(/'/g, "\\'")}', this)">
-                            ${prospect.notes || '<span class="text-gray-500 italic">Click to add notes...</span>'}
-                        </div>
-                    </div>
-                    
-                    <!-- Date Fields -->
-                    <div class="grid grid-cols-2 gap-2 mb-3">
-                        <div>
-                            <label class="text-xs text-gray-400 font-medium">Last Contact:</label>
-                            <input type="date" 
-                                   value="${prospect.lastContact || ''}"
-                                   onchange="updateField(${prospect.row}, 'lastContact', this.value)"
-                                   class="w-full mt-1 text-xs bg-white/10 border border-white/20 text-white rounded px-2 py-1">
-                            <div class="text-xs text-gray-400 mt-1">${lastContact}</div>
-                        </div>
-                        <div>
-                            <label class="text-xs text-gray-400 font-medium">Next Follow-up:</label>
-                            <input type="date" 
-                                   value="${prospect.nextFollowup || ''}"
-                                   onchange="updateField(${prospect.row}, 'nextFollowup', this.value)"
-                                   class="w-full mt-1 text-xs bg-white/10 border border-white/20 text-white rounded px-2 py-1">
-                            <div class="text-xs text-gray-400 mt-1">${nextFollowup}</div>
-                        </div>
-                    </div>
-                    
-                    <!-- Checklist -->
-                    <div class="border-t border-white/10 pt-3">
-                        <label class="text-xs text-gray-400 font-medium mb-2 block">Checklist:</label>
-                        <div class="space-y-1">
-                            ${checklistHTML}
-                        </div>
-                    </div>
                 </div>
             `;
+        }
+
+        function handleCardClick(row, showWarning) {
+            if (showWarning) {
+                const prospect = allProspects.find(p => p.row === row);
+                if (prospect) {
+                    openUpdateModal(prospect);
+                }
+            }
         }
 
         async function updateProspectStatus(row, newStatus) {
@@ -514,7 +504,7 @@
                 
                 if (data.success) {
                     await loadPipeline();
-                    showToast('✓ Status updated!', 'success');
+                    showToast('✔ Status updated!', 'success');
                 } else {
                     showToast('Error: ' + data.message, 'error');
                 }
@@ -524,109 +514,26 @@
             }
         }
 
-        async function updateField(row, field, value) {
-            try {
-                const payload = {
-                    action: 'updateProspect',
-                    recruiterRef: recruiterRef,
-                    row: row
-                };
-                payload[field] = value;
-                
-                const response = await fetch(RECRUITING_API_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'text/plain' },
-                    body: JSON.stringify(payload)
-                });
-                
-                const data = await response.json();
-                
-                if (data.success) {
-                    showToast('✓ Updated!', 'success');
-                } else {
-                    showToast('Error: ' + data.message, 'error');
-                }
-            } catch (error) {
-                console.error('Error updating field:', error);
-                showToast('Failed to update', 'error');
-            }
-        }
-
-        async function updateCheckbox(row, checkNum, isChecked) {
-            await updateField(row, 'check' + checkNum, isChecked);
-        }
-
-        function editField(row, field, currentValue, element) {
-            const input = document.createElement('input');
-            input.type = 'text';
-            input.value = currentValue;
-            input.className = 'w-full bg-white/20 text-white px-2 py-1 rounded border border-cyan-500 focus:outline-none';
-            
-            element.innerHTML = '';
-            element.appendChild(input);
-            input.focus();
-            
-            const saveEdit = async () => {
-                const newValue = input.value.trim();
-                if (newValue && newValue !== currentValue) {
-                    await updateField(row, field, newValue);
-                    await loadPipeline();
-                } else {
-                    element.textContent = currentValue;
-                }
-            };
-            
-            input.addEventListener('blur', saveEdit);
-            input.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') {
-                    saveEdit();
-                }
-            });
-        }
-
-        function editNotes(row, currentNotes, element) {
-            const textarea = document.createElement('textarea');
-            textarea.value = currentNotes;
-            textarea.className = 'w-full bg-white/20 text-white px-2 py-1 rounded border border-cyan-500 focus:outline-none min-h-[80px]';
-            
-            element.innerHTML = '';
-            element.appendChild(textarea);
-            textarea.focus();
-            
-            const saveNotes = async () => {
-                const newNotes = textarea.value.trim();
-                if (newNotes !== currentNotes) {
-                    await updateField(row, 'notes', newNotes);
-                    await loadPipeline();
-                } else {
-                    element.innerHTML = currentNotes || '<span class="text-gray-500 italic">Click to add notes...</span>';
-                }
-            };
-            
-            textarea.addEventListener('blur', saveNotes);
-        }
-
         function updateStats() {
-            $("countProspects").textContent = 
-                allProspects.filter(p => p.status === 'Prospect').length;
-            $("countInCourse").textContent = 
-                allProspects.filter(p => p.status === 'In Course').length;
-            $("countTesting").textContent = 
-                allProspects.filter(p => p.status === 'Testing').length;
-            $("countLicensed").textContent = 
-                allProspects.filter(p => p.status === 'Licensed').length;
+            $("countProspects").textContent = allProspects.filter(p => p.status === 'Prospect').length;
+            $("countInCourse").textContent = allProspects.filter(p => p.status === 'In Course').length;
+            $("countTesting").textContent = allProspects.filter(p => p.status === 'Testing').length;
+            $("countLicensed").textContent = allProspects.filter(p => p.status === 'Licensed').length;
+            $("countNeedingUpdate").textContent = allProspects.filter(p => needsUpdate(p)).length;
         }
 
         function copyReferralLink() {
             const url = $("myReferralUrl").textContent;
             navigator.clipboard.writeText(url).then(() => {
-                showToast('✓ Link copied to clipboard!', 'success');
+                showToast('✔ Link copied to clipboard!', 'success');
             }).catch(err => {
-                console.error('Error copying:', err);
                 alert('Link: ' + url);
             });
         }
 
+        /**********************
+         * QR CODE FUNCTIONS
+         **********************/
         function showQRCode() {
             const url = $("myReferralUrl").textContent;
             const modal = $("qrModal");
@@ -644,7 +551,6 @@
             });
             
             $("qrUrlDisplay").textContent = url;
-            
             modal.classList.add('active');
         }
 
@@ -667,7 +573,68 @@
             link.href = url;
             link.click();
             
-            showToast('✓ QR code downloaded!', 'success');
+            showToast('✔ QR code downloaded!', 'success');
+        }
+
+        /**********************
+         * UPDATE MODAL FUNCTIONS
+         **********************/
+        function openUpdateModal(prospect) {
+            currentUpdateProspect = prospect;
+            
+            $("updateProspectName").textContent = prospect.name;
+            $("updateProspectStatus").textContent = prospect.status;
+            $("updateLastUpdate").textContent = new Date(prospect.lastUpdate).toLocaleString();
+            $("updateComment").value = '';
+            
+            $("updateModal").classList.add('active');
+        }
+
+        function closeUpdateModal() {
+            $("updateModal").classList.remove('active');
+            currentUpdateProspect = null;
+        }
+
+        async function submitUpdate() {
+            const comment = $("updateComment").value.trim();
+            
+            if (!comment) {
+                showToast('Please enter an update comment', 'error');
+                return;
+            }
+            
+            if (!currentUpdateProspect) {
+                showToast('Error: No prospect selected', 'error');
+                return;
+            }
+            
+            try {
+                const response = await fetch(RECRUITING_API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain' },
+                    body: JSON.stringify({
+                        action: 'addUpdate',
+                        recruiterRef: recruiterRef,
+                        prospectName: currentUpdateProspect.name,
+                        currentStatus: currentUpdateProspect.status,
+                        updateText: comment,
+                        prospectRow: currentUpdateProspect.row
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    showToast('✔ Update saved successfully!', 'success');
+                    closeUpdateModal();
+                    await loadPipeline();
+                } else {
+                    showToast('Error: ' + data.message, 'error');
+                }
+            } catch (error) {
+                console.error('Error submitting update:', error);
+                showToast('Failed to save update', 'error');
+            }
         }
 
         function showToast(message, type) {
