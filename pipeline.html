@@ -24,16 +24,45 @@
             min-height: 100vh;
         }
         .stage-column {
-            min-width: 340px;
-            max-width: 380px;
+            min-width: 300px;
+            max-width: 340px;
         }
         .prospect-card {
-            transition: all 0.2s;
+            transition: all 0.3s ease;
             position: relative;
+            cursor: pointer;
         }
         .prospect-card:hover {
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        
+        .prospect-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+        }
+        
+        .prospect-card-body {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+            padding: 0 12px;
+        }
+        
+        .prospect-card.expanded .prospect-card-body {
+            max-height: 2000px;
+            padding: 0 12px 12px 12px;
+        }
+        
+        .expand-icon {
+            transition: transform 0.3s ease;
+            font-size: 18px;
+        }
+        
+        .prospect-card.expanded .expand-icon {
+            transform: rotate(180deg);
         }
         
         .editable-field {
@@ -512,7 +541,7 @@
                 const checkNum = idx + 1;
                 const isChecked = prospect['check' + checkNum];
                 return `
-                    <label class="flex items-center gap-2 text-sm cursor-pointer hover:bg-white/5 p-1 rounded">
+                    <label class="flex items-center gap-2 text-sm cursor-pointer hover:bg-white/5 p-1 rounded" onclick="event.stopPropagation();">
                         <input type="checkbox" 
                                ${isChecked ? 'checked' : ''} 
                                onchange="updateCheckbox(${prospect.row}, ${checkNum}, this.checked)"
@@ -523,92 +552,120 @@
             }).join('');
             
             return `
-                <div class="prospect-card bg-white/10 rounded-lg shadow-sm p-4 border-l-4 border-${color}-500">
+                <div class="prospect-card bg-white/10 rounded-lg shadow-sm border-l-4 border-${color}-500" id="card-${prospect.row}" onclick="toggleCard(${prospect.row})">
                     ${showWarning ? `<div class="update-warning" onclick="openUpdateModalByRow(${prospect.row}); event.stopPropagation();" title="Needs update! Click to log update">⚠️</div>` : ''}
                     
-                    <!-- Name (editable) -->
-                    <div class="font-semibold text-white mb-2 editable-field" 
-                         onclick="editField(${prospect.row}, 'name', '${prospect.name.replace(/'/g, "\\'")}', this)">
-                        ${prospect.name}
-                    </div>
-                    
-                    <!-- Phone (editable with tel link) -->
-                    <div class="text-sm text-gray-300 mb-2">
-                        📞 <a href="tel:${prospect.phone}" class="hover:text-cyan-400">${prospect.phone}</a>
-                        <span class="text-xs text-gray-500 cursor-pointer ml-2" 
-                              onclick="editField(${prospect.row}, 'phone', '${prospect.phone}', this.previousElementSibling)">
-                            ✏️
-                        </span>
-                    </div>
-                    
-                    <!-- Age Badge -->
-                    <div class="text-xs text-gray-400 mb-2">
-                        Added: ${formattedDate} <span class="bg-white/10 px-2 py-0.5 rounded ml-2">${ageInDays} days old</span>
-                    </div>
-                    
-                    <!-- Last Update Info -->
-                    <div class="text-xs mb-3 ${showWarning ? 'text-red-400' : 'text-gray-400'}">
-                        🕒 Last Update: ${lastUpdate}
-                    </div>
-                    
-                    <!-- Status Dropdown -->
-                    <div class="mb-3">
-                        <label class="text-xs text-gray-400 font-medium">Status:</label>
-                        <select onchange="updateProspectStatus(${prospect.row}, this.value)" 
-                                class="w-full mt-1 text-sm bg-white/10 border border-white/20 text-white rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-${color}-500">
-                            <option value="Prospect" ${prospect.status === 'Prospect' ? 'selected' : ''}>Prospect</option>
-                            <option value="In Course" ${prospect.status === 'In Course' ? 'selected' : ''}>In Course</option>
-                            <option value="Testing" ${prospect.status === 'Testing' ? 'selected' : ''}>Testing</option>
-                            <option value="Licensed" ${prospect.status === 'Licensed' ? 'selected' : ''}>Licensed</option>
-                        </select>
-                    </div>
-                    
-                    <!-- Notes (editable) -->
-                    <div class="mb-3">
-                        <label class="text-xs text-gray-400 font-medium">Notes:</label>
-                        <div class="text-sm text-gray-300 bg-white/5 rounded p-2 mt-1 min-h-[60px] cursor-pointer hover:bg-white/10"
-                             onclick="editNotes(${prospect.row}, '${(prospect.notes || '').replace(/'/g, "\\'")}', this)">
-                            ${prospect.notes || '<span class="text-gray-500 italic">Click to add notes...</span>'}
+                    <!-- Collapsed Header -->
+                    <div class="prospect-card-header">
+                        <div class="flex-1">
+                            <div class="font-semibold text-white">${prospect.name}</div>
+                            <div class="text-xs text-gray-400 mt-1">📞 ${prospect.phone}</div>
                         </div>
+                        <div class="expand-icon text-gray-400">▼</div>
                     </div>
                     
-                    <!-- Date Fields -->
-                    <div class="grid grid-cols-2 gap-2 mb-3">
-                        <div>
-                            <label class="text-xs text-gray-400 font-medium">Last Contact:</label>
-                            <input type="date" 
-                                   value="${prospect.lastContact || ''}"
-                                   onchange="updateField(${prospect.row}, 'lastContact', this.value)"
-                                   class="w-full mt-1 text-xs bg-white/10 border border-white/20 text-white rounded px-2 py-1">
-                            <div class="text-xs text-gray-400 mt-1">${lastContact}</div>
+                    <!-- Expanded Body -->
+                    <div class="prospect-card-body">
+                        <!-- Name (editable) -->
+                        <div class="mb-3">
+                            <label class="text-xs text-gray-400 font-medium">Name:</label>
+                            <div class="font-semibold text-white mt-1 editable-field" 
+                                 onclick="event.stopPropagation(); editField(${prospect.row}, 'name', '${prospect.name.replace(/'/g, "\\'")}', this)">
+                                ${prospect.name}
+                            </div>
                         </div>
-                        <div>
-                            <label class="text-xs text-gray-400 font-medium">Next Follow-up:</label>
-                            <input type="date" 
-                                   value="${prospect.nextFollowup || ''}"
-                                   onchange="updateField(${prospect.row}, 'nextFollowup', this.value)"
-                                   class="w-full mt-1 text-xs bg-white/10 border border-white/20 text-white rounded px-2 py-1">
-                            <div class="text-xs text-gray-400 mt-1">${nextFollowup}</div>
+                        
+                        <!-- Phone (editable with tel link) -->
+                        <div class="mb-3">
+                            <label class="text-xs text-gray-400 font-medium">Phone:</label>
+                            <div class="text-sm text-gray-300 mt-1">
+                                <a href="tel:${prospect.phone}" onclick="event.stopPropagation();" class="hover:text-cyan-400">${prospect.phone}</a>
+                                <span class="text-xs text-gray-500 cursor-pointer ml-2" 
+                                      onclick="event.stopPropagation(); editField(${prospect.row}, 'phone', '${prospect.phone}', this.previousElementSibling)">
+                                    ✏️
+                                </span>
+                            </div>
                         </div>
-                    </div>
-                    
-                    <!-- Checklist -->
-                    <div class="border-t border-white/10 pt-3">
-                        <label class="text-xs text-gray-400 font-medium mb-2 block">Progress Checklist:</label>
-                        <div class="space-y-1">
-                            ${checklistHTML}
+                        
+                        <!-- Age Badge -->
+                        <div class="text-xs text-gray-400 mb-3">
+                            Added: ${formattedDate} <span class="bg-white/10 px-2 py-0.5 rounded ml-2">${ageInDays} days old</span>
                         </div>
-                    </div>
-                    
-                    <!-- Log Update Button -->
-                    <div class="mt-3 pt-3 border-t border-white/10">
-                        <button onclick="openUpdateModalByRow(${prospect.row})" 
-                                class="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 px-3 py-2 rounded text-sm font-semibold transition">
-                            📝 Log Update
-                        </button>
+                        
+                        <!-- Last Update Info -->
+                        <div class="text-xs mb-3 ${showWarning ? 'text-red-400' : 'text-gray-400'}">
+                            🕒 Last Update: ${lastUpdate}
+                        </div>
+                        
+                        <!-- Status Dropdown -->
+                        <div class="mb-3">
+                            <label class="text-xs text-gray-400 font-medium">Status:</label>
+                            <select onchange="updateProspectStatus(${prospect.row}, this.value); event.stopPropagation();" 
+                                    onclick="event.stopPropagation();"
+                                    class="w-full mt-1 text-sm bg-white/10 border border-white/20 text-white rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-${color}-500">
+                                <option value="Prospect" ${prospect.status === 'Prospect' ? 'selected' : ''}>Prospect</option>
+                                <option value="In Course" ${prospect.status === 'In Course' ? 'selected' : ''}>In Course</option>
+                                <option value="Testing" ${prospect.status === 'Testing' ? 'selected' : ''}>Testing</option>
+                                <option value="Licensed" ${prospect.status === 'Licensed' ? 'selected' : ''}>Licensed</option>
+                            </select>
+                        </div>
+                        
+                        <!-- Notes (editable) -->
+                        <div class="mb-3">
+                            <label class="text-xs text-gray-400 font-medium">Notes:</label>
+                            <div class="text-sm text-gray-300 bg-white/5 rounded p-2 mt-1 min-h-[60px] cursor-pointer hover:bg-white/10"
+                                 onclick="event.stopPropagation(); editNotes(${prospect.row}, '${(prospect.notes || '').replace(/'/g, "\\'")}', this)">
+                                ${prospect.notes || '<span class="text-gray-500 italic">Click to add notes...</span>'}
+                            </div>
+                        </div>
+                        
+                        <!-- Date Fields -->
+                        <div class="grid grid-cols-2 gap-2 mb-3">
+                            <div>
+                                <label class="text-xs text-gray-400 font-medium">Last Contact:</label>
+                                <input type="date" 
+                                       value="${prospect.lastContact || ''}"
+                                       onchange="updateField(${prospect.row}, 'lastContact', this.value); event.stopPropagation();"
+                                       onclick="event.stopPropagation();"
+                                       class="w-full mt-1 text-xs bg-white/10 border border-white/20 text-white rounded px-2 py-1">
+                                <div class="text-xs text-gray-400 mt-1">${lastContact}</div>
+                            </div>
+                            <div>
+                                <label class="text-xs text-gray-400 font-medium">Next Follow-up:</label>
+                                <input type="date" 
+                                       value="${prospect.nextFollowup || ''}"
+                                       onchange="updateField(${prospect.row}, 'nextFollowup', this.value); event.stopPropagation();"
+                                       onclick="event.stopPropagation();"
+                                       class="w-full mt-1 text-xs bg-white/10 border border-white/20 text-white rounded px-2 py-1">
+                                <div class="text-xs text-gray-400 mt-1">${nextFollowup}</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Checklist -->
+                        <div class="border-t border-white/10 pt-3 mb-3">
+                            <label class="text-xs text-gray-400 font-medium mb-2 block">Progress Checklist:</label>
+                            <div class="space-y-1">
+                                ${checklistHTML}
+                            </div>
+                        </div>
+                        
+                        <!-- Log Update Button -->
+                        <div class="pt-3 border-t border-white/10">
+                            <button onclick="openUpdateModalByRow(${prospect.row}); event.stopPropagation();" 
+                                    class="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 px-3 py-2 rounded text-sm font-semibold transition">
+                                📝 Log Update
+                            </button>
+                        </div>
                     </div>
                 </div>
             `;
+        }
+        
+        function toggleCard(row) {
+            const card = document.getElementById(`card-${row}`);
+            if (card) {
+                card.classList.toggle('expanded');
+            }
         }
 
         /**********************
