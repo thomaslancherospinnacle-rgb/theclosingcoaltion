@@ -24,7 +24,16 @@
     }
   
     const LS_TOKEN = "cc_token";
-  
+    const LS_EXPIRES = "cc_expires_at";
+
+    function logoutLocal() {
+      try {
+        localStorage.removeItem(LS_TOKEN);
+        localStorage.removeItem(LS_EXPIRES);
+      } catch (e) {}
+    }
+    
+      
     function getCookie(name) {
       const value = `; ${document.cookie}`;
       const parts = value.split(`; ${name}=`);
@@ -316,58 +325,9 @@
       margin-top: 24px;
     }
   </style>
-  <script>
-    const API_URL = CFworker;
-
-  // Update auth status message
-  function updateAuthStatus(message) {
-    const statusEl = document.getElementById('authStatus');
-    if (statusEl) statusEl.textContent = message;
-  }
-
-  // Hide the auth overlay
-  function hideAuthOverlay() {
-    const overlay = document.getElementById('authOverlay');
-    if (overlay) {
-      overlay.style.opacity = '0';
-      overlay.style.transition = 'opacity 0.3s ease';
-      setTimeout(() => {
-        overlay.style.display = 'none';
-      }, 300);
-    }
-  }
-    const LS_TOKEN = "cc_token";
-    const LS_EXPIRES = "cc_expires_at";
-    
-    function goLogin() { window.location.href = "/login.html"; }
-    
-    async function api(action, payload){
-      const res = await fetch(API_URL, {
-        method: "POST",
-        headers: { "Content-Type":"application/json" },
-        body: JSON.stringify({ action, ...payload })
-      });
-      const data = await res.json().catch(() => null);
-      if (!data || data.ok !== true) throw new Error("Not authorized");
-      return data;
-    }
-    
-    (async () => {
-      const token = localStorage.getItem(LS_TOKEN);
-      if (!token) return goLogin();
-    
-      try {
-        await api("me", { token }); // validates session on backend
-      } catch {
-        localStorage.removeItem(LS_TOKEN);
-        localStorage.removeItem(LS_EXPIRES);
-        goLogin();
-      }
-    })();
-  </script>
-
 </head>
 <body>
+    
 <!-- Auth Loading Overlay -->
 <div id="authOverlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, #071423, #0a1a2b); z-index: 10000; display: flex; align-items: center; justify-content: center; flex-direction: column;">
   <div style="text-align: center;">
@@ -376,6 +336,22 @@
     <div id="authStatus" style="font-size: 14px; color: #4fd1c5; min-height: 20px;"></div>
   </div>
 </div>
+<script>
+  (async () => {
+    updateAuthStatus("Verifying session...");
+    const token = getToken();
+    if (!token) return goLogin();
+
+    try {
+      await api("me", { token });
+      updateAuthStatus("Loading dictionary...");
+      hideAuthOverlay();
+    } catch (e) {
+      logoutLocal();
+      goLogin();
+    }
+  })();
+</script>
 
 
   <div class="app">
