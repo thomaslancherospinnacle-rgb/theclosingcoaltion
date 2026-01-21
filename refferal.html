@@ -658,6 +658,9 @@
       } catch (e) {}
     }
 
+    // =========================
+    // API
+    // =========================
     async function api(action, payload) {
       if (!CLOUD_FLARE_URL) throw new Error("CFWORKER not set in config.js");
     
@@ -681,38 +684,6 @@
       return data;
     }
 
-
-    // =========================
-    // API
-    // =========================
-    async function api(action, payload) {
-      if (!CLOUD_FLARE_URL) throw new Error("CFWORKER not set in config.js");
-
-      const res = await fetch(CLOUD_FLARE_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action, ...payload }),
-      });
-
-      const txt = await res.text();
-      let data;
-      try {
-        data = JSON.parse(txt);
-      } catch {
-        throw new Error(txt || "Bad response");
-      }
-
-      if (!data || data.ok !== true) {
-        const msg =
-          data && (data.error || data.detail)
-            ? String(data.error || "Request failed") + (data.detail ? " — " + data.detail : "")
-            : "Request failed";
-        throw new Error(msg);
-      }
-
-      return data;
-    }
-
     // =========================
     // ALERTS
     // =========================
@@ -726,18 +697,6 @@
     // =========================
     // AUTH / LOGIN FLOW
     // =========================
-    // tiny DOM helpers (so requireLogin doesn't crash)
-    function $(id) { return document.getElementById(id); }
-    function setText(id, txt) { const el = $(id); if (el) el.textContent = txt; }
-    
-    function getCachedUsername() {
-      try {
-        return getCookie("cc_username") || localStorage.getItem("cc_username") || "";
-      } catch (e) {
-        return getCookie("cc_username") || "";
-      }
-    }
-    
     // Convert login email to a nice display name (customize if you want)
     function emailToDisplayName(email) {
       if (!email) return "";
@@ -792,7 +751,6 @@
       updateAuthStatus("Verifying session...");
     
       try {
-        // IMPORTANT: api() must be the FIXED version that calls `${CFWORKER}/${action}`
         const me = await api("me", { token });
     
         // Worker should return: { ok:true, loginEmail:"..." }
@@ -839,8 +797,6 @@
           `;
         }
     
-        // Up to you: keep overlay visible OR hide it so they can still browse offline.
-        // I recommend hiding so the UI isn't stuck:
         hideAuthOverlay();
     
         return { loginEmail: "", displayName: fallback, offline: true };
