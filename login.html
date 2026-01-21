@@ -425,15 +425,16 @@
   updateSessionUI();
 
   /**********************
-   * API
+   * API - FIXED VERSION
    **********************/
   async function api(action, payload){
     console.log('API Request:', { action, payload }); // Debug log
     
-    const res = await fetch(API_URL, {
+    // FIXED: Add action to URL path
+    const res = await fetch(`${API_URL}/${action}`, {
       method: "POST",
       headers: { "Content-Type":"application/json" },
-      body: JSON.stringify({ action, ...payload })
+      body: JSON.stringify(payload) // Don't include action in body
     });
 
     const text = await res.text();
