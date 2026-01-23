@@ -512,10 +512,11 @@
         // ⚠️⚠️⚠️ CONFIGURATION - UPDATE THESE URLS ⚠️⚠️⚠️
         // ============================================================
         
-        // Main API (Cloudflare Worker)
-        const API_URL = CFWORKER;
+        // Main API - Should be your Google Apps Script URL that has admin functions
+        // This is the AUTH script you just pasted (has sendVerification, verifyCode, etc.)
+        const API_URL = CFWORKER;  // ⚠️ MAKE SURE CFWORKER points to your Google Apps Script URL
         
-        // ⚠️ UPDATE THIS - Recruiting API (Google Apps Script)
+        // Recruiting API (Google Apps Script for recruits tab)
         const RECRUITING_API_URL = APPDB;
         
         const ADMIN_EMAIL = 'thomaslancheros.ail@gmail.com';
