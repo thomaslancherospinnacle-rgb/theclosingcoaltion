@@ -233,39 +233,20 @@
 
   <div class="wrap">
 
-    <!-- Step 1: Enter Code -->
+    <!-- Step 1: Login / Source Selection -->
     <section id="loginView" class="panel" style="padding:20px;">
       <div class="grid" style="gap:12px">
-        <div class="h1">Step 1: Enter Code</div>
+        <div class="h1">Step 1: Select Your Lead Source</div>
 
         <div class="muted small">
-          Loads <span style="font-family:var(--mono)">./CODE.csv</span>.
-          Example: <b>agent1</b> → <span style="font-family:var(--mono)">agent1.csv</span>
+          Choose from your assigned lead sources below.
         </div>
 
-        <input id="codeInput" class="input"
-               placeholder="code (filename without .csv)"
-               autocomplete="off" />
+        <select id="sourceDropdown" class="input" style="font-size:16px;">
+          <option value="">-- Select a lead source --</option>
+        </select>
 
-        <div class="row" style="justify-content:space-between; gap:10px;">
-          <div style="display:flex; gap:10px; flex-wrap:wrap;">
-            <button id="loadBtn" class="primary" type="button">Load sheet</button>
-
-            <!-- Hidden until CSV successfully loads -->
-            <a id="scriptBtn"
-               class="primary hidden"
-               href="https://drive.google.com/drive/folders/12tFssKLeEPW3bfvu5aKOMtCCBO73Cl0o?usp=sharing"
-               target="_blank"
-               rel="noopener noreferrer">
-              Access Docs
-            </a>
-          </div>
-
-          <label class="ghost" style="display:inline-flex; gap:8px; align-items:center; cursor:pointer;">
-            <input id="fileInput" type="file" accept=".csv,text/csv" style="display:none">
-            Upload CS1V instead
-          </label>
-        </div>
+        <button id="loadSourceBtn" class="primary" type="button">Load Leads</button>
 
         <div class="muted small" id="loginHint"></div>
       </div>
@@ -385,11 +366,23 @@
 
 <div class="toast" id="toast">Saved</div>
 
+<script src="config.js"></script>
 <script>
+// =========================
+// CALLER SYSTEM VARIABLES  
+// =========================
+let currentUser = null;
+let currentSource = null;
+let currentSourceType = null;
+let currentSourceOwner = null;
+
+// =========================
+// ORIGINAL DISPOSITIONS (NOW OUTCOMES)
+// =========================
 const DISPOSITIONS = [
-  { key:"Pick Up", desc:"Client answered the call." },
-  { key:"No Answer", desc:"Client did not answer the call." },
-  { key:"Set Virtual Appointment", desc:"Schedule a virtual appointment and send confirmation." },
+  { key:"No Pick Up", desc:"Client did not answer." },
+  { key:"Appointment Set", desc:"Virtual appointment scheduled." },
+  { key:"RESOLVE", desc:"Sale completed - lead resolved." },
 ];
 
 const DOCS_URL = "https://drive.google.com/drive/folders/12tFssKLeEPW3bfvu5aKOMtCCBO73Cl0o?usp=sharing";
@@ -400,6 +393,8 @@ const els = {
   nameView: document.getElementById("nameView"),
   listView: document.getElementById("listView"),
   detailView: document.getElementById("detailView"),
+  sourceDropdown: document.getElementById("sourceDropdown"),
+  loadSourceBtn: document.getElementById("loadSourceBtn"),
   codeInput: document.getElementById("codeInput"),
   loadBtn: document.getElementById("loadBtn"),
   fileInput: document.getElementById("fileInput"),
@@ -982,53 +977,47 @@ function saveDisposition(outcome, { phoneUsed = "" } = {}) {
     if (hom.ok){ dialedNumber = hom.digits; dialedPretty = hom.pretty; }
   }
 
-  if (outcome === "Pick Up") {
-    trackToSheets("Pickups");
-  } else if (outcome === "No Answer") {
-    trackToSheets("Disconnected");
-  } else if (outcome === "Set Virtual Appointment") {
+  // Update outcome in database (async)
+  updateLeadOutcome(state.currentIndex, outcome);
+
+  // Handle special outcomes
+  if (outcome === "No Pick Up") {
+    trackToSheets("NoPickup");
+  } else if (outcome === "Appointment Set") {
     trackToSheets("Appointments");
 
+    // Open Calendly - will be handled by updateLeadOutcome for referrals
+    // For CSV leads, open generic calendly
+    if (currentSourceType === 'CSV') {
       const calendlyBase = "https://calendly.com/thomaslancheros-ail/30min";
       const params = new URLSearchParams();
       
-      // Set name and email
       params.set("name", lead.name || "");
       params.set("email", lead.email || "");
       
-      // Build the details text with ALL info including phone
       const detailsParts = [];
       
-      // Add the phone number that was actually dialed
       if (dialedPretty) {
         detailsParts.push(`Phone: ${dialedPretty}`);
       } else if (lead.phone) {
-        // Fallback to lead.phone if dialedPretty isn't available
         const phoneFormatted = formatPhone10(lead.phone);
         detailsParts.push(`Phone: ${phoneFormatted.ok ? phoneFormatted.pretty : lead.phone}`);
       }
       
-      // Add address details
-      if (lead.address) {
-        detailsParts.push(`Address: ${lead.address}`);
-      }
-      if (lead.city) {
-        detailsParts.push(`City: ${lead.city}`);
-      }
-      if (lead.state) {
-        detailsParts.push(`State: ${lead.state}`);
-      }
-      if (lead.zip) {
-        detailsParts.push(`Zip: ${lead.zip}`);
-      }
+      if (lead.address) detailsParts.push(`Address: ${lead.address}`);
+      if (lead.city) detailsParts.push(`City: ${lead.city}`);
+      if (lead.state) detailsParts.push(`State: ${lead.state}`);
+      if (lead.zip) detailsParts.push(`Zip: ${lead.zip}`);
       
-      // Use 'a1' parameter for the "Please share anything..." field
       if (detailsParts.length > 0) {
         params.set("a1", detailsParts.join(" | "));
       }
       
       window.open(`${calendlyBase}?${params.toString()}`, "_blank");
     }
+  } else if (outcome === "RESOLVE") {
+    trackToSheets("Resolved");
+  }
 
   // readable note with the number
   const phoneLabel = dialedPretty
@@ -1352,6 +1341,235 @@ els.searchInput.addEventListener("keypress", (e)=>{
     e.preventDefault();
   }
 });
+
+// =========================
+// CALLER SYSTEM FUNCTIONS
+// =========================
+
+// Get current username from localStorage or auth
+function getCurrentUserName() {
+  // Try to get from localStorage first (assuming your AUTH system stores it)
+  const storedUser = localStorage.getItem('username') || localStorage.getItem('currentUser');
+  if (storedUser) return storedUser;
+  
+  // Fallback: prompt for name
+  const userName = prompt('Enter your name for tracking:');
+  if (userName) {
+    localStorage.setItem('currentUser', userName);
+    return userName;
+  }
+  return null;
+}
+
+// Initialize caller - load assigned sources
+async function initCaller() {
+  try {
+    currentUser = getCurrentUserName();
+    
+    if (!currentUser) {
+      els.loginHint.innerHTML = '<span style="color:#dc3545;">⚠️ Username required. Please refresh and enter your name.</span>';
+      return;
+    }
+    
+    els.agentNameDisplay.textContent = currentUser;
+    els.loginHint.innerHTML = '<span style="color:#0056b3;">⏳ Loading your assigned sources...</span>';
+    
+    // Load assigned sources for this caller
+    const response = await fetch(`${LEADSDB}?action=getPermissions&caller=${encodeURIComponent(currentUser)}`);
+    const permissions = await response.json();
+    
+    if (!permissions || permissions.length === 0) {
+      els.loginHint.innerHTML = '<span style="color:#dc3545;">⚠️ You have no assigned lead sources. Contact admin for access.</span>';
+      return;
+    }
+    
+    // Populate dropdown with assigned sources
+    els.sourceDropdown.innerHTML = '<option value="">-- Select a lead source --</option>';
+    
+    permissions.forEach(perm => {
+      const option = document.createElement('option');
+      option.value = JSON.stringify(perm);
+      option.textContent = `${perm.sourceType === 'CSV' ? '📁' : '👤'} ${perm.sourceName}`;
+      els.sourceDropdown.appendChild(option);
+    });
+    
+    els.loginHint.innerHTML = `<span style="color:#28a745;">✅ ${permissions.length} source(s) available. Select one above.</span>`;
+    
+  } catch (error) {
+    console.error('Error initializing caller:', error);
+    els.loginHint.innerHTML = '<span style="color:#dc3545;">❌ Error loading sources: ' + error.message + '</span>';
+  }
+}
+
+// Load leads from selected source
+async function loadSelectedSource() {
+  try {
+    const selectedValue = els.sourceDropdown.value;
+    
+    if (!selectedValue) {
+      els.loginHint.innerHTML = '<span style="color:#dc3545;">⚠️ Please select a lead source</span>';
+      return;
+    }
+    
+    const source = JSON.parse(selectedValue);
+    currentSource = source.sourceName;
+    currentSourceType = source.sourceType;
+    
+    els.loginHint.innerHTML = '<span style="color:#0056b3;">⏳ Loading leads from ' + source.sourceName + '...</span>';
+    
+    let loadedLeads = [];
+    
+    if (source.sourceType === 'CSV') {
+      // Load from LEADSDB
+      const response = await fetch(`${LEADSDB}?action=getLeads&source=${encodeURIComponent(source.sourceName)}`);
+      const data = await response.json();
+      
+      if (data.error) {
+        throw new Error(data.error);
+      }
+      
+      loadedLeads = data.map(lead => ({
+        name: lead.name,
+        phone: lead.phone,
+        outcome: lead.outcome || 'No Pick Up',
+        status: lead.status || 'New',
+        __sourceType: 'CSV'
+      }));
+      
+    } else if (source.sourceType === 'Referrals') {
+      // Load from REFDB
+      currentSourceOwner = source.sourceName;
+      const response = await fetch(`${REFDB}?user=${encodeURIComponent(source.sourceName)}`);
+      const referrals = await response.json();
+      
+      // Convert referrals to lead format
+      loadedLeads = referrals.map(ref => ({
+        name: ref.refName,
+        phone: ref.refNumber,
+        relation: ref.refRelation,
+        sponsorName: ref.sponsorName,
+        sponsorNumber: ref.sponsorNumber,
+        leadType: ref.leadType,
+        sponsorPos: ref.sponsorPos,
+        why: ref.why,
+        outcome: ref.outcome || 'No Pick Up',
+        extension: ref.extension,
+        __sourceType: 'Referrals',
+        __ownerName: source.sourceName,
+        __originalData: ref
+      }));
+    }
+    
+    // Store leads in state
+    state.leads = loadedLeads.map((lead, idx) => ({
+      ...lead,
+      __id: String(idx)
+    }));
+    
+    state.code = source.sourceName;
+    els.codePill.textContent = source.sourceName;
+    
+    els.loginHint.innerHTML = `<span style="color:#28a745;">✅ Loaded ${state.leads.length} leads!</span>`;
+    
+    // Hide login, show list
+    setTimeout(() => {
+      els.loginView.classList.add('hidden');
+      renderList();
+      els.listView.classList.remove('hidden');
+    }, 500);
+    
+  } catch (error) {
+    console.error('Error loading source:', error);
+    els.loginHint.innerHTML = '<span style="color:#dc3545;">❌ Error: ' + error.message + '</span>';
+  }
+}
+
+// Update outcome for a lead
+async function updateLeadOutcome(leadIndex, newOutcome) {
+  try {
+    const lead = state.leads[leadIndex];
+    
+    // Check if already in final state
+    if (lead.outcome === 'Appointment Set' || lead.outcome === 'RESOLVE') {
+      showToast('Cannot change - already in FINAL state: ' + lead.outcome);
+      return false;
+    }
+    
+    let result;
+    
+    if (currentSourceType === 'CSV') {
+      // Update in LEADSDB
+      const response = await fetch(LEADSDB, {
+        method: 'POST',
+        body: JSON.stringify({
+          action: 'updateOutcome',
+          source: currentSource,
+          phone: lead.phone,
+          outcome: newOutcome
+        })
+      });
+      result = await response.json();
+      
+    } else if (currentSourceType === 'Referrals') {
+      // Update in REFDB
+      const response = await fetch(REFDB, {
+        method: 'POST',
+        body: JSON.stringify({
+          action: 'updateReferral',
+          oldName: lead.name,
+          referralData: {
+            user: lead.__ownerName,
+            refName: lead.name,
+            refNumber: lead.phone,
+            refRelation: lead.relation,
+            sponsorName: lead.sponsorName,
+            sponsorNumber: lead.sponsorNumber || '',
+            leadType: lead.leadType || 'Referral',
+            sponsorPos: lead.sponsorPos || 'NO',
+            why: lead.why || '',
+            outcome: newOutcome,
+            extension: lead.extension || ''
+          }
+        })
+      });
+      result = await response.json();
+    }
+    
+    if (result.success) {
+      // Update local state
+      state.leads[leadIndex].outcome = newOutcome;
+      
+      // If Appointment Set on a referral, open Calendly
+      if (newOutcome === 'Appointment Set' && currentSourceType === 'Referrals' && lead.__ownerName) {
+        openCalendly(lead.__ownerName);
+      }
+      
+      showToast('✅ Outcome updated: ' + newOutcome);
+      return true;
+    } else {
+      showToast('❌ ' + result.message);
+      return false;
+    }
+    
+  } catch (error) {
+    console.error('Error updating outcome:', error);
+    showToast('❌ Error: ' + error.message);
+    return false;
+  }
+}
+
+// Open Calendly for referral owner
+function openCalendly(ownerName) {
+  const calendlyName = ownerName.toLowerCase().replace(/\s+/g, '');
+  const calendlyUrl = `https://calendly.com/${calendlyName}-ail/30min`;
+  window.open(calendlyUrl, '_blank');
+}
+
+// Initialize on page load
+initCaller();
+
+// Load source button handler
+els.loadSourceBtn.addEventListener('click', loadSelectedSource);
 </script>
 </body>
 </html>
