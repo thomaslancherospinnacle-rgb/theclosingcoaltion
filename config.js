@@ -12,14 +12,9 @@ const REFDB = "https://script.google.com/macros/s/AKfycbxpMNUsx8bCt2ApEyAC0ywpc-
 // Google Apps Script: Leads Database & Caller Permissions
 // Cloudflare Worker base URL
 const CFWORKER = "https://closing-coalition-api.thomaslancheros06.workers.dev";
-
-// API base used by admin.html
 const API_URL = CFWORKER.replace(/\/$/, "");
-
-// ✅ IMPORTANT: LEADSDB must go through the worker now
-// so the browser never touches script.google.com
-const LEADSDB = API_URL + "/leadsdb";
-
+const LEADSDB = API_URL + "/leadsdb"; // requires worker proxy route
+// const REFDB = "..."; // if you use it
 // Authentication Script (if separate)
 const AUTH = CFWORKER; // or separate auth URL if different
 
