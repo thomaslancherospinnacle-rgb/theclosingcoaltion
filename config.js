@@ -7,13 +7,13 @@
 const CFWORKER = "https://closing-coalition-api.thomaslancheros06.workers.dev/";
 
 // Google Apps Script: Applicants Database
-const APPDB = "https://script.google.com/macros/s/AKfycbxcoHmU_iqzvcmawu6kBuN0_Tmb4gWGk8v7MaHxzKzn1FhfVA_MDiqBU1otwgxCL9NM/exec";
+const APPDB = "https://script.google.com/macros/s/AKfycbwSqs-q-ZLMq_H4UAFxDJ9Enjbvw_2urr-7kTuop_6rbsU38hR-9-_mPizNXJFVYPcn/exec";
 
 // Google Apps Script: Referral Network Database
 const REFDB = "https://script.google.com/macros/s/AKfycbxpMNUsx8bCt2ApEyAC0ywpc-iuOLJAZhsEEuIQ59rsYniJJiyrMp5ECGQ9QD_sjwHv-Q/exec";
 
 // Google Apps Script: Leads Database & Caller Permissions
-const LEADSDB = "https://script.google.com/macros/s/AKfycbwkEbuok_mljgu_Gu4PzA-NukuuD8-MH40zKm0uiercsDG0EcJ_pLsFSbPpiPeM7bk/exec";
+const LEADSDB = "https://script.google.com/macros/s/AKfycbyYft41asMJZqVtlO43vu3c_lbSxzqy2X6eb2N9_AAny8j7iXH1ROXfc_H9SiJeYGJM/exec";
 // Authentication Script (if separate)
 const AUTH = CFWORKER; // or separate auth URL if different
 
