@@ -326,6 +326,43 @@
     .ref-badge.hardcard{
       background:#fbbf24;
     }
+    
+    .outcome-badge{
+      display:inline-block;
+      padding:6px 12px;
+      border-radius:6px;
+      font-size:12px;
+      font-weight:700;
+      margin-top:8px;
+      text-transform:uppercase;
+      letter-spacing:0.5px;
+    }
+    .outcome-badge.not-contacted{
+      background: rgba(156, 163, 175, 0.2);
+      border: 1px solid #9ca3af;
+      color: #9ca3af;
+    }
+    .outcome-badge.dialed{
+      background: rgba(251, 191, 36, 0.2);
+      border: 1px solid #fbbf24;
+      color: #fbbf24;
+    }
+    .outcome-badge.scheduled{
+      background: rgba(59, 130, 246, 0.2);
+      border: 1px solid #3b82f6;
+      color: #3b82f6;
+    }
+    .outcome-badge.presented{
+      background: rgba(34, 197, 94, 0.2);
+      border: 1px solid #22c55e;
+      color: #22c55e;
+    }
+    .outcome-badge.dnc{
+      background: rgba(239, 68, 68, 0.2);
+      border: 1px solid #ef4444;
+      color: #ef4444;
+    }
+    
     .extension-box{
       background: rgba(251, 191, 36, 0.1);
       border-left:3px solid #fbbf24;
@@ -473,11 +510,10 @@
             <label>Lead Type *</label>
             <select id="refLeadType">
               <option value="Hardcard">Hardcard</option>
-              <option value="Child Safe">Child Safe</option>
-              <option value="Will Kit">Will Kit</option>
-              <option value="Discount Card">Discount Card</option>
-              <option value="Request">Request</option>
               <option value="Referral">Referral</option>
+              <option value="Child Safe Kit">Child Safe Kit</option>
+              <option value="Request">Request</option>
+              <option value="Willkit">Willkit</option>
             </select>
           </div>
         </div>
@@ -490,8 +526,51 @@
         </div>
 
         <div class="form-group">
-          <label>Extension (Why?) *</label>
-          <textarea id="refExtension" placeholder="e.g., Bene, interested in coverage, etc."></textarea>
+          <label style="display: block; margin-bottom: 10px;">Sponsor POS?</label>
+          <div style="display: flex; gap: 20px; align-items: center;">
+            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; margin: 0;">
+              <input type="radio" name="refSponsorPos" id="refSponsorPosYes" value="YES" style="width: auto; cursor: pointer;"/>
+              <span>Yes</span>
+            </label>
+            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; margin: 0;">
+              <input type="radio" name="refSponsorPos" id="refSponsorPosNo" value="NO" checked style="width: auto; cursor: pointer;"/>
+              <span>No</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Why *</label>
+          <select id="refWhy" onchange="toggleRefWhyOther()">
+            <option value="">Choose a reason...</option>
+            <option value="Discount card">Discount card</option>
+            <option value="CSK">CSK</option>
+            <option value="Willkit">Willkit</option>
+            <option value="Bene">Bene</option>
+            <option value="Catch-Up">Catch-Up</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+
+        <div class="form-group" id="refWhyOtherGroup" style="display: none;">
+          <label>Please specify *</label>
+          <input type="text" id="refWhyOther" placeholder="Enter reason..."/>
+        </div>
+
+        <div class="form-group">
+          <label>Outcome/Status</label>
+          <select id="refOutcome">
+            <option value="Not Contacted">Not Contacted</option>
+            <option value="Dialed">Dialed</option>
+            <option value="Scheduled">Scheduled</option>
+            <option value="Presented">Presented</option>
+            <option value="DNC">DNC/No Sale</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Extension *</label>
+          <textarea id="refExtension" placeholder="e.g., son, aunt, neighbor..."></textarea>
         </div>
 
         <button class="btn btn-success" onclick="addReferral()">➕ Add Referral</button>
@@ -523,16 +602,15 @@
           <div class="form-group">
             <label>Lead Type *</label>
             <select id="sponsorLeadType">
-              <option value="Beneficiary">Beneficiary</option>
-              <option value="Child Safe">Child Safe</option>
-              <option value="Will Kit">Will Kit</option>
-              <option value="Discount Card">Discount Card</option>
-              <option value="Catch Up">Catch Up</option>
+              <option value="Hardcard">Hardcard</option>
               <option value="Referral">Referral</option>
+              <option value="Child Safe Kit">Child Safe Kit</option>
+              <option value="Request">Request</option>
+              <option value="Willkit">Willkit</option>
             </select>
           </div>
           <div class="form-group">
-            <label>Has Sponsor Policy?  (NO COST ACCIDENTAL COUNTS AS POLICY)</label>
+            <label>Has Sponsor Position?</label>
             <select id="sponsorPos">
               <option value="NO">NO</option>
               <option value="YES">YES</option>
@@ -918,6 +996,11 @@
         html += '<div class="referrals-container">';
         referrals.forEach(ref => {
           const cleanRefPhone = safePhone(ref.refNumber);
+          
+          // Get outcome class for color coding
+          const outcome = ref.outcome || "Not Contacted";
+          const outcomeClass = outcome.toLowerCase().replace(/[^a-z]/g, "");
+          
           html += `
             <div class="referral-card">
               <div class="ref-name">${esc(ref.refName)}</div>
@@ -925,6 +1008,9 @@
               <div class="ref-detail"><strong>Relation:</strong> ${esc(ref.refRelation || "")}</div>
               <div class="ref-detail">
                 <span class="ref-badge ${ref.leadType === "Hardcard" ? "hardcard" : ""}">${esc(ref.leadType || "")}</span>
+              </div>
+              <div>
+                <span class="outcome-badge ${outcomeClass}">${esc(outcome)}</span>
               </div>
               ${ref.extension ? `<div class="extension-box"><strong>📝 Why:</strong> ${esc(ref.extension)}</div>` : ""}
               <button class="call-sponsor-btn" data-action="toggle-contact">📞 Call Sponsor</button>
@@ -1019,6 +1105,19 @@
       const sponsorName = $("refSponsor")?.value || "";
       const leadType = $("refLeadType")?.value || "";
       const extension = ($("refExtension")?.value || "").trim();
+      
+      // Get Sponsor POS radio button value
+      const sponsorPosYes = $("refSponsorPosYes");
+      const sponsorPosNo = $("refSponsorPosNo");
+      const sponsorPos = sponsorPosYes?.checked ? "YES" : "NO";
+      
+      // Get Why value - if "Other", use the text input
+      const whySelect = $("refWhy")?.value || "";
+      const whyOther = ($("refWhyOther")?.value || "").trim();
+      const why = whySelect === "Other" ? whyOther : whySelect;
+      
+      // Get Outcome
+      const outcome = $("refOutcome")?.value || "Not Contacted";
 
       const refData = {
         user: currentUser,
@@ -1028,11 +1127,13 @@
         sponsorName,
         sponsorNumber: "",
         leadType,
-        sponsorPos: "NO",
+        sponsorPos,
+        why,
+        outcome,
         extension,
       };
 
-      if (!refName || !refNumber || !refRelation || !sponsorName || !extension) {
+      if (!refName || !refNumber || !refRelation || !sponsorName || !extension || !why) {
         showAlert("addRefStatus", "❌ Please fill in all fields", "error");
         return;
       }
@@ -1050,8 +1151,12 @@
         const result = await postToSheet({ action: "addReferral", referralData: refData });
         if (result && result.success) {
           showAlert("addRefStatus", "✅ Referral added!", "success");
-          ["refName", "refNumber", "refRelation", "refExtension"].forEach(id => { const el = $(id); if (el) el.value = ""; });
+          ["refName", "refNumber", "refRelation", "refExtension", "refWhyOther"].forEach(id => { const el = $(id); if (el) el.value = ""; });
           if ($("refSponsor")) $("refSponsor").value = "";
+          if ($("refWhy")) $("refWhy").value = "";
+          if ($("refOutcome")) $("refOutcome").value = "Not Contacted";
+          if ($("refWhyOtherGroup")) $("refWhyOtherGroup").style.display = "none";
+          if ($("refSponsorPosNo")) $("refSponsorPosNo").checked = true;
           setTimeout(loadData, 600);
         } else {
           showAlert("addRefStatus", "❌ " + (result?.message || "Failed"), "error");
@@ -1133,6 +1238,28 @@
     }
 
     // =========================
+    // WHY DROPDOWN TOGGLE
+    // =========================
+    function toggleRefWhyOther() {
+      const whySelect = $("refWhy");
+      const otherGroup = $("refWhyOtherGroup");
+      const otherInput = $("refWhyOther");
+      
+      if (whySelect && otherGroup) {
+        if (whySelect.value === "Other") {
+          otherGroup.style.display = "block";
+          if (otherInput) otherInput.required = true;
+        } else {
+          otherGroup.style.display = "none";
+          if (otherInput) {
+            otherInput.required = false;
+            otherInput.value = "";
+          }
+        }
+      }
+    }
+
+    // =========================
     // UI HELPERS
     // =========================
     function switchTab(tabName) {
@@ -1168,6 +1295,7 @@
     window.loadData = loadData;
     window.addReferral = addReferral;
     window.addSponsor = addSponsor;
+    window.toggleRefWhyOther = toggleRefWhyOther;
 
     // =========================
     // BOOT
