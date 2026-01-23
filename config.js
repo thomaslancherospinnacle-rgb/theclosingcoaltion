@@ -3,9 +3,6 @@
  * Update all Google Apps Script deployment URLs here
  */
 
-// Cloudflare Worker for Authentication
-const CFWORKER = "https://closing-coalition-api.thomaslancheros06.workers.dev/";
-
 // Google Apps Script: Applicants Database
 const APPDB = "https://script.google.com/macros/s/AKfycbwSqs-q-ZLMq_H4UAFxDJ9Enjbvw_2urr-7kTuop_6rbsU38hR-9-_mPizNXJFVYPcn/exec";
 
@@ -13,7 +10,16 @@ const APPDB = "https://script.google.com/macros/s/AKfycbwSqs-q-ZLMq_H4UAFxDJ9Enj
 const REFDB = "https://script.google.com/macros/s/AKfycbxpMNUsx8bCt2ApEyAC0ywpc-iuOLJAZhsEEuIQ59rsYniJJiyrMp5ECGQ9QD_sjwHv-Q/exec";
 
 // Google Apps Script: Leads Database & Caller Permissions
-const LEADSDB = "https://script.google.com/macros/s/AKfycbyYft41asMJZqVtlO43vu3c_lbSxzqy2X6eb2N9_AAny8j7iXH1ROXfc_H9SiJeYGJM/exec";
+// Cloudflare Worker base URL
+const CFWORKER = "https://closing-coalition-api.thomaslancheros06.workers.dev";
+
+// API base used by admin.html
+const API_URL = CFWORKER.replace(/\/$/, "");
+
+// ✅ IMPORTANT: LEADSDB must go through the worker now
+// so the browser never touches script.google.com
+const LEADSDB = API_URL + "/leadsdb";
+
 // Authentication Script (if separate)
 const AUTH = CFWORKER; // or separate auth URL if different
 
