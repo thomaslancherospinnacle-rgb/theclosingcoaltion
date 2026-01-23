@@ -473,8 +473,10 @@
             <label>Lead Type *</label>
             <select id="refLeadType">
               <option value="Hardcard">Hardcard</option>
-              <option value="Softcard">Softcard</option>
               <option value="Referral">Referral</option>
+              <option value="Child Safe Kit">Child Safe Kit</option>
+              <option value="Request">Request</option>
+              <option value="Willkit">Willkit</option>
             </select>
           </div>
         </div>
@@ -487,8 +489,40 @@
         </div>
 
         <div class="form-group">
-          <label>Extension (Why?) *</label>
-          <textarea id="refExtension" placeholder="e.g., Bene, interested in coverage, etc."></textarea>
+          <label style="display: block; margin-bottom: 10px;">Sponsor POS?</label>
+          <div style="display: flex; gap: 20px; align-items: center;">
+            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; margin: 0;">
+              <input type="radio" name="refSponsorPos" id="refSponsorPosYes" value="YES" style="width: auto; cursor: pointer;"/>
+              <span>Yes</span>
+            </label>
+            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; margin: 0;">
+              <input type="radio" name="refSponsorPos" id="refSponsorPosNo" value="NO" checked style="width: auto; cursor: pointer;"/>
+              <span>No</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Why *</label>
+          <select id="refWhy" onchange="toggleRefWhyOther()">
+            <option value="">Choose a reason...</option>
+            <option value="Discount card">Discount card</option>
+            <option value="CSK">CSK</option>
+            <option value="Willkit">Willkit</option>
+            <option value="Bene">Bene</option>
+            <option value="Catch-Up">Catch-Up</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+
+        <div class="form-group" id="refWhyOtherGroup" style="display: none;">
+          <label>Please specify *</label>
+          <input type="text" id="refWhyOther" placeholder="Enter reason..."/>
+        </div>
+
+        <div class="form-group">
+          <label>Extension *</label>
+          <textarea id="refExtension" placeholder="e.g., son, aunt, neighbor..."></textarea>
         </div>
 
         <button class="btn btn-success" onclick="addReferral()">➕ Add Referral</button>
@@ -521,8 +555,10 @@
             <label>Lead Type *</label>
             <select id="sponsorLeadType">
               <option value="Hardcard">Hardcard</option>
-              <option value="Softcard">Softcard</option>
               <option value="Referral">Referral</option>
+              <option value="Child Safe Kit">Child Safe Kit</option>
+              <option value="Request">Request</option>
+              <option value="Willkit">Willkit</option>
             </select>
           </div>
           <div class="form-group">
@@ -1013,6 +1049,16 @@
       const sponsorName = $("refSponsor")?.value || "";
       const leadType = $("refLeadType")?.value || "";
       const extension = ($("refExtension")?.value || "").trim();
+      
+      // Get Sponsor POS radio button value
+      const sponsorPosYes = $("refSponsorPosYes");
+      const sponsorPosNo = $("refSponsorPosNo");
+      const sponsorPos = sponsorPosYes?.checked ? "YES" : "NO";
+      
+      // Get Why value - if "Other", use the text input
+      const whySelect = $("refWhy")?.value || "";
+      const whyOther = ($("refWhyOther")?.value || "").trim();
+      const why = whySelect === "Other" ? whyOther : whySelect;
 
       const refData = {
         user: currentUser,
@@ -1022,11 +1068,12 @@
         sponsorName,
         sponsorNumber: "",
         leadType,
-        sponsorPos: "NO",
+        sponsorPos,
+        why,
         extension,
       };
 
-      if (!refName || !refNumber || !refRelation || !sponsorName || !extension) {
+      if (!refName || !refNumber || !refRelation || !sponsorName || !extension || !why) {
         showAlert("addRefStatus", "❌ Please fill in all fields", "error");
         return;
       }
@@ -1044,8 +1091,11 @@
         const result = await postToSheet({ action: "addReferral", referralData: refData });
         if (result && result.success) {
           showAlert("addRefStatus", "✅ Referral added!", "success");
-          ["refName", "refNumber", "refRelation", "refExtension"].forEach(id => { const el = $(id); if (el) el.value = ""; });
+          ["refName", "refNumber", "refRelation", "refExtension", "refWhyOther"].forEach(id => { const el = $(id); if (el) el.value = ""; });
           if ($("refSponsor")) $("refSponsor").value = "";
+          if ($("refWhy")) $("refWhy").value = "";
+          if ($("refWhyOtherGroup")) $("refWhyOtherGroup").style.display = "none";
+          if ($("refSponsorPosNo")) $("refSponsorPosNo").checked = true;
           setTimeout(loadData, 600);
         } else {
           showAlert("addRefStatus", "❌ " + (result?.message || "Failed"), "error");
@@ -1127,6 +1177,28 @@
     }
 
     // =========================
+    // WHY DROPDOWN TOGGLE
+    // =========================
+    function toggleRefWhyOther() {
+      const whySelect = $("refWhy");
+      const otherGroup = $("refWhyOtherGroup");
+      const otherInput = $("refWhyOther");
+      
+      if (whySelect && otherGroup) {
+        if (whySelect.value === "Other") {
+          otherGroup.style.display = "block";
+          if (otherInput) otherInput.required = true;
+        } else {
+          otherGroup.style.display = "none";
+          if (otherInput) {
+            otherInput.required = false;
+            otherInput.value = "";
+          }
+        }
+      }
+    }
+
+    // =========================
     // UI HELPERS
     // =========================
     function switchTab(tabName) {
@@ -1162,6 +1234,7 @@
     window.loadData = loadData;
     window.addReferral = addReferral;
     window.addSponsor = addSponsor;
+    window.toggleRefWhyOther = toggleRefWhyOther;
 
     // =========================
     // BOOT
