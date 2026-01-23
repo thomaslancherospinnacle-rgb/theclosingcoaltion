@@ -4,16 +4,16 @@
  */
 
 // Cloudflare Worker for Authentication
-const CFWORKER = "YOUR_CLOUDFLARE_WORKER_URL_HERE";
+const CFWORKER = "https://closing-coalition-api.thomaslancheros06.workers.dev/";
 
 // Google Apps Script: Applicants Database
-const APPDB = "YOUR_APPDB_DEPLOYMENT_URL_HERE";
+const APPDB = "https://script.google.com/macros/s/AKfycbxcoHmU_iqzvcmawu6kBuN0_Tmb4gWGk8v7MaHxzKzn1FhfVA_MDiqBU1otwgxCL9NM/exec";
 
 // Google Apps Script: Referral Network Database
-const REFDB = "YOUR_REFDB_DEPLOYMENT_URL_HERE";
+const REFDB = "https://script.google.com/macros/s/AKfycbxpMNUsx8bCt2ApEyAC0ywpc-iuOLJAZhsEEuIQ59rsYniJJiyrMp5ECGQ9QD_sjwHv-Q/exec";
 
 // Google Apps Script: Leads Database & Caller Permissions
-const LEADSDB = "YOUR_LEADSDB_DEPLOYMENT_URL_HERE";
+const LEADSDB = "https://script.google.com/macros/s/AKfycbwJzZWdt4fTHatUVlr0haGzVd0vojHBPZZLGJRp0UBSRXyCMDv42fHeNJ75U3o7rNHsVQ/exec";
 
 // Authentication Script (if separate)
 const AUTH = CFWORKER; // or separate auth URL if different
