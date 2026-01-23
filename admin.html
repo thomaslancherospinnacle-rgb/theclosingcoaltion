@@ -514,7 +514,8 @@
         
         // Main API - Should be your Google Apps Script URL that has admin functions
         // This is the AUTH script you just pasted (has sendVerification, verifyCode, etc.)
-        const API_URL = CFWORKER;  // ⚠️ MAKE SURE CFWORKER points to your Google Apps Script URL
+        // Remove trailing slash if present
+        const API_URL = CFWORKER.replace(/\/$/, '');
         
         // Recruiting API (Google Apps Script for recruits tab)
         const RECRUITING_API_URL = APPDB;
