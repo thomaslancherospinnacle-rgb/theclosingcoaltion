@@ -363,6 +363,28 @@
       color: #ef4444;
     }
     
+    .outcome-select{
+      width: 100%;
+      padding: 8px 10px;
+      background: rgba(0,0,0,.3);
+      border: 2px solid var(--line);
+      border-radius: 8px;
+      color: var(--text);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all .2s ease;
+    }
+    .outcome-select:focus{
+      outline: none;
+      border-color: var(--accent);
+    }
+    .outcome-select option{
+      background: var(--bg2);
+      color: var(--text);
+      padding: 8px;
+    }
+    
     .extension-box{
       background: rgba(251, 191, 36, 0.1);
       border-left:3px solid #fbbf24;
@@ -555,17 +577,6 @@
         <div class="form-group" id="refWhyOtherGroup" style="display: none;">
           <label>Please specify *</label>
           <input type="text" id="refWhyOther" placeholder="Enter reason..."/>
-        </div>
-
-        <div class="form-group">
-          <label>Outcome/Status</label>
-          <select id="refOutcome">
-            <option value="Not Contacted">Not Contacted</option>
-            <option value="Dialed">Dialed</option>
-            <option value="Scheduled">Scheduled</option>
-            <option value="Presented">Presented</option>
-            <option value="DNC">DNC/No Sale</option>
-          </select>
         </div>
 
         <div class="form-group">
@@ -1009,8 +1020,15 @@
               <div class="ref-detail">
                 <span class="ref-badge ${ref.leadType === "Hardcard" ? "hardcard" : ""}">${esc(ref.leadType || "")}</span>
               </div>
-              <div>
-                <span class="outcome-badge ${outcomeClass}">${esc(outcome)}</span>
+              <div class="form-group" style="margin-top: 12px;">
+                <label style="font-size: 12px; margin-bottom: 6px;">Update Outcome:</label>
+                <select class="outcome-select" data-ref-name="${esc(ref.refName)}" onchange="updateOutcome(this)">
+                  <option value="Not Contacted" ${outcome === "Not Contacted" ? "selected" : ""}>Not Contacted</option>
+                  <option value="Dialed" ${outcome === "Dialed" ? "selected" : ""}>Dialed</option>
+                  <option value="Scheduled" ${outcome === "Scheduled" ? "selected" : ""}>Scheduled</option>
+                  <option value="Presented" ${outcome === "Presented" ? "selected" : ""}>Presented</option>
+                  <option value="DNC" ${outcome === "DNC" ? "selected" : ""}>DNC/No Sale</option>
+                </select>
               </div>
               ${ref.extension ? `<div class="extension-box"><strong>📝 Why:</strong> ${esc(ref.extension)}</div>` : ""}
               <button class="call-sponsor-btn" data-action="toggle-contact">📞 Call Sponsor</button>
@@ -1114,9 +1132,6 @@
       const whySelect = $("refWhy")?.value || "";
       const whyOther = ($("refWhyOther")?.value || "").trim();
       const why = whySelect === "Other" ? whyOther : whySelect;
-      
-      // Get Outcome
-      const outcome = $("refOutcome")?.value || "Not Contacted";
 
       const refData = {
         user: currentUser,
@@ -1128,7 +1143,7 @@
         leadType,
         sponsorPos,
         why,
-        outcome,
+        outcome: "Not Contacted", // Default outcome
         extension,
       };
 
@@ -1153,7 +1168,6 @@
           ["refName", "refNumber", "refRelation", "refExtension", "refWhyOther"].forEach(id => { const el = $(id); if (el) el.value = ""; });
           if ($("refSponsor")) $("refSponsor").value = "";
           if ($("refWhy")) $("refWhy").value = "";
-          if ($("refOutcome")) $("refOutcome").value = "Not Contacted";
           if ($("refWhyOtherGroup")) $("refWhyOtherGroup").style.display = "none";
           if ($("refSponsorPosNo")) $("refSponsorPosNo").checked = true;
           setTimeout(loadData, 600);
@@ -1181,6 +1195,8 @@
         sponsorNumber: "",
         leadType,
         sponsorPos,
+        why: "",
+        outcome: "Not Contacted",
         extension,
       };
 
@@ -1206,6 +1222,57 @@
         }
       } catch (e) {
         showAlert("addSponsorStatus", "❌ Error: " + e.message, "error");
+      }
+    }
+
+    // =========================
+    // UPDATE OUTCOME
+    // =========================
+    async function updateOutcome(selectElement) {
+      const refName = selectElement.getAttribute('data-ref-name');
+      const newOutcome = selectElement.value;
+      
+      // Find the referral in our data
+      const referral = referralData.find(r => r.refName === refName);
+      if (!referral) {
+        alert("❌ Referral not found");
+        return;
+      }
+      
+      // Show loading state
+      selectElement.disabled = true;
+      const originalValue = referral.outcome;
+      
+      try {
+        // Update the referral with new outcome
+        const updatedData = {
+          ...referral,
+          outcome: newOutcome,
+          user: currentUser
+        };
+        
+        const result = await postToSheet({ 
+          action: "updateReferral", 
+          oldName: refName,
+          referralData: updatedData 
+        });
+        
+        if (result && result.success) {
+          // Update local data
+          referral.outcome = newOutcome;
+          // Show success feedback
+          selectElement.style.borderColor = "#22c55e";
+          setTimeout(() => {
+            selectElement.style.borderColor = "";
+            selectElement.disabled = false;
+          }, 1000);
+        } else {
+          throw new Error(result?.message || "Update failed");
+        }
+      } catch (e) {
+        alert("❌ Error updating outcome: " + e.message);
+        selectElement.value = originalValue; // Revert
+        selectElement.disabled = false;
       }
     }
 
@@ -1295,6 +1362,7 @@
     window.addReferral = addReferral;
     window.addSponsor = addSponsor;
     window.toggleRefWhyOther = toggleRefWhyOther;
+    window.updateOutcome = updateOutcome;
 
     // =========================
     // BOOT
