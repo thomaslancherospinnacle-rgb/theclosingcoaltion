@@ -13,7 +13,7 @@ const APPDB = "https://script.google.com/macros/s/AKfycbxcoHmU_iqzvcmawu6kBuN0_T
 const REFDB = "https://script.google.com/macros/s/AKfycbxpMNUsx8bCt2ApEyAC0ywpc-iuOLJAZhsEEuIQ59rsYniJJiyrMp5ECGQ9QD_sjwHv-Q/exec";
 
 // Google Apps Script: Leads Database & Caller Permissions
-const LEADSDB = "https://script.google.com/macros/s/AKfycbzLJR6CQ8l0WRj3UQRLiH4W4qqcZmOUkNE1kbxkfu7I_hzcHZ50V_zNIrhTGa7_VdSmKA/exec";
+const LEADSDB = "https://script.google.com/macros/s/AKfycbzEJ2Szgd-x-5G2Hmqn5PXSXJbtJczYfpMJ7-KQTUGMxYi-oLrqq0EQkXExSSxbHl-tTg/exec";
 // Authentication Script (if separate)
 const AUTH = CFWORKER; // or separate auth URL if different
 
