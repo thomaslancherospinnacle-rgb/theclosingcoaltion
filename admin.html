@@ -434,7 +434,7 @@
                                 </tr>
                             </thead>
                             <tbody id="callerSettingsTableBody">
-                                <!-- Populated by loadCallerSettings() -->
+                                <!-- Populated by ettings() -->
                             </tbody>
                         </table>
                     </div>
@@ -534,7 +534,7 @@
                             </button>
                         </div>
                         <div id="callersList" class="flex flex-wrap gap-2">
-                            <!-- Populated by loadCallers() -->
+                            <!-- Populated by () -->
                         </div>
                     </div>
                 </div>
@@ -543,7 +543,7 @@
                 <div class="bg-white p-6 rounded-lg shadow mb-6">
                     <h3 class="text-xl font-bold mb-4 text-gray-800">📁 CSV Lead Sources</h3>
                     <div id="csvSourcesContainer">
-                        <!-- Populated by loadCallerSources() -->
+                        <!-- Populated by ources() -->
                     </div>
                 </div>
 
@@ -551,7 +551,7 @@
                 <div class="bg-white p-6 rounded-lg shadow">
                     <h3 class="text-xl font-bold mb-4 text-gray-800">👤 User Referral Databases</h3>
                     <div id="referralSourcesContainer">
-                        <!-- Populated by loadCallerSources() -->
+                        <!-- Populated by ources() -->
                     </div>
                 </div>
             </div>
@@ -752,7 +752,7 @@
             
             // Auto-load caller settings when tab is shown
             if (tabName === 'callerSettings') {
-                loadCallerSettings();
+                ettings();
             }
         }
 
@@ -1403,7 +1403,7 @@
         let callerPermissions = {};
 
         // Load all callers from LEADSDB
-        async function loadCallers() {
+        async function () {
             try {
                 const response = await fetch(LEADSDB, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'getCallers' }) });
                 const data = await response.json();
@@ -1429,51 +1429,38 @@
 
         // Load all sources (CSV + Referrals)
         // Load all sources (CSV + Referrals)
-        async function loadCallerSources() {
+        async function loadCallers() {
             try {
-                // Load CSV sources from LEADSDB
-                const csvResponse = await fetch(LEADSDB, { 
+                const response = await fetch(LEADSDB, { 
                     method: 'POST', 
                     headers: { 'Content-Type': 'application/json' }, 
-                    body: JSON.stringify({ action: 'getSources' }) 
+                    body: JSON.stringify({ action: 'getCallers' }) 
                 });
-                const csvData = await csvResponse.json();
+                const data = await response.json();
                 
-                // LEADDB returns array directly
-                csvSources = Array.isArray(csvData) ? csvData : [];
-                console.log('CSV Sources loaded:', csvSources);
+                // Ensure data is an array
+                allCallers = Array.isArray(data) ? data : [];
                 
-                // Load referral sources from REFDB
-                const refResponse = await fetch(REFDB, { 
-                    method: 'POST', 
-                    headers: { 'Content-Type': 'application/json' }, 
-                    body: JSON.stringify({ action: 'listUsers' }) 
-                });
-                const refData = await refResponse.json();
+                console.log('Callers loaded:', allCallers);
                 
-                // REFDB returns { ok: true, users: [...] } - extract the users array
-                referralSources = refData.ok && refData.users ? refData.users : [];
+                const container = document.getElementById('callersList');
+                if (allCallers.length === 0) {
+                    container.innerHTML = '<p class="text-gray-500">No callers found. Click "Sync from AUTH" to load users.</p>';
+                    return;
+                }
                 
-                // Convert count to referralCount for consistency
-                referralSources = referralSources.map(source => ({
-                    ...source,
-                    referralCount: source.count || 0
-                }));
-                console.log('Referral Sources loaded:', referralSources);
-                
-                // Load existing permissions
-                await loadExistingPermissions();
-                
-                // Render sources
-                renderSourceCards('csvSourcesContainer', csvSources, 'CSV');
-                renderSourceCards('referralSourcesContainer', referralSources, 'Referrals');
+                container.innerHTML = allCallers.map(caller => `
+                    <span class="bg-blue-100 text-blue-700 px-3 py-2 rounded-full text-sm font-semibold">
+                        👤 ${caller.name}
+                    </span>
+                `).join('');
                 
             } catch (error) {
-                console.error('Error loading sources:', error);
-                showCallerMessage('Error loading sources: ' + error.message, 'error');
+                console.error('Error loading callers:', error);
+                allCallers = []; // Set to empty array on error
+                showCallerMessage('Error loading callers: ' + error.message, 'error');
             }
         }
-
         // Load existing permissions from LEADSDB
         async function loadExistingPermissions() {
             try {
