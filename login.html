@@ -269,7 +269,7 @@
   /**********************
    * CONFIG
    **********************/
-  const API_URL = CFWORKER; // <-- YOUR WORKER URL
+  const API_URL = typeof CFWORKER !== 'undefined' ? CFWORKER : '';// <-- YOUR WORKER URL
 
   /**********************
    * UI
