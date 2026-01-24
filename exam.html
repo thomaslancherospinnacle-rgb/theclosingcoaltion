@@ -625,10 +625,10 @@ function setBadge(kind, text){
 }
 
 async function api(action, payload){
-  const res = await fetch(CLOUD_FLARE_URL, {
+  const res = await fetch(`${CLOUD_FLARE_URL}/${action}`, {
     method: "POST",
     headers: { "Content-Type":"application/json" },
-    body: JSON.stringify({ action, ...payload })
+    body: JSON.stringify(payload)
   });
   const txt = await res.text();
   let data;
