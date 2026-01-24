@@ -434,7 +434,7 @@
                                 </tr>
                             </thead>
                             <tbody id="callerSettingsTableBody">
-                                <!-- Populated by ettings() -->
+                                <!-- Populated by loadCallerSettings() -->
                             </tbody>
                         </table>
                     </div>
@@ -534,7 +534,7 @@
                             </button>
                         </div>
                         <div id="callersList" class="flex flex-wrap gap-2">
-                            <!-- Populated by () -->
+                            <!-- Populated by loadCallers() -->
                         </div>
                     </div>
                 </div>
@@ -543,7 +543,7 @@
                 <div class="bg-white p-6 rounded-lg shadow mb-6">
                     <h3 class="text-xl font-bold mb-4 text-gray-800">📁 CSV Lead Sources</h3>
                     <div id="csvSourcesContainer">
-                        <!-- Populated by ources() -->
+                        <!-- Populated by loadCallerSources() -->
                     </div>
                 </div>
 
@@ -551,7 +551,7 @@
                 <div class="bg-white p-6 rounded-lg shadow">
                     <h3 class="text-xl font-bold mb-4 text-gray-800">👤 User Referral Databases</h3>
                     <div id="referralSourcesContainer">
-                        <!-- Populated by ources() -->
+                        <!-- Populated by loadCallerSources() -->
                     </div>
                 </div>
             </div>
@@ -564,12 +564,11 @@
         // ⚠️⚠️⚠️ CONFIGURATION - UPDATE THESE URLS ⚠️⚠️⚠️
         // ============================================================
         
-        // Main API - Should be your Google Apps Script URL that has admin functions
-        // This is the AUTH script you just pasted (has sendVerification, verifyCode, etc.)
-        // Remove trailing slash if present
-        const API_URL = CFWORKER.replace(/\/$/, '');
-// LEADSDB and REFDB already defined in config.js - don't redeclare!
-        const RECRUITING_API_URL = APPDB;
+        // Main API - Use CFWORKER from config.js
+        const API_URL = typeof CFWORKER !== 'undefined' ? CFWORKER : '';
+        // LEADSDB and REFDB are already defined in config.js - don't redeclare!
+        // Recruiting API (Google Apps Script for recruits tab)
+        const RECRUITING_API_URL = typeof APPDB !== 'undefined' ? APPDB : '';
         
         const ADMIN_EMAIL = 'thomaslancheros.ail@gmail.com';
         
@@ -752,7 +751,7 @@
             
             // Auto-load caller settings when tab is shown
             if (tabName === 'callerSettings') {
-                ettings();
+                loadCallerSettings();
             }
         }
 
@@ -1403,44 +1402,13 @@
         let callerPermissions = {};
 
         // Load all callers from LEADSDB
-        async function () {
-            try {
-                const response = await fetch(LEADSDB, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'getCallers' }) });
-                const data = await response.json();
-                allCallers = data;
-                
-                const container = document.getElementById('callersList');
-                if (allCallers.length === 0) {
-                    container.innerHTML = '<p class="text-gray-500">No callers found. Callers are automatically added when users login.</p>';
-                    return;
-                }
-                
-                container.innerHTML = allCallers.map(caller => `
-                    <span class="bg-blue-100 text-blue-700 px-3 py-2 rounded-full text-sm font-semibold">
-                        👤 ${caller.name}
-                    </span>
-                `).join('');
-                
-            } catch (error) {
-                console.error('Error loading callers:', error);
-                showCallerMessage('Error loading callers: ' + error.message, 'error');
-            }
-        }
-
-        // Load all sources (CSV + Referrals)
-        // Load all sources (CSV + Referrals)
         async function loadCallers() {
             try {
-                const response = await fetch(LEADSDB, { 
-                    method: 'POST', 
-                    headers: { 'Content-Type': 'application/json' }, 
-                    body: JSON.stringify({ action: 'getCallers' }) 
-                });
+                const response = await fetch(LEADSDB, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'getCallers' }) });
                 const data = await response.json();
                 
                 // Ensure data is an array
                 allCallers = Array.isArray(data) ? data : [];
-                
                 console.log('Callers loaded:', allCallers);
                 
                 const container = document.getElementById('callersList');
@@ -1461,7 +1429,78 @@
                 showCallerMessage('Error loading callers: ' + error.message, 'error');
             }
         }
+
+        // Load all sources (CSV + Referrals)
+        async function loadCallerSources() {
+            try {
+                console.log('Loading CSV sources from:', LEADSDB);
+                console.log('Loading REF sources from:', REFDB);
+                
+                // Load CSV sources from LEADSDB
+                const csvResponse = await fetch(LEADSDB, { 
+                    method: 'POST', 
+                    headers: { 'Content-Type': 'application/json' }, 
+                    body: JSON.stringify({ action: 'getSources' }) 
+                });
+                const csvData = await csvResponse.json();
+                console.log('CSV Response:', csvData);
+                
+                // LEADDB returns array directly
+                csvSources = Array.isArray(csvData) ? csvData : [];
+                
+                // Load referral sources from REFDB
+                const refResponse = await fetch(REFDB, { 
+                    method: 'POST', 
+                    headers: { 'Content-Type': 'application/json' }, 
+                    body: JSON.stringify({ action: 'listUsers' }) 
+                });
+                const refData = await refResponse.json();
+                console.log('REF Response:', refData);
+                
+                // REFDB returns { ok: true, users: [...] } - extract users array
+                referralSources = (refData && refData.ok && refData.users) ? refData.users : [];
+                
+                // Convert count to referralCount for consistency
+                referralSources = referralSources.map(source => ({
+                    ...source,
+                    referralCount: source.count || 0
+                }));
+                
+                console.log('CSV Sources:', csvSources);
+                console.log('REF Sources:', referralSources);
+                
+                // Load existing permissions
+                await loadExistingPermissions();
+                
+                // Render sources
+                renderSourceCards('csvSourcesContainer', csvSources, 'CSV');
+                renderSourceCards('referralSourcesContainer', referralSources, 'Referrals');
+                
+            } catch (error) {
+                console.error('Error loading sources:', error);
+                csvSources = [];
+                referralSources = [];
+                showCallerMessage('Error loading sources: ' + error.message, 'error');
+            }
+        }
+
         // Load existing permissions from LEADSDB
+        async function loadExistingPermissions() {
+            try {
+                callerPermissions = {};
+                
+                for (const caller of allCallers) {
+                    const response = await fetch(LEADSDB, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'getPermissions', caller: caller.name }) });
+                    const permissions = await response.json();
+                    
+                    callerPermissions[caller.name] = permissions;
+                }
+            } catch (error) {
+                console.error('Error loading permissions:', error);
+            }
+        }
+
+        // Render source cards with caller checkboxes
         function renderSourceCards(containerId, sources, sourceType) {
             const container = document.getElementById(containerId);
             
@@ -1477,56 +1516,6 @@
             
             if (!allCallers || allCallers.length === 0) {
                 container.innerHTML = '<p class="text-gray-500 p-4">Load callers first by clicking "Sync from AUTH"</p>';
-                return;
-            }
-            
-            container.innerHTML = sources.map(source => {
-                const accessCount = allCallers.filter(caller => 
-                    hasAccess(caller.name, sourceType, source.name)
-                ).length;
-                
-                return `
-                    <div class="border-2 border-gray-200 rounded-lg p-5 mb-4 hover:border-blue-400 transition">
-                        <div class="flex justify-between items-center mb-4 pb-4 border-b-2 border-gray-100">
-                            <div class="flex items-center gap-3">
-                                <span class="text-3xl">${sourceType === 'CSV' ? '📁' : '👤'}</span>
-                                <div>
-                                    <div class="font-bold text-lg text-gray-800">${source.name}</div>
-                                    <div class="text-sm text-gray-500">
-                                        ${sourceType} • ${source.leadCount || source.referralCount || 0} leads
-                                    </div>
-                                </div>
-                            </div>
-                            <span class="bg-blue-600 text-white px-4 py-2 rounded-full text-sm font-semibold">
-                                ${accessCount} caller${accessCount !== 1 ? 's' : ''}
-                            </span>
-                        </div>
-                        
-                        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-                            ${allCallers.map(caller => {
-                                const isChecked = hasAccess(caller.name, sourceType, source.name);
-                                return `
-                                    <label class="flex items-center gap-2 p-3 rounded-lg cursor-pointer transition
-                                        ${isChecked ? 'bg-purple-100 border-2 border-purple-400' : 'bg-gray-50 border-2 border-transparent hover:bg-gray-100'}">
-                                        <input type="checkbox" 
-                                            ${isChecked ? 'checked' : ''}
-                                            onchange="toggleCallerAccess('${caller.name}', '${sourceType}', '${source.name}', this.checked)"
-                                            class="w-5 h-5 accent-purple-600 cursor-pointer">
-                                        <span class="text-sm font-medium text-gray-700">${caller.name}</span>
-                                    </label>
-                                `;
-                            }).join('')}
-                        </div>
-                    </div>
-                `;
-            }).join('');
-        }
-        // Render source cards with caller checkboxes
-        function renderSourceCards(containerId, sources, sourceType) {
-            const container = document.getElementById(containerId);
-            
-            if (sources.length === 0) {
-                container.innerHTML = '<p class="text-gray-500 p-4">No sources available</p>';
                 return;
             }
             
