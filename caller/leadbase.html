@@ -539,58 +539,107 @@ async function loadSelectedSource() {
       });
       const data = await res.json();
       console.log('[LOAD] LEADDB raw data:', data);
+      console.log('[LOAD] LEADDB data type:', typeof data, 'Is array:', Array.isArray(data));
+      console.log('[LOAD] LEADDB first item:', data[0]);
       
-      // Keep ALL columns from LEADDB, just normalize the essential fields
-      leads = Array.isArray(data) ? data.map(row => {
-        // Create a new object with all original fields
-        const lead = { ...row };
-        
-        // Normalize name field (check common variations)
-        if (!lead.name && !lead.Name) {
-          lead.name = row.name || row.Name || row.firstName || row['First Name'] || 
-                      row.fullName || row['Full Name'] || 'Unknown';
-        }
-        
-        // Normalize phone field
-        if (!lead.phone && !lead.Phone) {
-          lead.phone = row.phone || row.Phone || row.mobile || row.Mobile || 
-                       row.cellPhone || row['Cell Phone'] || row.phoneNumber || '';
-        }
-        
-        // Normalize outcome/status field
-        if (!lead.outcome && !lead.Outcome) {
-          lead.outcome = row.outcome || row.Outcome || row.status || row.Status || 'Not Contacted';
-        }
-        
-        return lead;
-      }) : [];
+      // Handle both old format and new format
+      if (Array.isArray(data)) {
+        leads = data.map((row, idx) => {
+          console.log(`[LOAD] Processing LEADDB row ${idx}:`, row);
+          
+          // Keep ALL fields, just ensure we have name and phone
+          const lead = { ...row };
+          
+          // Find name from any possible field
+          if (!lead.name) {
+            lead.name = row.Name || row.name || row.firstName || row['First Name'] || 
+                       row.fullName || row['Full Name'] || `Lead ${idx + 1}`;
+          }
+          
+          // Find phone from any possible field
+          if (!lead.phone) {
+            lead.phone = row.Phone || row.phone || row.mobile || row.Mobile || 
+                        row.cellPhone || row['Cell Phone'] || row.phoneNumber || 
+                        row['Phone Number'] || '';
+          }
+          
+          // Ensure outcome
+          if (!lead.outcome) {
+            lead.outcome = row.outcome || row.Outcome || row.status || row.Status || 'Not Contacted';
+          }
+          
+          return lead;
+        });
+      } else {
+        console.error('[LOAD] LEADDB data is not an array:', data);
+        leads = [];
+      }
       
       console.log('[LOAD] LEADDB mapped leads:', leads);
+      
     } else if (selectedSource.type === 'REFDB') {
       const res = await fetch(`${REFDB}?user=${encodeURIComponent(selectedSource.name)}`);
       const data = await res.json();
       console.log('[LOAD] REFDB raw data:', data);
+      console.log('[LOAD] REFDB data type:', typeof data, 'Is array:', Array.isArray(data));
+      console.log('[LOAD] REFDB first item:', data[0]);
       
-      // Keep ALL columns from REFDB
-      leads = Array.isArray(data) ? data.map(ref => {
-        // Create object with all original fields
-        const lead = { ...ref };
-        
-        // Normalize essential fields for the app to work
-        lead.name = ref.refName || ref.name || ref.Name || 'Unknown';
-        lead.phone = ref.refNumber || ref.phone || ref.Phone || ref.refPhone || '';
-        lead.relation = ref.refRelation || ref.relation || ref.Relation || '';
-        lead.sponsor = ref.sponsorName || ref.sponsor || ref.Sponsor || '';
-        lead.sponsorPhone = ref.sponsorNumber || ref.sponsorPhone || ref['Sponsor Phone'] || '';
-        lead.outcome = ref.outcome || ref.Outcome || 'Not Contacted';
-        lead.tabOwner = selectedSource.name;
-        
-        console.log('[LOAD] Mapped lead:', lead);
-        return lead;
-      }) : [];
+      if (Array.isArray(data)) {
+        leads = data.map((ref, idx) => {
+          console.log(`[LOAD] Processing REFDB row ${idx}:`, ref);
+          console.log(`[LOAD] REFDB row keys:`, Object.keys(ref));
+          
+          // Keep ALL fields
+          const lead = { ...ref };
+          
+          // Normalize essential fields - check ALL possible variations
+          if (!lead.name) {
+            lead.name = ref.refName || ref.RefName || ref['Ref Name'] || 
+                       ref.name || ref.Name || 
+                       ref['NAME'] || `Referral ${idx + 1}`;
+          }
+          
+          if (!lead.phone) {
+            lead.phone = ref.refNumber || ref.RefNumber || ref['Ref Number'] ||
+                        ref.refPhone || ref.RefPhone || ref['Ref Phone'] ||
+                        ref.phone || ref.Phone || ref['PHONE'] || '';
+          }
+          
+          // Map other common referral fields
+          if (!lead.relation) {
+            lead.relation = ref.refRelation || ref.RefRelation || ref['Ref Relation'] ||
+                           ref.relation || ref.Relation || ref['RELATION'] || '';
+          }
+          
+          if (!lead.sponsor) {
+            lead.sponsor = ref.sponsorName || ref.SponsorName || ref['Sponsor Name'] ||
+                          ref.sponsor || ref.Sponsor || ref['SPONSOR'] || '';
+          }
+          
+          if (!lead.sponsorPhone) {
+            lead.sponsorPhone = ref.sponsorNumber || ref.SponsorNumber || ref['Sponsor Number'] ||
+                               ref.sponsorPhone || ref.SponsorPhone || ref['Sponsor Phone'] ||
+                               ref['SPONSOR PHONE'] || '';
+          }
+          
+          if (!lead.outcome) {
+            lead.outcome = ref.outcome || ref.Outcome || ref['OUTCOME'] || 'Not Contacted';
+          }
+          
+          lead.tabOwner = selectedSource.name;
+          
+          return lead;
+        });
+      } else {
+        console.error('[LOAD] REFDB data is not an array:', data);
+        leads = [];
+      }
       
       console.log('[LOAD] REFDB mapped leads:', leads);
     }
+
+    console.log('[LOAD] Final leads count:', leads.length);
+    console.log('[LOAD] Final leads sample:', leads[0]);
 
     document.getElementById('sourceTitle').textContent = selectedSource.name;
     document.getElementById('leadCount').textContent = `(${leads.length} leads)`;
@@ -599,6 +648,7 @@ async function loadSelectedSource() {
     
   } catch (err) {
     console.error('[LOAD] Error loading leads:', err);
+    console.error('[LOAD] Error stack:', err.stack);
     toast('Error loading leads: ' + err.message);
   } finally {
     btn.textContent = 'Load Selected Source';
