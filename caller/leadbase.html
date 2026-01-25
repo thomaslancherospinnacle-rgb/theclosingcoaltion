@@ -538,28 +538,55 @@ async function loadSelectedSource() {
         })
       });
       const data = await res.json();
-      leads = Array.isArray(data) ? data : [];
-      console.log('[LOAD] LEADDB leads:', leads);
+      console.log('[LOAD] LEADDB raw data:', data);
+      
+      // Keep ALL columns from LEADDB, just normalize the essential fields
+      leads = Array.isArray(data) ? data.map(row => {
+        // Create a new object with all original fields
+        const lead = { ...row };
+        
+        // Normalize name field (check common variations)
+        if (!lead.name && !lead.Name) {
+          lead.name = row.name || row.Name || row.firstName || row['First Name'] || 
+                      row.fullName || row['Full Name'] || 'Unknown';
+        }
+        
+        // Normalize phone field
+        if (!lead.phone && !lead.Phone) {
+          lead.phone = row.phone || row.Phone || row.mobile || row.Mobile || 
+                       row.cellPhone || row['Cell Phone'] || row.phoneNumber || '';
+        }
+        
+        // Normalize outcome/status field
+        if (!lead.outcome && !lead.Outcome) {
+          lead.outcome = row.outcome || row.Outcome || row.status || row.Status || 'Not Contacted';
+        }
+        
+        return lead;
+      }) : [];
+      
+      console.log('[LOAD] LEADDB mapped leads:', leads);
     } else if (selectedSource.type === 'REFDB') {
       const res = await fetch(`${REFDB}?user=${encodeURIComponent(selectedSource.name)}`);
       const data = await res.json();
       console.log('[LOAD] REFDB raw data:', data);
       
+      // Keep ALL columns from REFDB
       leads = Array.isArray(data) ? data.map(ref => {
-        // Map REFDB fields to lead format
-        const mapped = {
-          name: ref.refName || ref.name || ref.Name || 'Unknown',
-          phone: ref.refNumber || ref.phone || ref.Phone || ref.refPhone || '',
-          relation: ref.refRelation || ref.relation || ref.Relation || '',
-          sponsor: ref.sponsorName || ref.sponsor || ref.Sponsor || '',
-          sponsorPhone: ref.sponsorNumber || ref.sponsorPhone || ref['Sponsor Phone'] || '',
-          outcome: ref.outcome || ref.Outcome || 'Not Contacted',
-          tabOwner: selectedSource.name,
-          // Store all original fields for debugging
-          _raw: ref
-        };
-        console.log('[LOAD] Mapped lead:', mapped);
-        return mapped;
+        // Create object with all original fields
+        const lead = { ...ref };
+        
+        // Normalize essential fields for the app to work
+        lead.name = ref.refName || ref.name || ref.Name || 'Unknown';
+        lead.phone = ref.refNumber || ref.phone || ref.Phone || ref.refPhone || '';
+        lead.relation = ref.refRelation || ref.relation || ref.Relation || '';
+        lead.sponsor = ref.sponsorName || ref.sponsor || ref.Sponsor || '';
+        lead.sponsorPhone = ref.sponsorNumber || ref.sponsorPhone || ref['Sponsor Phone'] || '';
+        lead.outcome = ref.outcome || ref.Outcome || 'Not Contacted';
+        lead.tabOwner = selectedSource.name;
+        
+        console.log('[LOAD] Mapped lead:', lead);
+        return lead;
       }) : [];
       
       console.log('[LOAD] REFDB mapped leads:', leads);
@@ -635,14 +662,34 @@ function openLead(index) {
   const phone = formatPhone(lead.phone);
   const homePhone = formatPhone(lead.sponsorPhone || lead.home);
 
+  // Start with phone fields (with tel: links)
   let kvHtml = `
     <div class="kv"><div class="k">Mobile</div><div class="v">${phone.ok ? `<a href="${phone.tel}" style="color:#4fd1c5;text-decoration:none">${phone.pretty}</a>` : '—'}</div></div>
     <div class="kv"><div class="k">Home/Sponsor</div><div class="v">${homePhone.ok ? `<a href="${homePhone.tel}" style="color:#4fd1c5;text-decoration:none">${homePhone.pretty}</a>` : '—'}</div></div>
   `;
 
-  if (lead.relation) kvHtml += `<div class="kv"><div class="k">Relation</div><div class="v">${lead.relation}</div></div>`;
-  if (lead.sponsor) kvHtml += `<div class="kv"><div class="k">Sponsor</div><div class="v">${lead.sponsor}</div></div>`;
-  if (lead.address) kvHtml += `<div class="kv"><div class="k">Address</div><div class="v">${lead.address}</div></div>`;
+  // Auto-generate all other fields from the lead data
+  // Skip fields we've already displayed and internal fields
+  const skipFields = ['name', 'phone', 'sponsorPhone', 'home', 'outcome', 'status', 'tabOwner', '_raw'];
+  
+  Object.keys(lead).forEach(key => {
+    // Skip if already displayed, empty, or internal field
+    if (skipFields.includes(key) || !lead[key] || key.startsWith('_')) {
+      return;
+    }
+    
+    // Format the field name nicely
+    const fieldName = key
+      .replace(/([A-Z])/g, ' $1') // Add space before capitals
+      .replace(/^./, str => str.toUpperCase()) // Capitalize first letter
+      .trim();
+    
+    const value = String(lead[key]).trim();
+    
+    if (value) {
+      kvHtml += `<div class="kv"><div class="k">${fieldName}</div><div class="v">${value}</div></div>`;
+    }
+  });
 
   document.getElementById('detailKVs').innerHTML = kvHtml;
 
