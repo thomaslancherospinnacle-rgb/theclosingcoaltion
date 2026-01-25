@@ -288,6 +288,15 @@ function updateAuthStatus(msg) {
 // MAIN INIT - Check token via CFWORKER
 // ============================================================
 (async () => {
+  // Verify config is loaded
+  if (typeof CFWORKER === 'undefined' || typeof LEADSDB === 'undefined' || typeof REFDB === 'undefined') {
+    console.error('Config not loaded! CFWORKER:', typeof CFWORKER, 'LEADSDB:', typeof LEADSDB, 'REFDB:', typeof REFDB);
+    updateAuthStatus('Configuration error - please refresh');
+    return;
+  }
+  
+  console.log('Config loaded:', { CFWORKER, LEADSDB: LEADSDB.substring(0, 50) + '...', REFDB: REFDB.substring(0, 50) + '...' });
+  
   const token = getToken();
   
   console.log('Token check:', token ? 'Token found' : 'No token');
@@ -301,6 +310,9 @@ function updateAuthStatus(msg) {
   try {
     updateAuthStatus('Verifying session...');
     
+    console.log('Calling CFWORKER:', CFWORKER);
+    console.log('Token:', token ? 'exists' : 'missing');
+    
     // Check token via CFWORKER /me endpoint
     const meRes = await fetch(CFWORKER, {
       method: 'POST',
@@ -308,13 +320,25 @@ function updateAuthStatus(msg) {
       body: JSON.stringify({ action: 'me', token: token })
     });
     
+    console.log('Me response status:', meRes.status);
+    
+    if (!meRes.ok) {
+      console.error('HTTP error:', meRes.status, meRes.statusText);
+      clearSession();
+      goLogin();
+      return;
+    }
+    
     const meData = await meRes.json();
-    console.log('Me response:', meData);
+    console.log('Me response data:', meData);
     
     if (!meData.ok) {
       console.error('Token validation failed:', meData.error);
-      clearSession();
-      goLogin();
+      updateAuthStatus(meData.error || 'Session invalid');
+      setTimeout(() => {
+        clearSession();
+        goLogin();
+      }, 2000);
       return;
     }
     
@@ -340,8 +364,12 @@ function updateAuthStatus(msg) {
     
   } catch (e) {
     console.error('Auth error:', e);
-    clearSession();
-    goLogin();
+    console.error('Error stack:', e.stack);
+    updateAuthStatus('Error: ' + e.message);
+    setTimeout(() => {
+      clearSession();
+      goLogin();
+    }, 3000);
   }
 })();
 
