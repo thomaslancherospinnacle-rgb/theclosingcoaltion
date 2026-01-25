@@ -529,8 +529,8 @@
                     <div class="mb-6">
                         <div class="flex justify-between items-center mb-3">
                             <h3 class="text-lg font-semibold text-gray-700">📋 All Callers</h3>
-                            <button onclick="syncCallersFromAuth()" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition text-sm font-semibold">
-                                🔄 Sync from AUTH
+                            <button onclick="loadCallers()" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition text-sm font-semibold">
+                                🔄 Refresh Users
                             </button>
                         </div>
                         <div id="callersList" class="flex flex-wrap gap-2">
@@ -1404,16 +1404,35 @@
         // Load all callers from LEADSDB
         async function loadCallers() {
             try {
-                const response = await fetch(LEADSDB, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'getCallers' }) });
+                // Get verified users directly from AUTH
+                const response = await fetch(API_URL + '/getUsers', { 
+                    method: 'POST', 
+                    headers: { 'Content-Type': 'application/json' }, 
+                    body: JSON.stringify({ action: 'getUsers' }) 
+                });
                 const data = await response.json();
                 
-                // Ensure data is an array
-                allCallers = Array.isArray(data) ? data : [];
-                console.log('Callers loaded:', allCallers);
+                console.log('Auth users response:', data);
+                
+                // getUsers returns { ok: true, users: [...] }
+                if (data.ok && Array.isArray(data.users)) {
+                    // Filter for verified users
+                    allCallers = data.users
+                        .filter(user => user.verified === true || user.verified === 'TRUE')
+                        .map(user => ({
+                            name: user.username || user.name,
+                            email: user.login_email || user.email,
+                            active: 'YES'
+                        }));
+                } else {
+                    allCallers = [];
+                }
+                
+                console.log('Verified callers:', allCallers);
                 
                 const container = document.getElementById('callersList');
                 if (allCallers.length === 0) {
-                    container.innerHTML = '<p class="text-gray-500">No callers found. Click "Sync from AUTH" to load users.</p>';
+                    container.innerHTML = '<p class="text-gray-500">No verified users found.</p>';
                     return;
                 }
                 
@@ -1425,7 +1444,7 @@
                 
             } catch (error) {
                 console.error('Error loading callers:', error);
-                allCallers = []; // Set to empty array on error
+                allCallers = [];
                 showCallerMessage('Error loading callers: ' + error.message, 'error');
             }
         }
