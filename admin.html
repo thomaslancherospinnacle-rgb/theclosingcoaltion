@@ -1404,7 +1404,7 @@
         // Load all callers from LEADSDB
         async function loadCallers() {
             try {
-                // Get verified users directly from AUTH
+                // Get ALL users directly from AUTH (no verification filter)
                 const response = await fetch(API_URL + '/getUsers', { 
                     method: 'POST', 
                     headers: { 'Content-Type': 'application/json' }, 
@@ -1414,16 +1414,16 @@
                 
                 console.log('Auth users response:', data);
                 
-                // getUsers returns { ok: true, users: [...] }
-                if (data.ok && Array.isArray(data.users)) {
-                    // Filter for verified users
-                    allCallers = data.users
-                        .filter(user => user.verified === true || user.verified === 'TRUE')
-                        .map(user => ({
-                            name: user.username || user.name,
-                            email: user.login_email || user.email,
-                            active: 'YES'
-                        }));
+                // getUsers returns { success: true, users: [...] }
+                if (data && data.success && Array.isArray(data.users)) {
+                    // Map ALL users to caller format (no verification filter)
+                    allCallers = data.users.map(user => ({
+                        name: user.username || user.name || user.login_email,
+                        email: user.login_email || user.email,
+                        phone: user.phone || '',
+                        verified: user.verified === true || user.verified === 'TRUE',
+                        active: 'YES'
+                    }));
                 } else {
                     allCallers = [];
                 }
@@ -1432,13 +1432,13 @@
                 
                 const container = document.getElementById('callersList');
                 if (allCallers.length === 0) {
-                    container.innerHTML = '<p class="text-gray-500">No verified users found.</p>';
+                    container.innerHTML = '<p class="text-gray-500">No users found in AUTH system.</p>';
                     return;
                 }
                 
                 container.innerHTML = allCallers.map(caller => `
                     <span class="bg-blue-100 text-blue-700 px-3 py-2 rounded-full text-sm font-semibold">
-                        👤 ${caller.name}
+                        ${caller.verified ? '✅' : '⏳'} ${caller.name}
                     </span>
                 `).join('');
                 
