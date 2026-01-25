@@ -256,16 +256,40 @@ const DISPOSITIONS = [
 // AUTH HELPERS
 // ============================================================
 function getToken() {
-  return document.cookie.split('; ').find(row => row.startsWith('cc_token='))?.split('=')[1] || '';
+  return localStorage.getItem('cc_token') || '';
 }
 
 function clearSession() {
-  document.cookie = 'cc_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-  document.cookie = 'cc_expires_at=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+  localStorage.removeItem('cc_token');
+  localStorage.removeItem('cc_expires_at');
 }
 
 function goLogin() {
   window.location.href = '../login.html';
+}
+
+// API helper - same as home.html
+async function api(action, payload) {
+  const res = await fetch(`${CFWORKER}/${action}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  });
+  const text = await res.text();
+  let data;
+  try {
+    data = JSON.parse(text);
+  } catch {
+    throw new Error(text || 'Invalid response');
+  }
+
+  if (!data || data.ok !== true) {
+    const err = (data && (data.error || data.detail)) 
+      ? (data.error + (data.detail ? ` — ${data.detail}` : '')) 
+      : 'Request failed';
+    throw new Error(err);
+  }
+  return data;
 }
 
 // ============================================================
@@ -310,48 +334,18 @@ function updateAuthStatus(msg) {
   try {
     updateAuthStatus('Verifying session...');
     
-    console.log('Calling CFWORKER:', CFWORKER);
-    console.log('Token:', token ? 'exists' : 'missing');
+    const token = getToken();
+    const data = await api('me', { token });
     
-    // Check token via CFWORKER /me endpoint
-    const meRes = await fetch(CFWORKER, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ action: 'me', token: token })
-    });
-    
-    console.log('Me response status:', meRes.status);
-    
-    if (!meRes.ok) {
-      console.error('HTTP error:', meRes.status, meRes.statusText);
-      clearSession();
-      goLogin();
-      return;
-    }
-    
-    const meData = await meRes.json();
-    console.log('Me response data:', meData);
-    console.log('Me response keys:', Object.keys(meData));
-    console.log('loginEmail field:', meData.loginEmail);
-    console.log('username field:', meData.username);
-    
-    if (!meData.ok) {
-      console.error('Token validation failed:', meData.error);
-      updateAuthStatus(meData.error || 'Session invalid');
-      setTimeout(() => {
-        clearSession();
-        goLogin();
-      }, 2000);
-      return;
-    }
+    console.log('Me response:', data);
     
     // Success - user is authenticated
     currentUser = {
-      email: meData.loginEmail || meData.login_email || '',
-      username: meData.username || (meData.loginEmail || meData.login_email || 'User').split('@')[0].replace('.ail', ''),
-      callingFor: meData.callingFor || meData.calling_for || '',
-      calendlyUrl: meData.calendlyUrl || meData.calendly_url || '',
-      assignedTabs: meData.assignedTabs || meData.assigned_tabs || []
+      email: data.loginEmail || '',
+      username: data.username || data.loginEmail?.split('@')[0].replace('.ail', '') || 'User',
+      callingFor: data.callingFor || '',
+      calendlyUrl: data.calendlyUrl || '',
+      assignedTabs: data.assignedTabs || []
     };
     
     console.log('Current user:', currentUser);
