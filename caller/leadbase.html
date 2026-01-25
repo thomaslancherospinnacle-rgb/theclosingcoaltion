@@ -353,14 +353,22 @@ function updateAuthStatus(msg) {
     
     console.log('Current user:', currentUser);
     
-    // Update UI
+    // Update UI - but keep overlay visible while loading sources
     document.getElementById('userName').textContent = currentUser.username;
-    hideAuthOverlay();
     
     // Load available lead packs
-    updateAuthStatus('Loading lead packs...');
-    await loadAvailableSources();
-    showSourceSelection();
+    updateAuthStatus('Loading lead sources...');
+    
+    try {
+      await loadAvailableSources();
+      console.log('Sources loaded successfully');
+      hideAuthOverlay();
+      showSourceSelection();
+    } catch (sourceError) {
+      console.error('Error loading sources:', sourceError);
+      updateAuthStatus('Error loading sources: ' + sourceError.message);
+      setTimeout(() => hideAuthOverlay(), 3000);
+    }
     
   } catch (e) {
     console.error('Auth error:', e);
@@ -378,9 +386,10 @@ function updateAuthStatus(msg) {
 // ============================================================
 async function loadAvailableSources() {
   try {
-    console.log('Loading sources for:', currentUser.username);
+    console.log('[SOURCES] Starting to load sources for:', currentUser.username);
     
     // Get caller's permissions from LEADSDB
+    console.log('[SOURCES] Step 1: Fetching permissions from LEADSDB');
     const permRes = await fetch(LEADSDB, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -389,37 +398,54 @@ async function loadAvailableSources() {
         caller: currentUser.username 
       })
     });
-    const permissions = await permRes.json();
     
-    console.log('User permissions:', permissions);
+    if (!permRes.ok) {
+      throw new Error(`LEADSDB permissions fetch failed: ${permRes.status} ${permRes.statusText}`);
+    }
+    
+    const permissions = await permRes.json();
+    console.log('[SOURCES] User permissions:', permissions);
 
     // Get all CSV sources from LEADSDB
+    console.log('[SOURCES] Step 2: Fetching CSV sources from LEADSDB');
     const csvRes = await fetch(LEADSDB, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ action: 'getSources' })
     });
+    
+    if (!csvRes.ok) {
+      throw new Error(`LEADSDB getSources failed: ${csvRes.status} ${csvRes.statusText}`);
+    }
+    
     const csvData = await csvRes.json();
-    console.log('CSV sources:', csvData);
+    console.log('[SOURCES] CSV sources:', csvData);
 
     // Get all REFDB tabs
+    console.log('[SOURCES] Step 3: Fetching REF sources from REFDB');
     const refRes = await fetch(REFDB, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ action: 'listUsers' })
     });
+    
+    if (!refRes.ok) {
+      throw new Error(`REFDB listUsers failed: ${refRes.status} ${refRes.statusText}`);
+    }
+    
     const refData = await refRes.json();
-    console.log('REF sources:', refData);
+    console.log('[SOURCES] REF sources response:', refData);
 
     availableSources = [];
 
     // Add permitted CSV sources (LEADDB)
+    console.log('[SOURCES] Step 4: Processing CSV sources');
     if (Array.isArray(csvData)) {
       csvData.forEach(src => {
         const hasAccess = Array.isArray(permissions) && permissions.some(p => 
           p.sourceType === 'CSV' && p.sourceName === src.name
         );
-        console.log(`CSV Source "${src.name}": hasAccess=${hasAccess}`);
+        console.log(`[SOURCES] CSV "${src.name}": hasAccess=${hasAccess}`);
         if (hasAccess) {
           availableSources.push({
             name: src.name,
@@ -432,13 +458,16 @@ async function loadAvailableSources() {
     }
 
     // Add permitted REFDB sources
+    console.log('[SOURCES] Step 5: Processing REF sources');
     const refUsers = (refData && refData.ok && refData.users) ? refData.users : [];
+    console.log('[SOURCES] REF users to check:', refUsers);
+    
     refUsers.forEach(src => {
       const srcName = src.name || src.username;
       const hasAccess = Array.isArray(permissions) && permissions.some(p => 
         p.sourceType === 'Referrals' && p.sourceName === srcName
       );
-      console.log(`REF Source "${srcName}": hasAccess=${hasAccess}`);
+      console.log(`[SOURCES] REF "${srcName}": hasAccess=${hasAccess}`);
       if (hasAccess) {
         availableSources.push({
           name: srcName,
@@ -450,12 +479,15 @@ async function loadAvailableSources() {
       }
     });
 
-    console.log('Available sources:', availableSources);
+    console.log('[SOURCES] Final available sources:', availableSources);
+    console.log('[SOURCES] Step 6: Rendering source grid');
     renderSourceGrid();
+    console.log('[SOURCES] ✅ All sources loaded successfully');
     
   } catch (err) {
-    console.error('Error loading sources:', err);
-    toast('Error loading lead packs');
+    console.error('[SOURCES] ❌ Error loading sources:', err);
+    console.error('[SOURCES] Error stack:', err.stack);
+    throw err; // Re-throw to be caught by caller
   }
 }
 
