@@ -123,6 +123,23 @@
 </head>
 <body>
 <div class="app">
+  <!-- Appointment Setter Selection Modal (for LEADDB sources) -->
+  <div id="apptSetterModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:9999; align-items:center; justify-content:center;">
+    <div style="background:linear-gradient(180deg, #1a2332, #0f1923); border:1px solid rgba(79,209,197,0.3); border-radius:18px; padding:30px; max-width:500px; width:90%; box-shadow:0 20px 60px rgba(0,0,0,0.6);">
+      <h2 style="margin:0 0 10px; font-size:22px; color:#eaf2ff;">📅 Set Appointments For</h2>
+      <p style="color:rgba(234,242,255,0.7); font-size:14px; margin:0 0 20px;">Select which team member's Calendly link to use for appointments from this CSV source.</p>
+      
+      <select id="apptSetterSelect" style="width:100%; padding:12px; border-radius:10px; border:1px solid rgba(79,209,197,0.3); background:#0a1a2b; color:#eaf2ff; font-size:14px; font-weight:600; margin-bottom:20px; cursor:pointer;">
+        <option value="">Select a team member...</option>
+      </select>
+      
+      <div style="display:flex; gap:10px; justify-content:flex-end;">
+        <button onclick="cancelApptSetter()" style="padding:10px 20px; border-radius:10px; border:1px solid rgba(255,255,255,0.1); background:rgba(0,0,0,0.3); color:rgba(234,242,255,0.7); font-weight:700; cursor:pointer;">Cancel</button>
+        <button onclick="confirmApptSetter()" style="padding:10px 20px; border-radius:10px; border:1px solid rgba(79,209,197,0.3); background:linear-gradient(180deg, rgba(79,209,197,0.35), rgba(0,0,0,0.18)); color:#eaf2ff; font-weight:700; cursor:pointer;">Continue</button>
+      </div>
+    </div>
+  </div>
+
   <!-- Auth Overlay (Loading/Redirect) -->
   <div class="auth-overlay" id="authOverlay">
     <div class="auth-box" style="text-align:center">
@@ -167,7 +184,6 @@
         </div>
         <div style="display:flex;gap:8px">
           <button class="ghost" onclick="showSourceSelection()">← Back</button>
-          <button class="ghost" onclick="exportLeads()">Export CSV</button>
         </div>
       </div>
       <div class="list-header" id="listHeader"></div>
@@ -241,8 +257,14 @@
 // STATE & CONSTANTS
 // ============================================================
 let currentUser = null;
+// Appointment assignment for LEADDB
+let selectedCalendlyUser = null;
+let allAvailableUsers = [];
+
 let availableSources = [];
 let selectedSource = null;
+let selectedApptSetter = null; // For LEADDB sources - who to set appointments for
+let allTeamMembers = []; // List of all verified users for dropdown
 let leads = [];
 let currentLeadIndex = -1;
 
@@ -521,6 +543,244 @@ function selectSource(index) {
 async function loadSelectedSource() {
   if (!selectedSource) return;
 
+  // For LEADDB sources, show appointment assignment popup first
+  if (selectedSource.type === 'LEADDB') {
+    showAppointmentAssignmentPopup();
+    return;
+  }
+
+  const btn = document.getElementById('loadSourceBtn');
+  btn.textContent = 'Loading...';
+  btn.disabled = true;
+
+  try {
+    await continueLoadingSource();
+  } catch (err) {
+    console.error('[LOAD] Error:', err);
+    toast('Error: ' + err.message);
+  } finally {
+    btn.textContent = 'Load Selected Source';
+    btn.disabled = false;
+  }
+}
+
+// Show appointment assignment popup
+function showAppointmentAssignmentPopup() {
+  const popup = document.createElement('div');
+  popup.id = 'apptPopup';
+  popup.innerHTML = `
+    <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.88); z-index: 10000; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(4px);">
+      <div style="background: linear-gradient(135deg, #0a1a2b, #071423); border: 1px solid rgba(79,209,197,0.35); border-radius: 20px; padding: 32px; max-width: 520px; width: 90%; box-shadow: 0 25px 70px rgba(0,0,0,0.6);">
+        <h2 style="margin: 0 0 8px; color: #4fd1c5; font-size: 26px; font-weight: 900;">📅 Set Appointments For</h2>
+        <p style="color: rgba(234,242,255,0.65); margin: 0 0 24px; font-size: 14px; line-height: 1.5;">Choose whose Calendly link will be used when scheduling appointments from this CSV source.</p>
+        
+        <div style="margin-bottom: 24px;">
+          <input 
+            type="text" 
+            id="userSearchInput" 
+            placeholder="🔍 Search by name..."
+            style="width: 100%; padding: 14px 16px; border-radius: 14px; border: 1px solid rgba(79,209,197,0.35); background: rgba(0,0,0,0.5); color: #eaf2ff; font-size: 15px; margin-bottom: 14px; font-family: inherit;"
+          />
+          <div id="userListContainer" style="max-height: 340px; overflow-y: auto; border: 1px solid rgba(79,209,197,0.25); border-radius: 14px; background: rgba(0,0,0,0.4); min-height: 80px;">
+            <div style="padding: 30px; text-align: center; color: rgba(234,242,255,0.5);">Loading users...</div>
+          </div>
+        </div>
+        
+        <div style="display: flex; gap: 12px;">
+          <button onclick="cancelApptPopup()" style="flex: 1; padding: 14px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.12); background: rgba(0,0,0,0.5); color: rgba(234,242,255,0.8); cursor: pointer; font-weight: 700; font-size: 15px;">Cancel</button>
+          <button id="confirmApptBtn" disabled style="flex: 1; padding: 14px; border-radius: 14px; border: 1px solid rgba(79,209,197,0.4); background: linear-gradient(135deg, rgba(79,209,197,0.4), rgba(79,209,197,0.2)); color: #eaf2ff; cursor: pointer; font-weight: 700; font-size: 15px; opacity: 0.4;">Continue →</button>
+        </div>
+      </div>
+    </div>
+  `;
+  
+  document.body.appendChild(popup);
+  loadUsersForAppointment();
+  
+  document.getElementById('userSearchInput').addEventListener('input', (e) => {
+    filterApptUserList(e.target.value);
+  });
+}
+
+async function loadUsersForAppointment() {
+  try {
+    const response = await fetch(AUTH, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'getAllUsersForDropdown' })
+    });
+    
+    const data = await response.json();
+    
+    if (data.success && data.users) {
+      allAvailableUsers = data.users;
+      renderApptUserList(allAvailableUsers);
+    } else {
+      document.getElementById('userListContainer').innerHTML = '<div style="padding: 24px; text-align: center; color: #ff5a7a;">Failed to load users</div>';
+    }
+  } catch (err) {
+    console.error('Error loading users:', err);
+    document.getElementById('userListContainer').innerHTML = '<div style="padding: 24px; text-align: center; color: #ff5a7a;">Error: ' + err.message + '</div>';
+  }
+}
+
+function renderApptUserList(users) {
+  const container = document.getElementById('userListContainer');
+  
+  if (users.length === 0) {
+    container.innerHTML = '<div style="padding: 24px; text-align: center; color: rgba(234,242,255,0.4);">No users found</div>';
+    return;
+  }
+  
+  container.innerHTML = users.map(user => `
+    <div class="appt-user-item" 
+         data-username="${user.username}" 
+         data-email="${user.email}" 
+         data-calendly="${user.calendlyUrl}" 
+         style="padding: 16px 18px; border-bottom: 1px solid rgba(255,255,255,0.06); cursor: pointer; transition: all 0.15s ease;"
+         onmouseenter="this.style.background='rgba(79,209,197,0.1)'" 
+         onmouseleave="if(!this.classList.contains('selected')) this.style.background='transparent'"
+         onclick="selectApptUser(this)">
+      <div style="font-weight: 800; color: #4fd1c5; margin-bottom: 6px; font-size: 15px;">${user.username}</div>
+      <div style="font-size: 11px; color: rgba(234,242,255,0.45); font-family: monospace;">${user.calendlyUrl}</div>
+    </div>
+  `).join('');
+}
+
+function selectApptUser(element) {
+  document.querySelectorAll('.appt-user-item').forEach(item => {
+    item.classList.remove('selected');
+    item.style.background = 'transparent';
+    item.style.borderLeft = 'none';
+  });
+  
+  element.classList.add('selected');
+  element.style.background = 'rgba(79,209,197,0.18)';
+  element.style.borderLeft = '4px solid #4fd1c5';
+  element.style.paddingLeft = '14px';
+  
+  const confirmBtn = document.getElementById('confirmApptBtn');
+  confirmBtn.disabled = false;
+  confirmBtn.style.opacity = '1';
+  confirmBtn.onclick = () => confirmApptSelection();
+}
+
+function filterApptUserList(searchTerm) {
+  const term = searchTerm.toLowerCase().trim();
+  const filtered = allAvailableUsers.filter(user => 
+    user.username.toLowerCase().includes(term) ||
+    user.email.toLowerCase().includes(term)
+  );
+  renderApptUserList(filtered);
+}
+
+function cancelApptPopup() {
+  const popup = document.getElementById('apptPopup');
+  if (popup) popup.remove();
+  selectedCalendlyUser = null;
+}
+
+async function confirmApptSelection() {
+  const selected = document.querySelector('.appt-user-item.selected');
+  if (!selected) return;
+  
+  selectedCalendlyUser = {
+    username: selected.dataset.username,
+    email: selected.dataset.email,
+    calendlyUrl: selected.dataset.calendly
+  };
+  
+  console.log('[APPT] Assigned:', selectedCalendlyUser);
+  
+  const popup = document.getElementById('apptPopup');
+  if (popup) popup.remove();
+  
+  const btn = document.getElementById('loadSourceBtn');
+  btn.textContent = 'Loading...';
+  btn.disabled = true;
+  
+  try {
+    await continueLoadingSource();
+  } catch (err) {
+    console.error('Error:', err);
+    toast('Error: ' + err.message);
+  } finally {
+    btn.textContent = 'Load Selected Source';
+    btn.disabled = false;
+  }
+}
+
+async function continueLoadingSource() {
+  try {
+    console.log('[LOAD] Loading source:', selectedSource);
+    
+    if (selectedSource.type === 'LEADDB') {
+      const res = await fetch(LEADSDB, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'getLeads', source: selectedSource.name })
+      });
+      const data = await res.json();
+      console.log('[LOAD] LEADDB data:', data);
+      
+      if (Array.isArray(data)) {
+        leads = data.map((row, idx) => {
+          const lead = { ...row };
+          lead.name = row.Name || row.name || row.firstName || row['First Name'] || row.fullName || row['Full Name'] || `Lead ${idx + 1}`;
+          lead.phone = row.Phone || row.phone || row.mobile || row.Mobile || row.cellPhone || row['Cell Phone'] || row.phoneNumber || row['Phone Number'] || '';
+          lead.outcome = row.outcome || row.Outcome || row.status || row.Status || 'Not Contacted';
+          return lead;
+        });
+      } else {
+        leads = [];
+      }
+      
+    } else if (selectedSource.type === 'REFDB') {
+      const res = await fetch(`${REFDB}?user=${encodeURIComponent(selectedSource.name)}`);
+      const data = await res.json();
+      console.log('[LOAD] REFDB data:', data);
+      
+      if (Array.isArray(data)) {
+        const validRefs = data.filter((ref) => {
+          const relation = ref['REF RELATION'] || ref['Ref Relation'] || ref.refRelation || ref.RefRelation || ref.relation || ref.Relation || '';
+          const relationStr = String(relation).toLowerCase().trim();
+          const isRootSponsor = relationStr === 'root/sponsor' || relationStr === 'root' || relationStr === 'sponsor';
+          if (isRootSponsor) console.log('[LOAD] Filtered Root/Sponsor:', ref['REF NAME'] || ref.name);
+          return !isRootSponsor;
+        });
+        
+        console.log(`[LOAD] Filtered ${data.length - validRefs.length} Root/Sponsor, ${validRefs.length} valid`);
+        
+        leads = validRefs.map((ref, idx) => {
+          const lead = { ...ref };
+          lead.name = ref['REF NAME'] || ref['Ref Name'] || ref.refName || ref.RefName || ref.name || ref.Name || `Referral ${idx + 1}`;
+          lead.phone = ref['REF NUMBER'] || ref['Ref Number'] || ref.refNumber || ref.RefNumber || ref['REF PHONE'] || ref.refPhone || ref.phone || ref.Phone || '';
+          lead.relation = ref['REF RELATION'] || ref['Ref Relation'] || ref.refRelation || ref.RefRelation || ref.relation || ref.Relation || '';
+          lead.sponsor = ref['SPONSOR NAME'] || ref['Sponsor Name'] || ref.sponsorName || ref.SponsorName || ref.sponsor || ref.Sponsor || '';
+          lead.sponsorPhone = ref['SPONSOR NUMBER'] || ref['Sponsor Number'] || ref.sponsorNumber || ref.SponsorNumber || ref.sponsorPhone || ref.SponsorPhone || '';
+          lead.outcome = ref.outcome || ref.Outcome || 'Not Contacted';
+          lead.tabOwner = selectedSource.name;
+          return lead;
+        });
+      } else {
+        leads = [];
+      }
+    }
+
+    console.log('[LOAD] Final leads:', leads.length);
+    document.getElementById('sourceTitle').textContent = selectedSource.name;
+    document.getElementById('leadCount').textContent = `(${leads.length} leads)`;
+    renderLeadList();
+    showListView();
+    
+  } catch (err) {
+    console.error('[LOAD] Error:', err);
+    throw err;
+  }
+}
+
+  }
+
   const btn = document.getElementById('loadSourceBtn');
   btn.textContent = 'Loading...';
   btn.disabled = true;
@@ -635,6 +895,15 @@ async function loadSelectedSource() {
           lead.tabOwner = selectedSource.name;
           
           return lead;
+        })
+        // Filter out Root/Sponsor referrals - don't display them
+        .filter(lead => {
+          const relation = String(lead.relation || '').trim().toLowerCase();
+          const isRootSponsor = relation === 'root/sponsor' || relation === 'root' || relation === 'sponsor';
+          if (isRootSponsor) {
+            console.log('[LOAD] Filtering out Root/Sponsor:', lead.name);
+          }
+          return !isRootSponsor;
         });
       } else {
         console.error('[LOAD] REFDB data is not an array:', data);
@@ -701,8 +970,19 @@ function renderLeadList() {
 
 function showListView() {
   document.getElementById('sourceView').classList.add('hidden');
-  document.getElementById('listView').classList.remove('hidden');
   document.getElementById('detailView').classList.add('hidden');
+  document.getElementById('listView').classList.remove('hidden');
+  
+  // Hide Export CSV for LEADDB sources
+  const exportBtn = document.getElementById('exportCSV');
+  if (exportBtn) {
+    if (selectedSource && selectedSource.type === 'LEADDB') {
+      exportBtn.style.display = 'none';
+      console.log('[UI] Export CSV hidden for LEADDB');
+    } else {
+      exportBtn.style.display = 'inline-flex';
+    }
+  }
 }
 
 // ============================================================
@@ -782,28 +1062,34 @@ function openLead(index) {
     sendText.classList.add('disabled');
   }
 
-  // Schedule Appointment button - only for REFDB (referrals)
+    // Schedule Appointment button
   if (selectedSource.type === 'REFDB') {
-    // For referrals: use tab owner's Calendly
     const ownerName = selectedSource.name.toLowerCase().replace(/[^a-z]/g, '');
     const calendlyUrl = `https://calendly.com/${ownerName}-ail/30min`;
     setAppt.onclick = (e) => {
       e.preventDefault();
       const name = encodeURIComponent(lead.name || '');
       const phoneInfo = encodeURIComponent(phone.pretty || lead.phone || '');
-      const finalUrl = `${calendlyUrl}?name=${name}&a3=${phoneInfo}`;
-      window.open(finalUrl, '_blank');
-      toast('Opening Calendly...');
+      window.open(`${calendlyUrl}?name=${name}&a3=${phoneInfo}`, '_blank');
+      toast('Opening Calendly');
     };
     setAppt.classList.remove('disabled');
-  } else {
-    // For LEADDB: placeholder for future update
-    setAppt.onclick = (e) => {
-      e.preventDefault();
-      toast('Appointment scheduling coming soon for CSV leads');
-    };
-    setAppt.classList.add('disabled');
+  } else if (selectedSource.type === 'LEADDB') {
+    if (selectedCalendlyUser && selectedCalendlyUser.calendlyUrl) {
+      setAppt.onclick = (e) => {
+        e.preventDefault();
+        const name = encodeURIComponent(lead.name || '');
+        const phoneInfo = encodeURIComponent(phone.pretty || lead.phone || '');
+        window.open(`${selectedCalendlyUser.calendlyUrl}?name=${name}&a3=${phoneInfo}`, '_blank');
+        toast(`Opening ${selectedCalendlyUser.username}'s Calendly`);
+      };
+      setAppt.classList.remove('disabled');
+    } else {
+      setAppt.onclick = (e) => { e.preventDefault(); toast('No Calendly assigned'); };
+      setAppt.classList.add('disabled');
+    }
   }
+
 
   renderDispositions();
   renderHistory(lead);
@@ -918,6 +1204,93 @@ function toast(msg) {
   el.textContent = msg;
   el.classList.add('show');
   setTimeout(() => el.classList.remove('show'), 2000);
+}
+
+// ============================================================
+// APPOINTMENT SETTER MODAL (for LEADDB sources)
+// ============================================================
+async function fetchAllTeamMembers() {
+  try {
+    const res = await fetch(CFWORKER, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'getAllUsersForDropdown', token: getToken() })
+    });
+    const data = await res.json();
+    
+    if (data.success && data.users) {
+      allTeamMembers = data.users;
+      console.log('[APPT] Loaded team members:', allTeamMembers.length);
+    }
+  } catch (err) {
+    console.error('[APPT] Error loading team members:', err);
+  }
+}
+
+async function showApptSetterModal() {
+  // Load team members if not already loaded
+  if (allTeamMembers.length === 0) {
+    await fetchAllTeamMembers();
+  }
+  
+  // Populate dropdown
+  const select = document.getElementById('apptSetterSelect');
+  select.innerHTML = '<option value="">Select a team member...</option>';
+  
+  allTeamMembers.forEach(member => {
+    const option = document.createElement('option');
+    option.value = JSON.stringify({
+      username: member.username,
+      email: member.email,
+      calendlyUrl: member.calendlyUrl
+    });
+    option.textContent = `${member.username} (${member.email})`;
+    select.appendChild(option);
+  });
+  
+  // Show modal
+  const modal = document.getElementById('apptSetterModal');
+  modal.style.display = 'flex';
+  
+  // Return a promise that resolves when user selects or cancels
+  return new Promise((resolve) => {
+    window._apptSetterResolve = resolve;
+  });
+}
+
+function confirmApptSetter() {
+  const select = document.getElementById('apptSetterSelect');
+  const value = select.value;
+  
+  if (!value) {
+    toast('Please select a team member');
+    return;
+  }
+  
+  selectedApptSetter = JSON.parse(value);
+  console.log('[APPT] Selected:', selectedApptSetter);
+  
+  // Hide modal
+  document.getElementById('apptSetterModal').style.display = 'none';
+  
+  // Resolve the promise
+  if (window._apptSetterResolve) {
+    window._apptSetterResolve(true);
+    window._apptSetterResolve = null;
+  }
+}
+
+function cancelApptSetter() {
+  selectedApptSetter = null;
+  
+  // Hide modal
+  document.getElementById('apptSetterModal').style.display = 'none';
+  
+  // Resolve the promise
+  if (window._apptSetterResolve) {
+    window._apptSetterResolve(false);
+    window._apptSetterResolve = null;
+  }
 }
 
 function exportLeads() {
