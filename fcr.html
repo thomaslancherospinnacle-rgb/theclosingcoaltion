@@ -277,6 +277,10 @@
                         <span class="value" id="userEmail">Loading...</span>
                     </div>
                     <div class="info-row">
+                        <span class="label">Phone:</span>
+                        <span class="value" id="userPhone">Loading...</span>
+                    </div>
+                    <div class="info-row">
                         <span class="label">Company:</span>
                         <span class="value">American Income Life</span>
                     </div>
@@ -334,7 +338,7 @@
                     <h4 style="margin-bottom: 10px; color: #333;">Phone Numbers to Register:</h4>
                     <div id="phoneList">
                         <div class="phone-input">
-                            <input type="text" value="5862246692" placeholder="10-digit phone number">
+                            <input type="text" id="defaultPhone" placeholder="10-digit phone number">
                             <button onclick="removePhone(this)">Remove</button>
                         </div>
                     </div>
@@ -356,6 +360,7 @@
 
     <script>
         const API_URL = 'https://cfworkerapi.thomastcc.workers.dev';
+        let currentUser = null;
 
         // Get user info from cookie
         function getUserFromCookie() {
@@ -373,16 +378,66 @@
             return null;
         }
 
-        // Load user data
+        // Fetch user data from Cloudflare Worker API
+        async function fetchUserFromAPI() {
+            try {
+                const response = await fetch(`${API_URL}?action=validateSession`, {
+                    method: 'GET',
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log('API Response:', data);
+                    
+                    if (data.valid && data.user) {
+                        return data.user;
+                    }
+                }
+            } catch (error) {
+                console.error('Error fetching user from API:', error);
+            }
+            return null;
+        }
+
+        // Load user data from API or cookie
         async function loadUserData() {
-            const user = getUserFromCookie();
+            // Try API first
+            let user = await fetchUserFromAPI();
+            
+            // Fallback to cookie if API fails
+            if (!user) {
+                user = getUserFromCookie();
+            }
+
             if (user) {
+                currentUser = user;
                 document.getElementById('userName').textContent = user.name || 'Not available';
                 document.getElementById('userEmail').textContent = user.email || 'Not available';
+                
+                // Update phone display
+                const userPhoneEl = document.getElementById('userPhone');
+                if (userPhoneEl) {
+                    userPhoneEl.textContent = user.phone || '5862246692';
+                }
+                
+                // Pre-fill first phone number input with user's phone
+                const defaultPhoneInput = document.getElementById('defaultPhone');
+                if (defaultPhoneInput && user.phone) {
+                    defaultPhoneInput.value = user.phone.replace(/\D/g, ''); // Remove non-digits
+                } else if (defaultPhoneInput) {
+                    defaultPhoneInput.value = '5862246692';
+                }
             } else {
                 document.getElementById('userName').textContent = 'Not logged in';
                 document.getElementById('userEmail').textContent = 'Not logged in';
+                document.getElementById('userPhone').textContent = 'Not logged in';
             }
+            
+            return user;
         }
 
         // Phone number management
@@ -419,8 +474,9 @@
         }
 
         // Start the auto-fill process
-        function startProcess() {
-            const user = getUserFromCookie();
+        async function startProcess() {
+            // Make sure we have latest user data
+            const user = await loadUserData();
             
             if (!user) {
                 showStatus('error', 'Please log in first!');
@@ -438,7 +494,9 @@
             btn.disabled = true;
             btn.innerHTML = '<span class="loading"></span>Opening form...';
 
-            // Business data
+            // Business data - use phone from API if available, fallback to default
+            const contactPhone = user.phone || '5862246692';
+            
             const businessInfo = {
                 companyName: 'American Income Life Insurance Company',
                 addressLine1: '1200 Wooded Acres Dr',
@@ -448,11 +506,12 @@
                 zipCode: '26726',
                 website: 'https://www.ailife.com/',
                 contactName: user.name,
-                contactPhone: '5862246692',
+                contactPhone: contactPhone,
                 contactEmail: user.email,
-                callPurpose: 'Financial Services',
+                callPurpose: 'Insurance Services',
+                callCategory: 'Life Insurance - Policy Services & Customer Support',
                 callVolume: '5,001 - 10,000',
-                feedback: 'Scam Likely or Spam Risk',
+                feedback: 'Providing information about life insurance policies, non-forfeiture options, policy benefits, and customer service support to existing policyholders',
                 phoneNumbers: phones
             };
 
@@ -550,11 +609,20 @@
             '#calling_type',
             '[name="callingType"]',
             '[name="callPurpose"]',
-            'select[name="calling_type"]'
+            '[name="callCategory"]',
+            'select[name="calling_type"]',
+            'select#calling_type'
         ];
         
         for (let selector of callPurposeSelectors) {
-            fill(selector, data.callPurpose);
+            if (fill(selector, data.callPurpose)) break;
+        }
+        
+        // Try category field if purpose field didn't work
+        if (data.callCategory) {
+            for (let selector of callPurposeSelectors) {
+                fill(selector, data.callCategory);
+            }
         }
         
         const callVolumeSelectors = [
