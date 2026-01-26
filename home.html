@@ -1,867 +1,701 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Non-Forfeiture Financial — Home</title>
-  <style>
-    :root{
-      --bg1:#071423;
-      --bg2:#0a1a2b;
-      --card: rgba(255,255,255,.06);
-      --card2: rgba(255,255,255,.08);
-      --line: rgba(255,255,255,.10);
-      --text:#eaf2ff;
-      --muted: rgba(234,242,255,.72);
-      --muted2: rgba(234,242,255,.52);
-      --accent:#4fd1c5;
-      --accent2:#2dd4bf;
-      --danger:#ff5a7a;
-      --ok:#22c55e;
-      --shadow: 0 18px 60px rgba(0,0,0,.55);
-      --r:18px;
-      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-      --sans: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
-    }
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0;
-      font-family:var(--sans);
-      color:var(--text);
-      background:
-        radial-gradient(1200px 700px at 20% 20%, rgba(79,209,197,.22), transparent 55%),
-        radial-gradient(1200px 700px at 80% 15%, rgba(45,212,191,.18), transparent 55%),
-        radial-gradient(900px 600px at 70% 80%, rgba(99,102,241,.16), transparent 55%),
-        linear-gradient(180deg, var(--bg1), var(--bg2));
-      min-height:100%;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FCR Complete Auto-Fill</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    /* Top bar */
-    .topbar{
-      position:sticky;
-      top:0;
-      z-index:10;
-      backdrop-filter: blur(12px);
-      background: linear-gradient(180deg, rgba(0,0,0,.35), rgba(0,0,0,.18));
-      border-bottom:1px solid var(--line);
-    }
-    .topbar-inner{
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 14px 18px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:14px;
-    }
-    .brand{
-      display:flex; align-items:center; gap:12px;
-      min-width: 220px;
-    }
-    .dot{
-      width:38px; height:38px;
-      border-radius:12px;
-      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.35), rgba(255,255,255,.06) 42%, rgba(79,209,197,.22) 100%),
-                  linear-gradient(180deg, rgba(79,209,197,.55), rgba(45,212,191,.12));
-      border:1px solid rgba(255,255,255,.14);
-    }
-    .title{font-weight:900; letter-spacing:.2px; line-height:1.05}
-    .sub{font-size:12px; color:var(--muted2); margin-top:2px}
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
 
-    .nav{
-      display:flex;
-      align-items:center;
-      justify-content:flex-end;
-      gap:10px;
-      flex-wrap:wrap;
-    }
-    .nav a, .nav button{
-      text-decoration:none;
-      color: var(--text);
-      font-weight:900;
-      letter-spacing:.2px;
-      padding:10px 12px;
-      border-radius: 14px;
-      border: 1px solid var(--line);
-      background: rgba(0,0,0,.18);
-      cursor:pointer;
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      transition: transform .05s ease, filter .15s ease, border-color .15s ease;
-    }
-    .nav a.primary{
-      background: linear-gradient(180deg, rgba(79,209,197,.35), rgba(0,0,0,.18));
-      border-color: rgba(79,209,197,.30);
-    }
-    .nav a:hover, .nav button:hover{filter:brightness(1.06)}
-    .nav a:active, .nav button:active{transform: translateY(1px)}
-    .pill{
-      font-family: var(--mono);
-      font-size:12px;
-      padding: 8px 10px;
-      border-radius: 999px;
-      border: 1px solid var(--line);
-      background: rgba(0,0,0,.14);
-      color: var(--muted);
-      max-width: 320px;
-      overflow:hidden;
-      text-overflow:ellipsis;
-      white-space:nowrap;
-    }
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+        }
 
-    /* Page */
-    .wrap{
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 22px 18px 40px;
-      display:grid;
-      grid-template-columns: 1fr;
-      gap:16px;
-    }
+        .card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
 
-    .card{
-      background: linear-gradient(180deg, var(--card2), var(--card));
-      border:1px solid var(--line);
-      border-radius: var(--r);
-      box-shadow: var(--shadow);
-      overflow:hidden;
-    }
-    .card .head{
-      padding:16px 16px 12px;
-      border-bottom:1px solid var(--line);
-      display:flex;
-      align-items:flex-start;
-      justify-content:space-between;
-      gap:10px;
-    }
-    .card h2{margin:0; font-size:16px; font-weight:900}
-    .card .body{padding:16px}
-    .muted{color:var(--muted); font-size:13px; line-height:1.55}
-    
-    .grid{
-      display:grid;
-      grid-template-columns:1fr;
-      gap:12px;
-    }
-    @media (min-width: 560px){
-      .grid{grid-template-columns: 1fr 1fr;}
-    }
-    
-    .grid3{
-      display:grid;
-      grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));
-      gap:12px;
-    }
-    
-    .tile{
-      border:1px solid var(--line);
-      background: rgba(0,0,0,.14);
-      border-radius: 14px;
-      padding:14px;
-      display:flex;
-      flex-direction:column;
-      gap:6px;
-    }
-    .tile .k{font-weight:900; font-size:12px; color:var(--muted2); text-transform: uppercase; letter-spacing:.5px}
-    .tile .v{font-family:var(--mono); font-size:20px; font-weight:900; color:var(--text)}
-    .tile .hint{font-size:11px; color:var(--muted2); margin-top:4px}
-    
-    .status-badge{
-      padding:10px 14px;
-      border-radius:12px;
-      font-weight:900;
-      font-size:14px;
-      text-align:center;
-      margin:12px 0;
-    }
-    .status-badge.ready{
-      background: linear-gradient(180deg, rgba(34,197,94,.25), rgba(34,197,94,.08));
-      border:1px solid rgba(34,197,94,.4);
-      color: rgba(220,255,233,.95);
-    }
-    .status-badge.borderline{
-      background: linear-gradient(180deg, rgba(79,209,197,.25), rgba(79,209,197,.08));
-      border:1px solid rgba(79,209,197,.4);
-      color: rgba(220,255,253,.95);
-    }
-    .status-badge.wait{
-      background: linear-gradient(180deg, rgba(251,191,36,.25), rgba(251,191,36,.08));
-      border:1px solid rgba(251,191,36,.4);
-      color: rgba(254,252,232,.95);
-    }
-    .status-badge.notready{
-      background: linear-gradient(180deg, rgba(255,90,122,.25), rgba(255,90,122,.08));
-      border:1px solid rgba(255,90,122,.4);
-      color: rgba(255,220,228,.95);
-    }
-    .status-badge.nodata{
-      background: rgba(0,0,0,.14);
-      border:1px solid var(--line);
-      color: var(--muted);
-    }
-    
-    .ctaRow{display:flex; gap:10px; flex-wrap:wrap; margin-top:10px}
-    .ctaRow a, .ctaRow button{
-      text-decoration:none;
-      color:var(--text);
-      font-weight:900;
-      padding:12px 16px;
-      border-radius: 14px;
-      border:1px solid rgba(79,209,197,.28);
-      background: linear-gradient(180deg, rgba(79,209,197,.35), rgba(0,0,0,.18));
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      cursor:pointer;
-      transition: transform .05s ease, filter .15s ease;
-    }
-    .ctaRow a:hover, .ctaRow button:hover{filter:brightness(1.06)}
-    .ctaRow a:active, .ctaRow button:active{transform: translateY(1px)}
-    .ctaRow a.secondary, .ctaRow button.secondary{
-      border:1px solid var(--line);
-      background: rgba(0,0,0,.18);
-      color: var(--muted);
-    }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
 
-    .msg{
-      display:none;
-      padding:12px;
-      border-radius: 14px;
-      border:1px solid var(--line);
-      background: rgba(0,0,0,.14);
-      color: var(--muted);
-      margin-top:10px;
-    }
-    .msg.show{display:block}
-    .msg.err{border-color: rgba(255,90,122,.35); color: rgba(255,220,228,.92)}
-    
-    select{
-      font-family: var(--sans);
-      font-weight:700;
-      padding:10px 12px;
-      border-radius: 12px;
-      border:1px solid var(--line);
-      background: rgb(22 26 43);
-      color: var(--text);
-      cursor:pointer;
-      font-size:14px;
-    }
-    select:focus{
-      outline:none;
-      border-color: var(--accent);
-    }
-    
-    .attempts-table{
-      width:100%;
-      border-collapse: collapse;
-      margin-top:12px;
-      font-size:12px;
-    }
-    .attempts-table th{
-      text-align:left;
-      padding:8px 6px;
-      border-bottom:1px solid var(--line);
-      font-weight:900;
-      color:var(--muted2);
-      font-size:11px;
-      text-transform: uppercase;
-      letter-spacing:.5px;
-    }
-    .attempts-table td{
-      padding:8px 6px;
-      border-bottom:1px solid rgba(255,255,255,.04);
-      font-family: var(--mono);
-    }
-    .attempts-table tr:hover{
-      background: rgba(255,255,255,.02);
-    }
-    
-    .loading{
-      text-align:center;
-      padding:20px;
-      color:var(--muted2);
-      font-size:13px;
-    }
-  </style>
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .info-box {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 25px;
+            border-left: 4px solid #667eea;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .info-row:last-child {
+            border-bottom: none;
+        }
+
+        .label {
+            font-weight: 600;
+            color: #666;
+        }
+
+        .value {
+            color: #333;
+        }
+
+        .steps-container {
+            margin: 25px 0;
+        }
+
+        .step {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px 20px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .step-number {
+            width: 35px;
+            height: 35px;
+            background: #667eea;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .step.manual {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+        }
+
+        .step.manual .step-number {
+            background: #ffc107;
+        }
+
+        .step.auto {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+        }
+
+        .step.auto .step-number {
+            background: #28a745;
+        }
+
+        .step-content h4 {
+            margin: 0 0 5px 0;
+            color: #333;
+            font-size: 16px;
+        }
+
+        .step-content p {
+            margin: 0;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 10px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+
+        .btn-secondary:hover {
+            background: #f0f0ff;
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .alert-info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+
+        .alert-warning {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+
+        .status {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 6px;
+            display: none;
+        }
+
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 8px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .phone-numbers {
+            margin-top: 20px;
+        }
+
+        .phone-input {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .phone-input input {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .phone-input button {
+            padding: 12px 20px;
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .add-phone-btn {
+            padding: 10px;
+            background: #28a745;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            width: 100%;
+        }
+    </style>
 </head>
 <body>
-<!-- Auth Loading Overlay -->
-<div id="authOverlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, #071423, #0a1a2b); z-index: 10000; display: flex; align-items: center; justify-content: center; flex-direction: column;">
-  <div style="text-align: center;">
-    <div style="font-size: 48px; margin-bottom: 20px;">🔒</div>
-    <div style="font-size: 24px; font-weight: bold; margin-bottom: 10px; color: #eaf2ff;">Securing Connection...</div>
-    <div id="authStatus" style="font-size: 14px; color: #4fd1c5; min-height: 20px;"></div>
-  </div>
-</div>
+    <div class="container">
+        <div class="card">
+            <div class="header">
+                <h1>📞 Free Caller Registry</h1>
+                <p>Complete Auto-Fill System</p>
+            </div>
 
+            <div class="content">
+                <div class="info-box">
+                    <h3 style="margin-top: 0; color: #333;">Your Information</h3>
+                    <div class="info-row">
+                        <span class="label">Name:</span>
+                        <span class="value" id="userName">Loading...</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">Email:</span>
+                        <span class="value" id="userEmail">Loading...</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">Company:</span>
+                        <span class="value">American Income Life</span>
+                    </div>
+                </div>
 
+                <div class="alert alert-warning">
+                    <strong>⚠️ Note:</strong> Email verification is required and cannot be automated. You'll need to manually enter the verification code from your email.
+                </div>
 
-  <header class="topbar">
-    <div class="topbar-inner">
-      <div class="brand">
-        <div class="dot"></div>
-        <div>
-          <div class="title">Non-Forfeiture Financial</div>
-          <div class="sub">Home</div>
+                <div class="steps-container">
+                    <h3 style="margin-bottom: 15px; color: #333;">Process Overview:</h3>
+                    
+                    <div class="step auto">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h4>✅ Email Entry (Auto)</h4>
+                            <p>System will fill your email</p>
+                        </div>
+                    </div>
+
+                    <div class="step manual">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h4>👤 Verification Code (Manual)</h4>
+                            <p>Check email and enter 5-digit code</p>
+                        </div>
+                    </div>
+
+                    <div class="step auto">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h4>✅ Business Info (Auto)</h4>
+                            <p>13 fields auto-filled</p>
+                        </div>
+                    </div>
+
+                    <div class="step auto">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <h4>✅ Phone Numbers (Auto)</h4>
+                            <p>Your configured numbers added</p>
+                        </div>
+                    </div>
+
+                    <div class="step auto">
+                        <div class="step-number">5</div>
+                        <div class="step-content">
+                            <h4>✅ Submit (Auto)</h4>
+                            <p>Terms accepted & form submitted</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="phone-numbers">
+                    <h4 style="margin-bottom: 10px; color: #333;">Phone Numbers to Register:</h4>
+                    <div id="phoneList">
+                        <div class="phone-input">
+                            <input type="text" value="5862246692" placeholder="10-digit phone number">
+                            <button onclick="removePhone(this)">Remove</button>
+                        </div>
+                    </div>
+                    <button class="add-phone-btn" onclick="addPhone()">+ Add Phone Number</button>
+                </div>
+
+                <button class="btn btn-primary" id="startBtn" onclick="startProcess()">
+                    🚀 Start Auto-Fill Process
+                </button>
+
+                <button class="btn btn-secondary" onclick="window.open('https://freecallerregistry.com/fcr/', '_blank')">
+                    🔗 Open Form Manually
+                </button>
+
+                <div class="status" id="status"></div>
+            </div>
         </div>
-      </div>
-
-      <div class="nav">
-        <span id="userEmail" class="pill">—</span>
-        <a class="primary" href="exam.html">Exam</a>
-        <a class="primary" href="dictionary.html">Dictionary</a>
-        <a class="primary" href="caller/leadbase.html">Caller</a>
-        <a class="primary" href="refferal.html">Refferal</a>
-        <a class="primary" href="pipeline.html">Pipeline</a>
-        <a class="primary" href="fcr.html">Register Number</a>
-        <button id="btnLogout">Logout</button>
-      </div>
     </div>
-  </header>
 
-  <main class="wrap">
+    <script>
+        const API_URL = 'https://cfworkerapi.thomastcc.workers.dev';
 
-    <!-- Phone Number Input (shown only if no phone) -->
-    <section id="phoneSection" class="card" style="display:none">
-      <div class="head">
-        <h2>📱 Enter Phone Number</h2>
-      </div>
-      <div class="body">
-        <p class="muted" style="margin-bottom:12px">Add your phone number to receive SMS notifications and exam reminders.</p>
-        <div style="display:flex;gap:10px;align-items:flex-start;flex-wrap:wrap">
-          <input 
-            type="tel" 
-            id="phoneInput" 
-            placeholder="(555) 555-5555"
-            style="flex:1;min-width:200px;font-family:var(--sans);font-weight:700;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:rgb(22 26 43);color:var(--text);font-size:14px"
-          />
-          <button 
-            id="savePhoneBtn" 
-            onclick="savePhoneNumber()"
-            style="padding:12px 20px;border-radius:12px;border:1px solid rgba(79,209,197,.28);background:linear-gradient(180deg,rgba(79,209,197,.35),rgba(0,0,0,.18));color:var(--text);font-weight:900;cursor:pointer;font-size:14px"
-          >
-            Save Phone Number
-          </button>
-        </div>
-        <div id="phoneMsg" class="msg"></div>
-      </div>
-    </section>
+        // Get user info from cookie
+        function getUserFromCookie() {
+            const cookies = document.cookie.split(';');
+            for (let cookie of cookies) {
+                const [name, value] = cookie.trim().split('=');
+                if (name === 'user') {
+                    try {
+                        return JSON.parse(decodeURIComponent(value));
+                    } catch (e) {
+                        return null;
+                    }
+                }
+            }
+            return null;
+        }
 
-    <!-- Exam Readiness Dashboard -->
-    <section class="card">
-      <div class="head">
-        <h2>📊 Exam Readiness</h2>
-          <div style="display:flex;gap:8px;align-items:center">
-            <select id="examSelect" style="padding:6px 10px;font-size:12px">
-              <option value="MI">Michigan</option>
-              <option value="TN">Tennessee</option>
-            </select>
-            <button id="refreshBtn" class="secondary" style="padding:6px 12px;font-size:12px;border:1px solid var(--line);background:rgba(0,0,0,.18);color:var(--muted);border-radius:10px;cursor:pointer;font-weight:900">Refresh</button>
-          </div>
-      </div>
-      <div class="body">
-        <div id="readinessContent" class="loading">Loading readiness data...</div>
-      </div>
-    </section>
+        // Load user data
+        async function loadUserData() {
+            const user = getUserFromCookie();
+            if (user) {
+                document.getElementById('userName').textContent = user.name || 'Not available';
+                document.getElementById('userEmail').textContent = user.email || 'Not available';
+            } else {
+                document.getElementById('userName').textContent = 'Not logged in';
+                document.getElementById('userEmail').textContent = 'Not logged in';
+            }
+        }
 
-    <!-- Quick Actions & State Resources -->
-    <section class="card">
-      <div class="head">
-        <h2>Quick Actions</h2>
-      </div>
-      <div class="body">
-        <div class="ctaRow">
-          <a class="primary" href="exam.html">Start Practice Exam</a>
-          <a class="primary" href="dictionary.html">Study Dictionary</a>
-          <a class="primary" href="caller/leadbase.html">Open Caller</a>
-        </div>
+        // Phone number management
+        function addPhone() {
+            const phoneList = document.getElementById('phoneList');
+            const newInput = document.createElement('div');
+            newInput.className = 'phone-input';
+            newInput.innerHTML = `
+                <input type="text" placeholder="10-digit phone number" maxlength="10">
+                <button onclick="removePhone(this)">Remove</button>
+            `;
+            phoneList.appendChild(newInput);
+        }
 
-        <div style="margin-top:20px;padding-top:20px;border-top:1px solid var(--line)">
-          <div style="font-weight:900;margin-bottom:10px">📚 Get Exam Prep Course</div>
-          <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
-            <select id="stateSelect" style="flex:1;min-width:200px">
-              <option value="">Select your state...</option>
-              <option value="alabama">Alabama</option>
-              <option value="alaska">Alaska</option>
-              <option value="arizona">Arizona</option>
-              <option value="arkansas">Arkansas</option>
-              <option value="california">California</option>
-              <option value="colorado">Colorado</option>
-              <option value="connecticut">Connecticut</option>
-              <option value="delaware">Delaware</option>
-              <option value="florida">Florida</option>
-              <option value="georgia">Georgia</option>
-              <option value="hawaii">Hawaii</option>
-              <option value="idaho">Idaho</option>
-              <option value="illinois">Illinois</option>
-              <option value="indiana">Indiana</option>
-              <option value="iowa">Iowa</option>
-              <option value="kansas">Kansas</option>
-              <option value="kentucky">Kentucky</option>
-              <option value="louisiana">Louisiana</option>
-              <option value="maine">Maine</option>
-              <option value="maryland">Maryland</option>
-              <option value="massachusetts">Massachusetts</option>
-              <option value="michigan">Michigan</option>
-              <option value="minnesota">Minnesota</option>
-              <option value="mississippi">Mississippi</option>
-              <option value="missouri">Missouri</option>
-              <option value="montana">Montana</option>
-              <option value="nebraska">Nebraska</option>
-              <option value="nevada">Nevada</option>
-              <option value="new-hampshire">New Hampshire</option>
-              <option value="new-jersey">New Jersey</option>
-              <option value="new-mexico">New Mexico</option>
-              <option value="new-york">New York</option>
-              <option value="north-carolina">North Carolina</option>
-              <option value="north-dakota">North Dakota</option>
-              <option value="ohio">Ohio</option>
-              <option value="oklahoma">Oklahoma</option>
-              <option value="oregon">Oregon</option>
-              <option value="pennsylvania">Pennsylvania</option>
-              <option value="rhode-island">Rhode Island</option>
-              <option value="south-carolina">South Carolina</option>
-              <option value="south-dakota">South Dakota</option>
-              <option value="tennessee">Tennessee</option>
-              <option value="texas">Texas</option>
-              <option value="utah">Utah</option>
-              <option value="vermont">Vermont</option>
-              <option value="virginia">Virginia</option>
-              <option value="washington">Washington</option>
-              <option value="west-virginia">West Virginia</option>
-              <option value="wisconsin">Wisconsin</option>
-              <option value="wyoming">Wyoming</option>
-            </select>
-            <a id="xcelLink" href="#" target="_blank" style="display:none;padding:10px 16px;text-decoration:none;font-weight:900;border-radius:12px;background:linear-gradient(180deg, rgba(79,209,197,.35), rgba(0,0,0,.18));border:1px solid rgba(79,209,197,.3);color:var(--text)">Get Xcel Course →</a>
-          </div>
-        </div>
+        function removePhone(btn) {
+            const phoneInputs = document.querySelectorAll('.phone-input');
+            if (phoneInputs.length > 1) {
+                btn.parentElement.remove();
+            } else {
+                alert('At least one phone number is required');
+            }
+        }
 
-        <div id="msg" class="msg"></div>
-      </div>
-    </section>
+        function getPhoneNumbers() {
+            const inputs = document.querySelectorAll('.phone-input input');
+            const phones = [];
+            inputs.forEach(input => {
+                const value = input.value.trim().replace(/\D/g, '');
+                if (value.length === 10) {
+                    phones.push(value);
+                }
+            });
+            return phones;
+        }
 
-  </main>
+        // Start the auto-fill process
+        function startProcess() {
+            const user = getUserFromCookie();
+            
+            if (!user) {
+                showStatus('error', 'Please log in first!');
+                return;
+            }
 
-<script>
-  /**********************
-   * CONFIG
-   **********************/
-  const API_URL = "https://closing-coalition-api.thomaslancheros06.workers.dev";
+            const phones = getPhoneNumbers();
+            if (phones.length === 0) {
+                showStatus('error', 'Please add at least one valid 10-digit phone number');
+                return;
+            }
 
-  // Update auth status message
-  function updateAuthStatus(message) {
-    const statusEl = document.getElementById('authStatus');
-    if (statusEl) statusEl.textContent = message;
-  }
+            const btn = document.getElementById('startBtn');
+            const originalHTML = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = '<span class="loading"></span>Opening form...';
 
-  // Hide the auth overlay
-  function hideAuthOverlay() {
-    const overlay = document.getElementById('authOverlay');
-    if (overlay) {
-      overlay.style.opacity = '0';
-      overlay.style.transition = 'opacity 0.3s ease';
-      setTimeout(() => {
-        overlay.style.display = 'none';
-      }, 300);
-    }
-  }
-  const LS_TOKEN = "cc_token";
-  const LS_EXPIRES = "cc_expires_at";
+            // Business data
+            const businessInfo = {
+                companyName: 'American Income Life Insurance Company',
+                addressLine1: '1200 Wooded Acres Dr',
+                addressLine2: '',
+                city: 'Waco',
+                state: 'Texas',
+                zipCode: '26726',
+                website: 'https://www.ailife.com/',
+                contactName: user.name,
+                contactPhone: '5862246692',
+                contactEmail: user.email,
+                callPurpose: 'Insurance Services',
+                callCategory: 'Life Insurance - Policy Services & Customer Support',
+                callVolume: '5,001 - 10,000',
+                feedback: 'Providing information about life insurance policies, non-forfeiture options, policy benefits, and customer service support to existing policyholders',
+                phoneNumbers: phones
+            };
 
-  const $ = (id) => document.getElementById(id);
-
-  function setMsg(type, text){
-    const el = $("msg");
-    el.className = "msg show" + (type === "err" ? " err" : "");
-    el.textContent = text || "";
-  }
-  function clearMsg(){
-    const el = $("msg");
-    el.className = "msg";
-    el.textContent = "";
-  }
-
-  function getToken(){ return localStorage.getItem(LS_TOKEN) || ""; }
-  function getExpires(){ return localStorage.getItem(LS_EXPIRES) || ""; }
-
-  async function api(action, payload){
-    const res = await fetch(`${API_URL}/${action}`, {
-      method: "POST",
-      headers: { "Content-Type":"application/json" },
-      body: JSON.stringify(payload)
-    });
-    const text = await res.text();
-    let data;
-    try { data = JSON.parse(text); }
-    catch { throw new Error(text || "Invalid response"); }
-
-    if (!data || data.ok !== true){
-      const err = (data && (data.error || data.detail)) ? (data.error + (data.detail ? ` — ${data.detail}` : "")) : "Request failed";
-      throw new Error(err);
-    }
-    return data;
-  }
-
-  function logoutLocal(){
-    localStorage.removeItem(LS_TOKEN);
-    localStorage.removeItem(LS_EXPIRES);
-  }
-
-  function goLogin(){
-    window.location.href = "/login.html";
-  }
-
-  $("btnLogout").addEventListener("click", async () => {
-    clearMsg();
-    const token = getToken();
-    try{
-      if (token) { await api("logout", { token }).catch(()=>{}); }
-    } finally {
-      logoutLocal();
-      goLogin();
-    }
-  });
-
-  /**********************
-   * STATE SELECTOR & XCEL LINK
-   **********************/
-  const stateSelect = $("stateSelect");
-  const xcelLink = $("xcelLink");
-
-  stateSelect.addEventListener("change", () => {
-    const state = stateSelect.value;
-    if (state) {
-      xcelLink.href = `https://partners.xcelsolutions.com/${state}/insurance-license/life?partner=ariasevanson`;
-      xcelLink.style.display = "inline-flex";
-    } else {
-      xcelLink.style.display = "none";
-    }
-  });
-
-  /**********************
-   * PHONE NUMBER MANAGEMENT
-   **********************/
-  let userHasPhone = false;
-
-  // Auto-format phone number as user types
-  const phoneInput = $("phoneInput");
-  if (phoneInput) {
-    phoneInput.addEventListener("input", (e) => {
-      let value = e.target.value.replace(/\D/g, "");
-      if (value.length > 10) value = value.substring(0, 10);
-      
-      if (value.length >= 6) {
-        e.target.value = `(${value.substring(0,3)}) ${value.substring(3,6)}-${value.substring(6)}`;
-      } else if (value.length >= 3) {
-        e.target.value = `(${value.substring(0,3)}) ${value.substring(3)}`;
-      } else {
-        e.target.value = value;
-      }
-    });
-  }
-
-  // Check if user has phone number
-  async function checkUserPhone() {
-    try {
-      const token = getToken();
-      // Call a new API endpoint to get user profile
-      const response = await api("getUserProfile", { token });
-      
-      if (response.ok && response.phone && response.phone.trim().length >= 10) {
-        userHasPhone = true;
-        $("phoneSection").style.display = "none";
-      } else {
-        userHasPhone = false;
-        $("phoneSection").style.display = "block";
-      }
-    } catch (e) {
-      // If API doesn't exist yet, hide section for now
-      console.log("Phone check not available:", e);
-      $("phoneSection").style.display = "none";
-    }
-  }
-
-  // Save phone number
-  async function savePhoneNumber() {
-    const phone = $("phoneInput").value.trim();
-    const phoneDigits = phone.replace(/\D/g, "");
+            // Create comprehensive auto-fill script
+            const autoFillScript = `
+(function() {
+    const data = ${JSON.stringify(businessInfo)};
+    let currentStep = 1;
     
-    if (!phone) {
-      showPhoneMsg("Please enter a phone number", "err");
-      return;
+    console.log('FCR Auto-Fill Started');
+    console.log('Data:', data);
+    
+    function fill(selector, value) {
+        const el = document.querySelector(selector);
+        if (el) {
+            el.value = value;
+            el.dispatchEvent(new Event('input', { bubbles: true }));
+            el.dispatchEvent(new Event('change', { bubbles: true }));
+            el.dispatchEvent(new Event('blur', { bubbles: true }));
+            console.log('Filled:', selector, 'with:', value);
+            return true;
+        }
+        return false;
     }
     
-    if (phoneDigits.length < 10) {
-      showPhoneMsg("Phone number must be at least 10 digits", "err");
-      return;
+    function click(selector) {
+        const el = document.querySelector(selector);
+        if (el) {
+            el.click();
+            console.log('Clicked:', selector);
+            return true;
+        }
+        return false;
     }
     
-    const btn = $("savePhoneBtn");
-    btn.disabled = true;
-    btn.textContent = "Saving...";
+    function check(selector) {
+        const el = document.querySelector(selector);
+        if (el && !el.checked) {
+            el.checked = true;
+            el.dispatchEvent(new Event('change', { bubbles: true }));
+            console.log('Checked:', selector);
+            return true;
+        }
+        return false;
+    }
     
-    try {
-      const token = getToken();
-      const response = await api("updatePhone", { token, phone });
-      
-      if (response.ok) {
-        showPhoneMsg("✅ Phone number saved successfully!", "");
+    // STEP 1: Fill email and prepare for verification
+    function step1() {
+        console.log('=== STEP 1: Email Entry ===');
+        fill('#enterprise_contact_verification_email', data.contactEmail);
+        fill('[name="contactEmail"]', data.contactEmail);
+        
+        alert('✅ Email filled!\\n\\nNext steps:\\n1. Click "Send Verification Code"\\n2. Check your email\\n3. Enter the 5-digit code\\n4. Click "Verify and Continue"\\n5. The rest will auto-fill!');
+    }
+    
+    // STEP 3: Fill all business information
+    function step3() {
+        console.log('=== STEP 3: Business Information ===');
+        
+        // Business details
+        fill('#enterprise_company_name', data.companyName);
+        fill('[name="companyName"]', data.companyName);
+        
+        fill('#enterprise_company_address_line_1', data.addressLine1);
+        fill('[name="companyAddressLine1"]', data.addressLine1);
+        
+        fill('#enterprise_company_address_line_2', data.addressLine2);
+        fill('[name="companyAddressLine2"]', data.addressLine2);
+        
+        fill('#enterprise_company_city', data.city);
+        fill('[name="companyCity"]', data.city);
+        
+        fill('#enterprise_company_state', data.state);
+        fill('[name="companyState"]', data.state);
+        fill('select[name="companyState"]', data.state);
+        
+        fill('#enterprise_company_zip', data.zipCode);
+        fill('[name="companyZip"]', data.zipCode);
+        
+        fill('#enterprise_company_website', data.website);
+        fill('[name="companyWebsite"]', data.website);
+        
+        // Contact information
+        fill('#enterprise_contact_name', data.contactName);
+        fill('[name="contactName"]', data.contactName);
+        
+        fill('#enterprise_contact_phone', data.contactPhone);
+        fill('[name="contactPhone"]', data.contactPhone);
+        
+        fill('#enterprise_contact_email', data.contactEmail);
+        fill('[name="contactEmail"]', data.contactEmail);
+        
+        // Calling habits
+        const callPurposeSelectors = [
+            '#calling_type',
+            '[name="callingType"]',
+            '[name="callPurpose"]',
+            '[name="callCategory"]',
+            'select[name="calling_type"]',
+            'select#calling_type'
+        ];
+        
+        for (let selector of callPurposeSelectors) {
+            if (fill(selector, data.callPurpose)) break;
+        }
+        
+        // Try category field if purpose field didn't work
+        if (data.callCategory) {
+            for (let selector of callPurposeSelectors) {
+                fill(selector, data.callCategory);
+            }
+        }
+        
+        const callVolumeSelectors = [
+            '#calling_volume',
+            '[name="callingVolume"]',
+            '[name="callVolume"]',
+            'select[name="calling_volume"]'
+        ];
+        
+        for (let selector of callVolumeSelectors) {
+            fill(selector, data.callVolume);
+        }
+        
+        // Optional feedback
+        fill('[name="feedback"]', data.feedback);
+        fill('textarea[name="feedback"]', data.feedback);
+        
         setTimeout(() => {
-          $("phoneSection").style.display = "none";
-          userHasPhone = true;
-        }, 1500);
-      } else {
-        throw new Error(response.error || "Failed to save phone");
-      }
-    } catch (e) {
-      console.error("Error saving phone:", e);
-      showPhoneMsg("❌ " + e.message, "err");
-      btn.disabled = false;
-      btn.textContent = "Save Phone Number";
+            alert('✅ Business information filled!\\n\\nClick "Continue to Next Step" to proceed.');
+        }, 500);
     }
-  }
-
-  function showPhoneMsg(text, type) {
-    const msg = $("phoneMsg");
-    msg.textContent = text;
-    msg.className = "msg show" + (type === "err" ? " err" : "");
-    if (!type) {
-      setTimeout(() => {
-        msg.className = "msg";
-      }, 3000);
-    }
-  }
-
-  /**********************
-   * READINESS DASHBOARD
-   **********************/
-  async function loadReadinessData() {
-    const exam = $("examSelect").value;
-    const contentEl = $("readinessContent");
     
-    contentEl.innerHTML = '<div class="loading">Loading readiness data...</div>';
-    
-    try {
-      const data = await api("getExamMetrics", {
-        token: getToken(),
-        exam: exam
-      });
-      
-      if (!data.ok) throw new Error(data.error || "Failed to load");
-      
-      renderReadiness(data);
-    } catch(e) {
-      console.error("Failed to load readiness:", e);
-      contentEl.innerHTML = `
-        <div style="text-align:center;padding:20px;color:var(--muted2)">
-          <div style="font-size:16px;margin-bottom:8px">📭 No exam data yet</div>
-          <div style="font-size:13px">Take a practice exam to see your readiness metrics!</div>
-        </div>
-      `;
-    }
-  }
-
-  function renderReadiness(data) {
-    const contentEl = $("readinessContent");
-    const latest = data.latest || {};
-    const attempts = data.attempts || [];
-    
-    // Determine status class
-    const status = latest.readiness_status || "NO DATA";
-    let statusClass = "nodata";
-    if (status === "READY") statusClass = "ready";
-    else if (status === "BORDERLINE") statusClass = "borderline";
-    else if (status === "WAIT") statusClass = "wait";
-    else if (status.includes("NOT READY")) statusClass = "notready";
-    
-    // Status explanations
-    const statusExplanations = {
-      "READY": "You're ready to pass! Your scores and speed are excellent.",
-      "BORDERLINE": "You're close! A bit more practice will get you ready.",
-      "WAIT": "Keep practicing. You need higher scores before taking the real exam.",
-      "NOT READY (TIME)": "You're too slow. Practice speed to finish within time limits.",
-      "NOT READY (DOMAIN)": "Weak domain detected. Study your weakest areas more.",
-      "NO DATA": "No exam attempts recorded yet. Take a practice exam to start!"
-    };
-    
-    const explanation = statusExplanations[status] || "Take more practice exams to improve your readiness.";
-    
-    // Render
-    let html = `
-      <!-- Status Badge -->
-      <div class="status-badge ${statusClass}">
-        <div style="font-size:16px;margin-bottom:4px">${status}</div>
-        <div style="font-size:12px;opacity:.85">${explanation}</div>
-      </div>
-    `;
-    
-    if (latest.readiness_score_pct !== undefined && latest.readiness_score_pct > 0) {
-      html += `
-        <!-- Key Metrics -->
-        <div class="grid3" style="margin-top:16px">
-          <div class="tile">
-            <div class="k">Recent Score</div>
-            <div class="v">${latest.last_score_pct.toFixed(1)}%</div>
-            <div class="hint">Latest exam result</div>
-          </div>
-          <div class="tile">
-            <div class="k">3-Exam Average</div>
-            <div class="v">${latest.last3_avg_pct.toFixed(1)}%</div>
-            <div class="hint">Consistency metric</div>
-          </div>
-          <div class="tile">
-            <div class="k">Weakest Domain</div>
-            <div class="v">${latest.last_domain_low_pct.toFixed(1)}%</div>
-            <div class="hint">Lowest topic score</div>
-          </div>
-          <div class="tile">
-            <div class="k">Time/Question</div>
-            <div class="v">${latest.last_time_per_q_sec.toFixed(1)}s</div>
-            <div class="hint">Average speed</div>
-          </div>
-          <div class="tile">
-            <div class="k">Readiness Score</div>
-            <div class="v">${latest.readiness_score_pct.toFixed(1)}%</div>
-            <div class="hint">Pass probability</div>
-          </div>
-          <div class="tile">
-            <div class="k">Last Attempt</div>
-            <div class="v">${formatDate(latest.last_attempt_at)}</div>
-            <div class="hint">Most recent</div>
-          </div>
-        </div>
+    // STEP 4: Fill phone numbers
+    function step4() {
+        console.log('=== STEP 4: Phone Numbers ===');
         
-        <!-- Understanding Your Metrics -->
-        <div style="margin-top:20px;padding:14px;border-radius:12px;background:rgba(0,0,0,.14);border:1px solid var(--line)">
-          <div style="font-weight:900;margin-bottom:10px;font-size:13px">📖 Understanding Your Metrics</div>
-          <div style="font-size:12px;color:var(--muted);line-height:1.6">
-            <div style="margin-bottom:6px"><strong>Readiness Score</strong> = Your probability of passing (0.5×Recent + 0.3×Average + 0.2×Weakest)</div>
-            <div style="margin-bottom:6px"><strong>Recent Score</strong> = Your last exam performance</div>
-            <div style="margin-bottom:6px"><strong>3-Exam Average</strong> = Consistency across your last 3 attempts</div>
-            <div style="margin-bottom:6px"><strong>Weakest Domain</strong> = Your lowest-scoring topic area</div>
-            <div><strong>Time/Question</strong> = Must be ≤69s (60s + 15% buffer) to pass time gate</div>
-          </div>
-        </div>
-      `;
-      
-      if (attempts.length > 0) {
-        html += `
-          <!-- Recent Attempts -->
-          <div style="margin-top:20px">
-            <div style="font-weight:900;margin-bottom:10px;font-size:13px">📜 Last ${Math.min(attempts.length, 10)} Attempts</div>
-            <table class="attempts-table">
-              <thead>
-                <tr>
-                  <th>Date</th>
-                  <th>Score</th>
-                  <th>Domain</th>
-                  <th>Time/Q</th>
-                  <th>CRS</th>
-                  <th>Status</th>
-                </tr>
-              </thead>
-              <tbody>
-        `;
+        // Try to find phone number input fields
+        const phoneInputs = document.querySelectorAll('input[type="tel"], input[placeholder*="phone"], input[name*="phone"]');
         
-        attempts.forEach(a => {
-          const statusShort = a.readiness_status.replace("NOT READY (", "").replace(")", "").substring(0, 10);
-          html += `
-            <tr>
-              <td>${formatDate(a.timestamp)}</td>
-              <td>${a.total_score_pct.toFixed(0)}%</td>
-              <td>${a.domain_low_pct.toFixed(0)}%</td>
-              <td>${a.time_per_q_sec.toFixed(1)}s</td>
-              <td>${a.readiness_score_pct.toFixed(0)}%</td>
-              <td style="color:${getStatusColor(a.readiness_status)}">${statusShort}</td>
-            </tr>
-          `;
+        data.phoneNumbers.forEach((phone, index) => {
+            if (phoneInputs[index]) {
+                phoneInputs[index].value = phone;
+                phoneInputs[index].dispatchEvent(new Event('input', { bubbles: true }));
+                phoneInputs[index].dispatchEvent(new Event('change', { bubbles: true }));
+            }
         });
         
-        html += `
-              </tbody>
-            </table>
-          </div>
-        `;
-      }
-    } else {
-      html += `
-        <div style="text-align:center;padding:30px 20px;color:var(--muted2)">
-          <div style="font-size:48px;margin-bottom:12px">📝</div>
-          <div style="font-size:16px;font-weight:900;margin-bottom:8px">No exam attempts yet</div>
-          <div style="font-size:13px">Take your first practice exam to start tracking your readiness!</div>
-          <div style="margin-top:16px">
-            <a href="exam.html" style="display:inline-flex;padding:12px 20px;background:linear-gradient(180deg, rgba(79,209,197,.35), rgba(0,0,0,.18));border:1px solid rgba(79,209,197,.3);border-radius:14px;color:var(--text);text-decoration:none;font-weight:900">Start Practice Exam →</a>
-          </div>
-        </div>
-      `;
+        setTimeout(() => {
+            alert('✅ Phone numbers added!\\n\\nClick "Continue to Final Step" to review.');
+        }, 500);
     }
     
-    contentEl.innerHTML = html;
-  }
-
-  function formatDate(isoString) {
-    if (!isoString) return "—";
-    const d = new Date(isoString);
-    const now = new Date();
-    const diffMs = now - d;
-    const diffMins = Math.floor(diffMs / 60000);
-    const diffHours = Math.floor(diffMs / 3600000);
-    const diffDays = Math.floor(diffMs / 86400000);
-    
-    if (diffMins < 60) return `${diffMins}m ago`;
-    if (diffHours < 24) return `${diffHours}h ago`;
-    if (diffDays < 7) return `${diffDays}d ago`;
-    
-    return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-  }
-
-  function getStatusColor(status) {
-    if (status === "READY") return "var(--ok)";
-    if (status === "BORDERLINE") return "var(--accent)";
-    if (status.includes("NOT READY")) return "var(--danger)";
-    return "var(--muted2)";
-  }
-
-  // Event listeners
-
-
-  // Protect page: must have valid token
-// Protect page: must have valid token
-  (async () => {
-    const token = getToken();
-    const exp = getExpires();
-
-    if (!token){
-      goLogin();
-      return;
+    // STEP 5: Accept terms and submit
+    function step5() {
+        console.log('=== STEP 5: Terms & Submit ===');
+        
+        // Find and check all checkboxes
+        const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+        checkboxes.forEach(cb => {
+            if (!cb.checked) {
+                cb.checked = true;
+                cb.dispatchEvent(new Event('change', { bubbles: true }));
+            }
+        });
+        
+        setTimeout(() => {
+            alert('✅ Terms accepted!\\n\\nReview the information and click "Submit Your Registration" when ready.');
+        }, 500);
     }
-
-    try{
-      updateAuthStatus("Verifying session...");
-      const me = await api("me", { token });
-      // success
-      $("userEmail").textContent = me.loginEmail || "—";
-      updateAuthStatus("Loading your data...");
-      hideAuthOverlay();
-      
-      // Check if user has phone number
-      await checkUserPhone();
-      
-      // Load readiness data
-      await loadReadinessData();
-      
-      // Event listeners (MOVE THEM HERE)
-      $("examSelect").addEventListener("change", loadReadinessData);
-      $("refreshBtn").addEventListener("click", loadReadinessData);
-    } catch (e){
-      // token invalid/expired
-      logoutLocal();
-      setMsg("err", "Session expired. Please log in again.");
-      setTimeout(goLogin, 600);
+    
+    // Detect current step and auto-fill
+    function detectAndFill() {
+        const url = window.location.href;
+        const currentSection = document.querySelector('.current');
+        
+        if (document.querySelector('#enterprise_contact_verification_email')) {
+            step1();
+        } else if (document.querySelector('#enterprise_company_name')) {
+            step3();
+        } else if (document.querySelector('[placeholder*="phone"]') || url.includes('phone')) {
+            step4();
+        } else if (document.querySelector('input[type="checkbox"]')) {
+            step5();
+        } else {
+            step1(); // Default to step 1
+        }
     }
-  })();
-</script>
+    
+    // Start auto-fill
+    setTimeout(detectAndFill, 1000);
+    
+    // Add button to re-run for next step
+    const controlPanel = document.createElement('div');
+    controlPanel.style.cssText = 'position: fixed; bottom: 20px; right: 20px; background: #667eea; color: white; padding: 15px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); z-index: 999999;';
+    controlPanel.innerHTML = '<strong>FCR Auto-Fill Active</strong><br><button onclick="location.reload()" style="margin-top:10px; padding:8px 15px; background:white; color:#667eea; border:none; border-radius:5px; cursor:pointer; font-weight:600;">Refresh Auto-Fill</button>';
+    document.body.appendChild(controlPanel);
+    
+})();
+`;
+
+            // Open form
+            const formWindow = window.open('https://freecallerregistry.com/fcr/', 'fcr_form', 'width=1200,height=900');
+            
+            if (!formWindow) {
+                showStatus('error', 'Pop-up blocked! Please allow pop-ups for this site.');
+                btn.disabled = false;
+                btn.innerHTML = originalHTML;
+                return;
+            }
+
+            // Try to inject script
+            setTimeout(() => {
+                try {
+                    const script = formWindow.document.createElement('script');
+                    script.textContent = autoFillScript;
+                    formWindow.document.head.appendChild(script);
+                    showStatus('success', '✅ Form opened! Auto-fill will start in 1 second. Follow the on-screen instructions.');
+                } catch (e) {
+                    console.log('Cross-origin restriction:', e);
+                    showStatus('success', '✅ Form opened in new window. Auto-fill active.');
+                }
+                
+                btn.disabled = false;
+                btn.innerHTML = originalHTML;
+            }, 2000);
+        }
+
+        // Show status message
+        function showStatus(type, message) {
+            const status = document.getElementById('status');
+            status.className = `status ${type}`;
+            status.textContent = message;
+            status.style.display = 'block';
+            
+            setTimeout(() => {
+                status.style.display = 'none';
+            }, 8000);
+        }
+
+        // Initialize
+        window.addEventListener('DOMContentLoaded', loadUserData);
+    </script>
 </body>
 </html>
