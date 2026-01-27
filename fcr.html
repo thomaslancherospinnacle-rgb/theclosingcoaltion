@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FCR Complete Auto-Fill</title>
+    <title>FCR Auto-Fill - Bookmarklet Setup</title>
     <style>
         * {
             margin: 0;
@@ -19,7 +19,7 @@
         }
 
         .container {
-            max-width: 700px;
+            max-width: 800px;
             margin: 0 auto;
         }
 
@@ -75,110 +75,98 @@
             color: #333;
         }
 
-        .steps-container {
-            margin: 25px 0;
-        }
-
-        .step {
+        .bookmarklet-zone {
             background: #f8f9fa;
-            border-radius: 8px;
-            padding: 15px 20px;
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
+            border: 3px dashed #667eea;
+            border-radius: 12px;
+            padding: 40px;
+            text-align: center;
+            margin: 30px 0;
         }
 
-        .step-number {
+        .bookmarklet-button {
+            display: inline-block;
+            padding: 20px 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 20px;
+            font-weight: 600;
+            cursor: move;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .bookmarklet-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        .instruction {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+
+        .steps {
+            list-style: none;
+            counter-reset: step-counter;
+        }
+
+        .steps li {
+            counter-increment: step-counter;
+            margin-bottom: 20px;
+            padding-left: 50px;
+            position: relative;
+            line-height: 1.6;
+        }
+
+        .steps li::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: 0;
+            top: 0;
             width: 35px;
             height: 35px;
-            background: #667eea;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: bold;
-            flex-shrink: 0;
-        }
-
-        .step.manual {
-            background: #fff3cd;
-            border-left: 4px solid #ffc107;
-        }
-
-        .step.manual .step-number {
-            background: #ffc107;
-        }
-
-        .step.auto {
-            background: #d4edda;
-            border-left: 4px solid #28a745;
-        }
-
-        .step.auto .step-number {
-            background: #28a745;
-        }
-
-        .step-content h4 {
-            margin: 0 0 5px 0;
-            color: #333;
-            font-size: 16px;
-        }
-
-        .step-content p {
-            margin: 0;
-            color: #666;
-            font-size: 14px;
         }
 
         .btn {
-            width: 100%;
-            padding: 16px;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-bottom: 10px;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 12px 24px;
+            background: #667eea;
             color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
         }
 
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
-        }
-
-        .btn-secondary {
-            background: white;
-            color: #667eea;
-            border: 2px solid #667eea;
-        }
-
-        .btn-secondary:hover {
-            background: #f0f0ff;
-        }
-
-        .btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
+        .btn:hover {
+            background: #5568d3;
+            transform: translateY(-1px);
         }
 
         .alert {
             padding: 15px;
             border-radius: 8px;
-            margin-bottom: 20px;
+            margin: 15px 0;
         }
 
-        .alert-info {
-            background: #d1ecf1;
-            color: #0c5460;
-            border: 1px solid #bee5eb;
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
         }
 
         .alert-warning {
@@ -187,73 +175,17 @@
             border: 1px solid #ffeaa7;
         }
 
-        .status {
-            margin-top: 15px;
-            padding: 12px;
-            border-radius: 6px;
-            display: none;
+        .alert-info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
         }
 
-        .status.success {
-            background: #d4edda;
-            color: #155724;
-        }
-
-        .status.error {
-            background: #f8d7da;
-            color: #721c24;
-        }
-
-        .loading {
-            display: inline-block;
-            width: 16px;
-            height: 16px;
-            border: 3px solid rgba(255,255,255,.3);
-            border-radius: 50%;
-            border-top-color: white;
-            animation: spin 1s ease-in-out infinite;
-            margin-right: 8px;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        .phone-numbers {
-            margin-top: 20px;
-        }
-
-        .phone-input {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 10px;
-        }
-
-        .phone-input input {
-            flex: 1;
-            padding: 12px;
-            border: 2px solid #e0e0e0;
-            border-radius: 6px;
-            font-size: 14px;
-        }
-
-        .phone-input button {
-            padding: 12px 20px;
-            background: #dc3545;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-        }
-
-        .add-phone-btn {
-            padding: 10px;
-            background: #28a745;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            width: 100%;
+        code {
+            background: #f8f9fa;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
         }
     </style>
 </head>
@@ -261,8 +193,8 @@
     <div class="container">
         <div class="card">
             <div class="header">
-                <h1>📞 Free Caller Registry</h1>
-                <p>Complete Auto-Fill System</p>
+                <h1>📞 FCR Auto-Fill Bookmarklet</h1>
+                <p>One-Click Solution for Cross-Origin Auto-Fill</p>
             </div>
 
             <div class="content">
@@ -286,571 +218,183 @@
                     </div>
                 </div>
 
-                <div class="alert alert-warning">
-                    <strong>⚠️ Note:</strong> Email verification is required and cannot be automated. You'll need to manually enter the verification code from your email.
+                <div class="alert alert-info">
+                    <strong>💡 Why a bookmarklet?</strong> Browser security prevents us from auto-filling forms on different domains. A bookmarklet runs directly on the form page, bypassing this restriction.
                 </div>
 
-                <div class="steps-container">
-                    <h3 style="margin-bottom: 15px; color: #333;">Process Overview:</h3>
-                    
-                    <div class="step auto">
-                        <div class="step-number">1</div>
-                        <div class="step-content">
-                            <h4>✅ Email Entry (Auto)</h4>
-                            <p>System will fill your email</p>
-                        </div>
-                    </div>
-
-                    <div class="step manual">
-                        <div class="step-number">2</div>
-                        <div class="step-content">
-                            <h4>👤 Verification Code (Manual)</h4>
-                            <p>Check email and enter 5-digit code</p>
-                        </div>
-                    </div>
-
-                    <div class="step auto">
-                        <div class="step-number">3</div>
-                        <div class="step-content">
-                            <h4>✅ Business Info (Auto)</h4>
-                            <p>13 fields auto-filled</p>
-                        </div>
-                    </div>
-
-                    <div class="step auto">
-                        <div class="step-number">4</div>
-                        <div class="step-content">
-                            <h4>✅ Phone Numbers (Auto)</h4>
-                            <p>Your configured numbers added</p>
-                        </div>
-                    </div>
-
-                    <div class="step auto">
-                        <div class="step-number">5</div>
-                        <div class="step-content">
-                            <h4>✅ Submit (Auto)</h4>
-                            <p>Terms accepted & form submitted</p>
-                        </div>
-                    </div>
+                <div class="bookmarklet-zone">
+                    <p style="margin-bottom: 20px; color: #666; font-size: 16px;">
+                        <strong>⬇️ Drag this button to your bookmarks bar:</strong>
+                    </p>
+                    <a href="" id="bookmarkletLink" class="bookmarklet-button" onclick="alert('Please DRAG this button to your bookmarks bar instead of clicking it!'); return false;">
+                        🔮 FCR Auto-Fill
+                    </a>
+                    <p style="margin-top: 20px; color: #999; font-size: 14px;">
+                        (Don't click - drag to bookmarks bar!)
+                    </p>
                 </div>
 
-                <div class="phone-numbers">
-                    <h4 style="margin-bottom: 10px; color: #333;">Phone Numbers to Register:</h4>
-                    <div id="phoneList">
-                        <div class="phone-input">
-                            <input type="text" id="defaultPhone" placeholder="10-digit phone number">
-                            <button onclick="removePhone(this)">Remove</button>
-                        </div>
-                    </div>
-                    <button class="add-phone-btn" onclick="addPhone()">+ Add Phone Number</button>
+                <div class="instruction">
+                    <strong>⚠️ Important:</strong> Make sure you're logged into The Closing Coalition before using the bookmarklet!
                 </div>
 
-                <button class="btn btn-primary" id="startBtn" onclick="startProcess()">
-                    🚀 Start Auto-Fill Process
-                </button>
+                <h3 style="margin-bottom: 15px; color: #333;">📋 How to Use:</h3>
+                <ol class="steps">
+                    <li><strong>Drag the button above</strong> to your browser's bookmarks bar (the bar below the address bar)</li>
+                    <li><strong>Go to</strong> <code>https://freecallerregistry.com/fcr/</code></li>
+                    <li><strong>Click the "FCR Auto-Fill" bookmark</strong> in your bookmarks bar</li>
+                    <li><strong>The form will auto-fill</strong> with your information instantly!</li>
+                    <li><strong>Enter the email verification code</strong> manually when prompted</li>
+                    <li><strong>Continue through the form</strong> - everything else auto-fills automatically!</li>
+                </ol>
 
-                <button class="btn btn-secondary" onclick="window.open('https://freecallerregistry.com/fcr/', '_blank')">
-                    🔗 Open Form Manually
-                </button>
+                <h3 style="margin: 30px 0 15px 0; color: #333;">🎯 What Gets Auto-Filled:</h3>
+                <ul style="line-height: 2; color: #666; margin-left: 20px;">
+                    <li>✅ Your email address (Step 1)</li>
+                    <li>✅ All business information (Step 3)</li>
+                    <li>✅ Your contact details (name, phone, email)</li>
+                    <li>✅ Phone numbers to register</li>
+                    <li>✅ Terms acceptance checkboxes (Step 5)</li>
+                </ul>
 
-                <div class="status" id="status"></div>
+                <div class="alert alert-warning" style="margin-top: 30px;">
+                    <strong>🔒 Can't see the bookmarks bar?</strong><br>
+                    • Chrome/Edge: Press <code>Ctrl+Shift+B</code> (Windows) or <code>Cmd+Shift+B</code> (Mac)<br>
+                    • Firefox: Right-click the top bar → Check "Bookmarks Toolbar"<br>
+                    • Safari: View menu → Show Favorites Bar
+                </div>
+
+                <div style="margin-top: 30px; text-align: center;">
+                    <button class="btn" onclick="testBookmarklet()">🧪 Test Bookmarklet Code</button>
+                    <button class="btn" onclick="location.reload()" style="background: #6c757d; margin-left: 10px;">🔄 Refresh Data</button>
+                </div>
             </div>
         </div>
     </div>
 
     <script>
-        const API_URL = 'https://cfworkerapi.thomastcc.workers.dev';
-        let currentUser = null;
+        const API_URL = 'https://closing-coalition-api.thomaslancheros06.workers.dev/';
 
-        // Get user info from cookie (fallback method)
-        function getUserFromCookie() {
-            // First try localStorage (your system uses this)
+        // Get user data from storage
+        async function loadUserData() {
             try {
+                // Try localStorage
                 const lsUsername = localStorage.getItem('cc_username');
                 const lsEmail = localStorage.getItem('adminEmail');
+                const lsPhone = localStorage.getItem('userPhone');
                 const lsToken = localStorage.getItem('cc_token');
-                
+
                 if (lsUsername || lsEmail) {
-                    console.log('Found user data in localStorage');
-                    const userData = {
-                        name: lsUsername || '',
-                        email: lsEmail || '',
-                        token: lsToken || ''
-                    };
+                    document.getElementById('userName').textContent = lsUsername || 'Not available';
+                    document.getElementById('userEmail').textContent = lsEmail || 'Not available';
+                    document.getElementById('userPhone').textContent = lsPhone || '5862246692';
                     
-                    // Store token globally if found
-                    if (userData.token) {
-                        window.userToken = userData.token;
-                    }
-                    
-                    return userData;
+                    generateBookmarklet(lsUsername, lsEmail, lsPhone || '5862246692');
+                    return;
                 }
-            } catch (e) {
-                console.log('localStorage not accessible:', e);
-            }
-            
-            // Fallback to cookie
-            const cookies = document.cookie.split(';');
-            for (let cookie of cookies) {
-                const [name, value] = cookie.trim().split('=');
-                if (name === 'user') {
-                    try {
-                        const userData = JSON.parse(decodeURIComponent(value));
-                        console.log('Found user in cookie:', userData);
-                        
-                        // If user object has a token, store it globally
-                        if (userData.token) {
-                            window.userToken = userData.token;
+
+                // Try API
+                const token = getToken();
+                if (token) {
+                    const response = await fetch(`${API_URL}/me`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ token })
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        if (data.ok) {
+                            document.getElementById('userName').textContent = data.username || 'Not available';
+                            document.getElementById('userEmail').textContent = data.loginEmail || 'Not available';
+                            document.getElementById('userPhone').textContent = data.phone || '5862246692';
+                            
+                            generateBookmarklet(data.username, data.loginEmail, data.phone || '5862246692');
+                            return;
                         }
-                        
-                        return userData;
-                    } catch (e) {
-                        console.error('Error parsing user cookie:', e);
-                        return null;
                     }
                 }
-            }
-            return null;
-        }
 
-        // Get token from cookie - check multiple possible names
-        function getTokenFromCookie() {
-            const cookies = document.cookie.split(';');
-            console.log('All cookies:', document.cookie);
-            
-            // Try different possible cookie names (cc_token is used by Closing Coalition)
-            const possibleNames = ['cc_token', 'session_token', 'token', 'auth_token', 'closing_coalition_token'];
-            
-            for (let cookie of cookies) {
-                const [name, value] = cookie.trim().split('=');
-                console.log('Checking cookie:', name);
-                
-                if (possibleNames.includes(name)) {
-                    console.log('Found token in cookie:', name);
-                    return decodeURIComponent(value);
-                }
-            }
-            
-            // Also check localStorage
-            try {
-                const lsToken = localStorage.getItem('cc_token');
-                if (lsToken) {
-                    console.log('Found token in localStorage: cc_token');
-                    return lsToken;
-                }
-            } catch (e) {
-                console.log('localStorage not accessible:', e);
-            }
-            
-            console.warn('No auth token found in cookies or localStorage. Available cookies:', cookies.map(c => c.split('=')[0].trim()));
-            return null;
-        }
-
-        // Fetch user data from Cloudflare Worker API
-        async function fetchUserFromAPI() {
-            try {
-                // Get token from cookie or window object
-                let token = getTokenFromCookie();
-                
-                // Fallback: check if token was stored in window by getUserFromCookie
-                if (!token && window.userToken) {
-                    token = window.userToken;
-                    console.log('Using token from window object');
-                }
-                
-                if (!token) {
-                    console.log('No token found in cookie or window');
-                    return null;
-                }
-
-                console.log('Making API call to /me with token');
-
-                // Call /me endpoint with token
-                const response = await fetch(`${API_URL}/me`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ token: token })
-                });
-
-                console.log('API response status:', response.status);
-
-                if (response.ok) {
-                    const data = await response.json();
-                    console.log('API /me Response:', data);
-                    
-                    if (data.ok && data.loginEmail) {
-                        // Extract username from login email or use provided username
-                        const username = data.username || data.loginEmail.split('.')[0].replace(/ail@gmail\.com$/, '');
-                        
-                        return {
-                            name: username,
-                            email: data.loginEmail,
-                            phone: data.phone || '',
-                            callingFor: data.callingFor || '',
-                            calendlyUrl: data.calendlyUrl || '',
-                            assignedTabs: data.assignedTabs || []
-                        };
-                    } else {
-                        console.error('API returned ok but no user data:', data);
-                    }
-                } else {
-                    console.error('API request failed:', response.status, await response.text());
-                }
-            } catch (error) {
-                console.error('Error fetching user from API:', error);
-            }
-            return null;
-        }
-
-        // Load user data from API or cookie
-        async function loadUserData() {
-            // Try API first
-            let user = await fetchUserFromAPI();
-            
-            // Fallback to cookie if API fails
-            if (!user) {
-                user = getUserFromCookie();
-            }
-
-            if (user) {
-                currentUser = user;
-                document.getElementById('userName').textContent = user.name || 'Not available';
-                document.getElementById('userEmail').textContent = user.email || 'Not available';
-                
-                // Update phone display
-                const userPhoneEl = document.getElementById('userPhone');
-                if (userPhoneEl) {
-                    userPhoneEl.textContent = user.phone || '5862246692';
-                }
-                
-                // Pre-fill first phone number input with user's phone
-                const defaultPhoneInput = document.getElementById('defaultPhone');
-                if (defaultPhoneInput && user.phone) {
-                    defaultPhoneInput.value = user.phone.replace(/\D/g, ''); // Remove non-digits
-                } else if (defaultPhoneInput) {
-                    defaultPhoneInput.value = '5862246692';
-                }
-            } else {
+                // Fallback
                 document.getElementById('userName').textContent = 'Not logged in';
                 document.getElementById('userEmail').textContent = 'Not logged in';
                 document.getElementById('userPhone').textContent = 'Not logged in';
-            }
-            
-            return user;
-        }
-
-        // Phone number management
-        function addPhone() {
-            const phoneList = document.getElementById('phoneList');
-            const newInput = document.createElement('div');
-            newInput.className = 'phone-input';
-            newInput.innerHTML = `
-                <input type="text" placeholder="10-digit phone number" maxlength="10">
-                <button onclick="removePhone(this)">Remove</button>
-            `;
-            phoneList.appendChild(newInput);
-        }
-
-        function removePhone(btn) {
-            const phoneInputs = document.querySelectorAll('.phone-input');
-            if (phoneInputs.length > 1) {
-                btn.parentElement.remove();
-            } else {
-                alert('At least one phone number is required');
-            }
-        }
-
-        function getPhoneNumbers() {
-            const inputs = document.querySelectorAll('.phone-input input');
-            const phones = [];
-            inputs.forEach(input => {
-                const value = input.value.trim().replace(/\D/g, '');
-                if (value.length === 10) {
-                    phones.push(value);
-                }
-            });
-            return phones;
-        }
-
-        // Start the auto-fill process
-        async function startProcess() {
-            // Make sure we have latest user data
-            const user = await loadUserData();
-            
-            if (!user) {
-                showStatus('error', 'Please log in first!');
-                return;
-            }
-
-            const phones = getPhoneNumbers();
-            if (phones.length === 0) {
-                showStatus('error', 'Please add at least one valid 10-digit phone number');
-                return;
-            }
-
-            const btn = document.getElementById('startBtn');
-            const originalHTML = btn.innerHTML;
-            btn.disabled = true;
-            btn.innerHTML = '<span class="loading"></span>Opening form...';
-
-            // Business data - use phone from API if available, fallback to default
-            const contactPhone = user.phone || '5862246692';
-            
-            const businessInfo = {
-                companyName: 'American Income Life Insurance Company',
-                addressLine1: '1200 Wooded Acres Dr',
-                addressLine2: '',
-                city: 'Waco',
-                state: 'Texas',
-                zipCode: '26726',
-                website: 'https://www.ailife.com/',
-                contactName: user.name,
-                contactPhone: contactPhone,
-                contactEmail: user.email,
-                callPurpose: 'Insurance Services',
-                callCategory: 'Life Insurance - Policy Services & Customer Support',
-                callVolume: '5,001 - 10,000',
-                feedback: 'Providing information about life insurance policies, non-forfeiture options, policy benefits, and customer service support to existing policyholders',
-                phoneNumbers: phones
-            };
-
-            // Create comprehensive auto-fill script
-            const autoFillScript = `
-(function() {
-    const data = ${JSON.stringify(businessInfo)};
-    let currentStep = 1;
-    
-    console.log('FCR Auto-Fill Started');
-    console.log('Data:', data);
-    
-    function fill(selector, value) {
-        const el = document.querySelector(selector);
-        if (el) {
-            el.value = value;
-            el.dispatchEvent(new Event('input', { bubbles: true }));
-            el.dispatchEvent(new Event('change', { bubbles: true }));
-            el.dispatchEvent(new Event('blur', { bubbles: true }));
-            console.log('Filled:', selector, 'with:', value);
-            return true;
-        }
-        return false;
-    }
-    
-    function click(selector) {
-        const el = document.querySelector(selector);
-        if (el) {
-            el.click();
-            console.log('Clicked:', selector);
-            return true;
-        }
-        return false;
-    }
-    
-    function check(selector) {
-        const el = document.querySelector(selector);
-        if (el && !el.checked) {
-            el.checked = true;
-            el.dispatchEvent(new Event('change', { bubbles: true }));
-            console.log('Checked:', selector);
-            return true;
-        }
-        return false;
-    }
-    
-    // STEP 1: Fill email and prepare for verification
-    function step1() {
-        console.log('=== STEP 1: Email Entry ===');
-        fill('#enterprise_contact_verification_email', data.contactEmail);
-        fill('[name="contactEmail"]', data.contactEmail);
-        
-        alert('✅ Email filled!\\n\\nNext steps:\\n1. Click "Send Verification Code"\\n2. Check your email\\n3. Enter the 5-digit code\\n4. Click "Verify and Continue"\\n5. The rest will auto-fill!');
-    }
-    
-    // STEP 3: Fill all business information
-    function step3() {
-        console.log('=== STEP 3: Business Information ===');
-        
-        // Business details
-        fill('#enterprise_company_name', data.companyName);
-        fill('[name="companyName"]', data.companyName);
-        
-        fill('#enterprise_company_address_line_1', data.addressLine1);
-        fill('[name="companyAddressLine1"]', data.addressLine1);
-        
-        fill('#enterprise_company_address_line_2', data.addressLine2);
-        fill('[name="companyAddressLine2"]', data.addressLine2);
-        
-        fill('#enterprise_company_city', data.city);
-        fill('[name="companyCity"]', data.city);
-        
-        fill('#enterprise_company_state', data.state);
-        fill('[name="companyState"]', data.state);
-        fill('select[name="companyState"]', data.state);
-        
-        fill('#enterprise_company_zip', data.zipCode);
-        fill('[name="companyZip"]', data.zipCode);
-        
-        fill('#enterprise_company_website', data.website);
-        fill('[name="companyWebsite"]', data.website);
-        
-        // Contact information
-        fill('#enterprise_contact_name', data.contactName);
-        fill('[name="contactName"]', data.contactName);
-        
-        fill('#enterprise_contact_phone', data.contactPhone);
-        fill('[name="contactPhone"]', data.contactPhone);
-        
-        fill('#enterprise_contact_email', data.contactEmail);
-        fill('[name="contactEmail"]', data.contactEmail);
-        
-        // Calling habits
-        const callPurposeSelectors = [
-            '#calling_type',
-            '[name="callingType"]',
-            '[name="callPurpose"]',
-            '[name="callCategory"]',
-            'select[name="calling_type"]',
-            'select#calling_type'
-        ];
-        
-        for (let selector of callPurposeSelectors) {
-            if (fill(selector, data.callPurpose)) break;
-        }
-        
-        // Try category field if purpose field didn't work
-        if (data.callCategory) {
-            for (let selector of callPurposeSelectors) {
-                fill(selector, data.callCategory);
-            }
-        }
-        
-        const callVolumeSelectors = [
-            '#calling_volume',
-            '[name="callingVolume"]',
-            '[name="callVolume"]',
-            'select[name="calling_volume"]'
-        ];
-        
-        for (let selector of callVolumeSelectors) {
-            fill(selector, data.callVolume);
-        }
-        
-        // Optional feedback
-        fill('[name="feedback"]', data.feedback);
-        fill('textarea[name="feedback"]', data.feedback);
-        
-        setTimeout(() => {
-            alert('✅ Business information filled!\\n\\nClick "Continue to Next Step" to proceed.');
-        }, 500);
-    }
-    
-    // STEP 4: Fill phone numbers
-    function step4() {
-        console.log('=== STEP 4: Phone Numbers ===');
-        
-        // Try to find phone number input fields
-        const phoneInputs = document.querySelectorAll('input[type="tel"], input[placeholder*="phone"], input[name*="phone"]');
-        
-        data.phoneNumbers.forEach((phone, index) => {
-            if (phoneInputs[index]) {
-                phoneInputs[index].value = phone;
-                phoneInputs[index].dispatchEvent(new Event('input', { bubbles: true }));
-                phoneInputs[index].dispatchEvent(new Event('change', { bubbles: true }));
-            }
-        });
-        
-        setTimeout(() => {
-            alert('✅ Phone numbers added!\\n\\nClick "Continue to Final Step" to review.');
-        }, 500);
-    }
-    
-    // STEP 5: Accept terms and submit
-    function step5() {
-        console.log('=== STEP 5: Terms & Submit ===');
-        
-        // Find and check all checkboxes
-        const checkboxes = document.querySelectorAll('input[type="checkbox"]');
-        checkboxes.forEach(cb => {
-            if (!cb.checked) {
-                cb.checked = true;
-                cb.dispatchEvent(new Event('change', { bubbles: true }));
-            }
-        });
-        
-        setTimeout(() => {
-            alert('✅ Terms accepted!\\n\\nReview the information and click "Submit Your Registration" when ready.');
-        }, 500);
-    }
-    
-    // Detect current step and auto-fill
-    function detectAndFill() {
-        const url = window.location.href;
-        const currentSection = document.querySelector('.current');
-        
-        if (document.querySelector('#enterprise_contact_verification_email')) {
-            step1();
-        } else if (document.querySelector('#enterprise_company_name')) {
-            step3();
-        } else if (document.querySelector('[placeholder*="phone"]') || url.includes('phone')) {
-            step4();
-        } else if (document.querySelector('input[type="checkbox"]')) {
-            step5();
-        } else {
-            step1(); // Default to step 1
-        }
-    }
-    
-    // Start auto-fill
-    setTimeout(detectAndFill, 1000);
-    
-    // Add button to re-run for next step
-    const controlPanel = document.createElement('div');
-    controlPanel.style.cssText = 'position: fixed; bottom: 20px; right: 20px; background: #667eea; color: white; padding: 15px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); z-index: 999999;';
-    controlPanel.innerHTML = '<strong>FCR Auto-Fill Active</strong><br><button onclick="location.reload()" style="margin-top:10px; padding:8px 15px; background:white; color:#667eea; border:none; border-radius:5px; cursor:pointer; font-weight:600;">Refresh Auto-Fill</button>';
-    document.body.appendChild(controlPanel);
-    
-})();
-`;
-
-            // Open form
-            const formWindow = window.open('https://freecallerregistry.com/fcr/', 'fcr_form', 'width=1200,height=900');
-            
-            if (!formWindow) {
-                showStatus('error', 'Pop-up blocked! Please allow pop-ups for this site.');
-                btn.disabled = false;
-                btn.innerHTML = originalHTML;
-                return;
-            }
-
-            // Try to inject script
-            setTimeout(() => {
-                try {
-                    const script = formWindow.document.createElement('script');
-                    script.textContent = autoFillScript;
-                    formWindow.document.head.appendChild(script);
-                    showStatus('success', '✅ Form opened! Auto-fill will start in 1 second. Follow the on-screen instructions.');
-                } catch (e) {
-                    console.log('Cross-origin restriction:', e);
-                    showStatus('success', '✅ Form opened in new window. Auto-fill active.');
-                }
                 
-                btn.disabled = false;
-                btn.innerHTML = originalHTML;
-            }, 2000);
+                generateBookmarklet('', '', '5862246692');
+
+            } catch (error) {
+                console.error('Error loading user data:', error);
+                document.getElementById('userName').textContent = 'Error loading';
+                document.getElementById('userEmail').textContent = 'Error loading';
+                document.getElementById('userPhone').textContent = 'Error loading';
+                
+                generateBookmarklet('', '', '5862246692');
+            }
         }
 
-        // Show status message
-        function showStatus(type, message) {
-            const status = document.getElementById('status');
-            status.className = `status ${type}`;
-            status.textContent = message;
-            status.style.display = 'block';
+        // Get token
+        function getToken() {
+            try {
+                const lsToken = localStorage.getItem('cc_token');
+                if (lsToken) return lsToken;
+            } catch (e) {}
+
+            const cookies = document.cookie.split(';');
+            for (let cookie of cookies) {
+                const [name, value] = cookie.trim().split('=');
+                if (name === 'cc_token') {
+                    return decodeURIComponent(value);
+                }
+            }
+            return null;
+        }
+
+        // Generate bookmarklet
+        function generateBookmarklet(username, email, phone) {
+            const script = `
+(function(){
+const d={
+companyName:'American Income Life Insurance Company',
+addressLine1:'1200 Wooded Acres Dr',
+addressLine2:'',
+city:'Waco',
+state:'Texas',
+zipCode:'26726',
+website:'https://www.ailife.com/',
+contactName:'${username || 'Thomas Lancheros'}',
+contactPhone:'${phone || '5862246692'}',
+contactEmail:'${email || 'thomaslancheros.ail@gmail.com'}',
+callPurpose:'Insurance Services',
+callCategory:'Life Insurance - Policy Services & Customer Support',
+callVolume:'5,001 - 10,000',
+feedback:'Providing information about life insurance policies, non-forfeiture options, policy benefits, and customer service support to existing policyholders',
+phoneNumbers:['${phone || '5862246692'}']
+};
+function f(s,v){const e=document.querySelector(s);if(e){e.value=v;e.dispatchEvent(new Event('input',{bubbles:true}));e.dispatchEvent(new Event('change',{bubbles:true}));e.dispatchEvent(new Event('blur',{bubbles:true}));return true}return false}
+function step1(){console.log('Step 1: Email');f('#enterprise_contact_verification_email',d.contactEmail);f('[name="contactEmail"]',d.contactEmail);setTimeout(()=>alert('✅ Email filled!\\n\\nNext:\\n1. Click "Send Verification Code"\\n2. Check your email\\n3. Enter the code\\n4. Click "Verify and Continue"\\n5. Click the bookmarklet again!'),500)}
+function step3(){console.log('Step 3: Business Info');f('#enterprise_company_name',d.companyName);f('[name="companyName"]',d.companyName);f('#enterprise_company_address_line_1',d.addressLine1);f('[name="companyAddressLine1"]',d.addressLine1);f('#enterprise_company_address_line_2',d.addressLine2);f('#enterprise_company_city',d.city);f('[name="companyCity"]',d.city);f('#enterprise_company_state',d.state);f('[name="companyState"]',d.state);f('select[name="companyState"]',d.state);f('#enterprise_company_zip',d.zipCode);f('[name="companyZip"]',d.zipCode);f('#enterprise_company_website',d.website);f('[name="companyWebsite"]',d.website);f('#enterprise_contact_name',d.contactName);f('[name="contactName"]',d.contactName);f('#enterprise_contact_phone',d.contactPhone);f('[name="contactPhone"]',d.contactPhone);f('#enterprise_contact_email',d.contactEmail);f('[name="contactEmail"]',d.contactEmail);['#calling_type','[name="callingType"]','[name="callPurpose"]','select[name="calling_type"]'].forEach(s=>f(s,d.callPurpose));['#calling_volume','[name="callingVolume"]','select[name="calling_volume"]'].forEach(s=>f(s,d.callVolume));f('[name="feedback"]',d.feedback);f('textarea[name="feedback"]',d.feedback);setTimeout(()=>alert('✅ Business info filled!\\n\\nClick "Continue to Next Step"'),500)}
+function step4(){console.log('Step 4: Phone Numbers');const inputs=document.querySelectorAll('input[type="tel"],input[placeholder*="phone"]');d.phoneNumbers.forEach((p,i)=>{if(inputs[i]){inputs[i].value=p;inputs[i].dispatchEvent(new Event('input',{bubbles:true}))}});setTimeout(()=>alert('✅ Phone numbers added!\\n\\nClick "Continue to Final Step"'),500)}
+function step5(){console.log('Step 5: Terms');document.querySelectorAll('input[type="checkbox"]').forEach(cb=>{if(!cb.checked){cb.checked=true;cb.dispatchEvent(new Event('change',{bubbles:true}))}});setTimeout(()=>alert('✅ Terms accepted!\\n\\nReview and click "Submit Your Registration"'),500)}
+if(document.querySelector('#enterprise_contact_verification_email'))step1();
+else if(document.querySelector('#enterprise_company_name'))step3();
+else if(document.querySelector('[placeholder*="phone"]'))step4();
+else if(document.querySelector('input[type="checkbox"]'))step5();
+else step1();
+})();
+`.trim();
+
+            const bookmarkletCode = 'javascript:' + encodeURIComponent(script);
+            document.getElementById('bookmarkletLink').href = bookmarkletCode;
+        }
+
+        // Test bookmarklet
+        function testBookmarklet() {
+            const link = document.getElementById('bookmarkletLink');
+            const code = link.href.substring('javascript:'.length);
+            const decoded = decodeURIComponent(code);
             
-            setTimeout(() => {
-                status.style.display = 'none';
-            }, 8000);
+            alert('Bookmarklet code generated successfully!\n\nLength: ' + decoded.length + ' characters\n\nThe bookmarklet is ready to use. Drag it to your bookmarks bar.');
+            console.log('Bookmarklet code:', decoded);
         }
 
         // Initialize
