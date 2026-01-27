@@ -362,15 +362,50 @@
         const API_URL = 'https://cfworkerapi.thomastcc.workers.dev';
         let currentUser = null;
 
-        // Get user info from cookie
+        // Get user info from cookie (fallback method)
         function getUserFromCookie() {
+            // First try localStorage (your system uses this)
+            try {
+                const lsUsername = localStorage.getItem('cc_username');
+                const lsEmail = localStorage.getItem('adminEmail');
+                const lsToken = localStorage.getItem('cc_token');
+                
+                if (lsUsername || lsEmail) {
+                    console.log('Found user data in localStorage');
+                    const userData = {
+                        name: lsUsername || '',
+                        email: lsEmail || '',
+                        token: lsToken || ''
+                    };
+                    
+                    // Store token globally if found
+                    if (userData.token) {
+                        window.userToken = userData.token;
+                    }
+                    
+                    return userData;
+                }
+            } catch (e) {
+                console.log('localStorage not accessible:', e);
+            }
+            
+            // Fallback to cookie
             const cookies = document.cookie.split(';');
             for (let cookie of cookies) {
                 const [name, value] = cookie.trim().split('=');
                 if (name === 'user') {
                     try {
-                        return JSON.parse(decodeURIComponent(value));
+                        const userData = JSON.parse(decodeURIComponent(value));
+                        console.log('Found user in cookie:', userData);
+                        
+                        // If user object has a token, store it globally
+                        if (userData.token) {
+                            window.userToken = userData.token;
+                        }
+                        
+                        return userData;
                     } catch (e) {
+                        console.error('Error parsing user cookie:', e);
                         return null;
                     }
                 }
@@ -378,27 +413,57 @@
             return null;
         }
 
-        // Get token from cookie
+        // Get token from cookie - check multiple possible names
         function getTokenFromCookie() {
             const cookies = document.cookie.split(';');
+            console.log('All cookies:', document.cookie);
+            
+            // Try different possible cookie names (cc_token is used by Closing Coalition)
+            const possibleNames = ['cc_token', 'session_token', 'token', 'auth_token', 'closing_coalition_token'];
+            
             for (let cookie of cookies) {
                 const [name, value] = cookie.trim().split('=');
-                if (name === 'session_token' || name === 'token') {
+                console.log('Checking cookie:', name);
+                
+                if (possibleNames.includes(name)) {
+                    console.log('Found token in cookie:', name);
                     return decodeURIComponent(value);
                 }
             }
+            
+            // Also check localStorage
+            try {
+                const lsToken = localStorage.getItem('cc_token');
+                if (lsToken) {
+                    console.log('Found token in localStorage: cc_token');
+                    return lsToken;
+                }
+            } catch (e) {
+                console.log('localStorage not accessible:', e);
+            }
+            
+            console.warn('No auth token found in cookies or localStorage. Available cookies:', cookies.map(c => c.split('=')[0].trim()));
             return null;
         }
 
         // Fetch user data from Cloudflare Worker API
         async function fetchUserFromAPI() {
             try {
-                // Get token from cookie
-                const token = getTokenFromCookie();
+                // Get token from cookie or window object
+                let token = getTokenFromCookie();
+                
+                // Fallback: check if token was stored in window by getUserFromCookie
+                if (!token && window.userToken) {
+                    token = window.userToken;
+                    console.log('Using token from window object');
+                }
+                
                 if (!token) {
-                    console.log('No token found in cookie');
+                    console.log('No token found in cookie or window');
                     return null;
                 }
+
+                console.log('Making API call to /me with token');
 
                 // Call /me endpoint with token
                 const response = await fetch(`${API_URL}/me`, {
@@ -408,6 +473,8 @@
                     },
                     body: JSON.stringify({ token: token })
                 });
+
+                console.log('API response status:', response.status);
 
                 if (response.ok) {
                     const data = await response.json();
@@ -425,7 +492,11 @@
                             calendlyUrl: data.calendlyUrl || '',
                             assignedTabs: data.assignedTabs || []
                         };
+                    } else {
+                        console.error('API returned ok but no user data:', data);
                     }
+                } else {
+                    console.error('API request failed:', response.status, await response.text());
                 }
             } catch (error) {
                 console.error('Error fetching user from API:', error);
