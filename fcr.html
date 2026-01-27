@@ -378,23 +378,53 @@
             return null;
         }
 
+        // Get token from cookie
+        function getTokenFromCookie() {
+            const cookies = document.cookie.split(';');
+            for (let cookie of cookies) {
+                const [name, value] = cookie.trim().split('=');
+                if (name === 'session_token' || name === 'token') {
+                    return decodeURIComponent(value);
+                }
+            }
+            return null;
+        }
+
         // Fetch user data from Cloudflare Worker API
         async function fetchUserFromAPI() {
             try {
-                const response = await fetch(`${API_URL}?action=validateSession`, {
-                    method: 'GET',
-                    credentials: 'include',
+                // Get token from cookie
+                const token = getTokenFromCookie();
+                if (!token) {
+                    console.log('No token found in cookie');
+                    return null;
+                }
+
+                // Call /me endpoint with token
+                const response = await fetch(`${API_URL}/me`, {
+                    method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
-                    }
+                    },
+                    body: JSON.stringify({ token: token })
                 });
 
                 if (response.ok) {
                     const data = await response.json();
-                    console.log('API Response:', data);
+                    console.log('API /me Response:', data);
                     
-                    if (data.valid && data.user) {
-                        return data.user;
+                    if (data.ok && data.loginEmail) {
+                        // Extract username from login email or use provided username
+                        const username = data.username || data.loginEmail.split('.')[0].replace(/ail@gmail\.com$/, '');
+                        
+                        return {
+                            name: username,
+                            email: data.loginEmail,
+                            phone: data.phone || '',
+                            callingFor: data.callingFor || '',
+                            calendlyUrl: data.calendlyUrl || '',
+                            assignedTabs: data.assignedTabs || []
+                        };
                     }
                 }
             } catch (error) {
