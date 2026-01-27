@@ -273,7 +273,7 @@
     </div>
 
     <script>
-        const API_URL = 'https://closing-coalition-api.thomaslancheros06.workers.dev/';
+        const API_URL = 'https://cfworkerapi.thomastcc.workers.dev';
 
         // Get user data from storage
         async function loadUserData() {
@@ -365,21 +365,66 @@ contactName:'${username || 'Thomas Lancheros'}',
 contactPhone:'${phone || '5862246692'}',
 contactEmail:'${email || 'thomaslancheros.ail@gmail.com'}',
 callPurpose:'Insurance Services',
-callCategory:'Life Insurance - Policy Services & Customer Support',
 callVolume:'5,001 - 10,000',
 feedback:'Providing information about life insurance policies, non-forfeiture options, policy benefits, and customer service support to existing policyholders',
 phoneNumbers:['${phone || '5862246692'}']
 };
-function f(s,v){const e=document.querySelector(s);if(e){e.value=v;e.dispatchEvent(new Event('input',{bubbles:true}));e.dispatchEvent(new Event('change',{bubbles:true}));e.dispatchEvent(new Event('blur',{bubbles:true}));return true}return false}
-function step1(){console.log('Step 1: Email');f('#enterprise_contact_verification_email',d.contactEmail);f('[name="contactEmail"]',d.contactEmail);setTimeout(()=>alert('✅ Email filled!\\n\\nNext:\\n1. Click "Send Verification Code"\\n2. Check your email\\n3. Enter the code\\n4. Click "Verify and Continue"\\n5. Click the bookmarklet again!'),500)}
-function step3(){console.log('Step 3: Business Info');f('#enterprise_company_name',d.companyName);f('[name="companyName"]',d.companyName);f('#enterprise_company_address_line_1',d.addressLine1);f('[name="companyAddressLine1"]',d.addressLine1);f('#enterprise_company_address_line_2',d.addressLine2);f('#enterprise_company_city',d.city);f('[name="companyCity"]',d.city);f('#enterprise_company_state',d.state);f('[name="companyState"]',d.state);f('select[name="companyState"]',d.state);f('#enterprise_company_zip',d.zipCode);f('[name="companyZip"]',d.zipCode);f('#enterprise_company_website',d.website);f('[name="companyWebsite"]',d.website);f('#enterprise_contact_name',d.contactName);f('[name="contactName"]',d.contactName);f('#enterprise_contact_phone',d.contactPhone);f('[name="contactPhone"]',d.contactPhone);f('#enterprise_contact_email',d.contactEmail);f('[name="contactEmail"]',d.contactEmail);['#calling_type','[name="callingType"]','[name="callPurpose"]','select[name="calling_type"]'].forEach(s=>f(s,d.callPurpose));['#calling_volume','[name="callingVolume"]','select[name="calling_volume"]'].forEach(s=>f(s,d.callVolume));f('[name="feedback"]',d.feedback);f('textarea[name="feedback"]',d.feedback);setTimeout(()=>alert('✅ Business info filled!\\n\\nClick "Continue to Next Step"'),500)}
-function step4(){console.log('Step 4: Phone Numbers');const inputs=document.querySelectorAll('input[type="tel"],input[placeholder*="phone"]');d.phoneNumbers.forEach((p,i)=>{if(inputs[i]){inputs[i].value=p;inputs[i].dispatchEvent(new Event('input',{bubbles:true}))}});setTimeout(()=>alert('✅ Phone numbers added!\\n\\nClick "Continue to Final Step"'),500)}
-function step5(){console.log('Step 5: Terms');document.querySelectorAll('input[type="checkbox"]').forEach(cb=>{if(!cb.checked){cb.checked=true;cb.dispatchEvent(new Event('change',{bubbles:true}))}});setTimeout(()=>alert('✅ Terms accepted!\\n\\nReview and click "Submit Your Registration"'),500)}
-if(document.querySelector('#enterprise_contact_verification_email'))step1();
-else if(document.querySelector('#enterprise_company_name'))step3();
-else if(document.querySelector('[placeholder*="phone"]'))step4();
-else if(document.querySelector('input[type="checkbox"]'))step5();
-else step1();
+function fill(selector,value){
+const el=document.querySelector(selector);
+if(el){
+el.value=value;
+el.dispatchEvent(new Event('input',{bubbles:true}));
+el.dispatchEvent(new Event('change',{bubbles:true}));
+el.dispatchEvent(new Event('blur',{bubbles:true}));
+console.log('Filled:',selector);
+return true;
+}
+return false;
+}
+function fillAll(){
+console.log('Starting auto-fill...');
+fill('#enterprise_contact_verification_email',d.contactEmail);
+fill('#enterprise_company_name',d.companyName);
+fill('#enterprise_company_address_line_1',d.addressLine1);
+fill('#enterprise_company_address_line_2',d.addressLine2);
+fill('#enterprise_company_city',d.city);
+fill('#enterprise_company_state',d.state);
+fill('#enterprise_company_zip',d.zipCode);
+fill('#enterprise_company_website',d.website);
+fill('#enterprise_contact_name',d.contactName);
+fill('#enterprise_contact_phone',d.contactPhone);
+fill('#enterprise_contact_email',d.contactEmail);
+const callPurposeEl=document.querySelector('#calling_type');
+if(callPurposeEl){
+callPurposeEl.value=d.callPurpose;
+callPurposeEl.dispatchEvent(new Event('change',{bubbles:true}));
+}
+const callVolumeEl=document.querySelector('#calling_volume');
+if(callVolumeEl){
+callVolumeEl.value=d.callVolume;
+callVolumeEl.dispatchEvent(new Event('change',{bubbles:true}));
+}
+const feedbackEl=document.querySelector('textarea');
+if(feedbackEl){
+feedbackEl.value=d.feedback;
+feedbackEl.dispatchEvent(new Event('input',{bubbles:true}));
+}
+const phoneInputs=document.querySelectorAll('input[type="tel"]');
+if(phoneInputs.length>0){
+phoneInputs[0].value=d.phoneNumbers[0];
+phoneInputs[0].dispatchEvent(new Event('input',{bubbles:true}));
+}
+const checkboxes=document.querySelectorAll('input[type="checkbox"]');
+checkboxes.forEach(cb=>{
+if(!cb.checked){
+cb.checked=true;
+cb.dispatchEvent(new Event('change',{bubbles:true}));
+}
+});
+console.log('Auto-fill complete!');
+alert('✅ Form auto-filled!\\n\\nPlease review the information and continue.');
+}
+fillAll();
 })();
 `.trim();
 
