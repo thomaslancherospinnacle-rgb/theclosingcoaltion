@@ -3,7 +3,7 @@
  */
 
 // Google Apps Script: Applicants/Auth Database
-const APPDB = "https://script.google.com/macros/s/AKfycbwSqs-q-ZLMq_H4UAFxDJ9Enjbvw_2urr-7kTuop_6rbsU38hR-9-_mPizNXJFVYPcn/exec";
+const APPDB = "https://script.google.com/macros/s/AKfycbxBmZef_qgpLsWsuDH03ivr0vvtsRMQvkbKGTuf5EWIn1Ntd31Pr-qywo7Q6iUF2FS1/exec";
 
 // Cloudflare Worker - ALL API CALLS GO THROUGH HERE
 const CFWORKER = "https://closing-coalition-api.thomaslancheros06.workers.dev";
