@@ -184,6 +184,91 @@
             display: block;
         }
         
+
+
+        /* Video Lead Capture */
+        .video-lead-card {
+            max-width: 900px;
+            margin: 0 auto 30px;
+            background: white;
+            border: 3px solid #003087;
+            border-radius: 20px;
+            padding: 32px;
+            box-shadow: 0 15px 45px rgba(0, 48, 135, 0.14);
+            text-align: left;
+        }
+
+        .video-lead-card .form-header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .video-lead-card .form-title {
+            font-size: 30px;
+            font-weight: 800;
+            color: #003087;
+            margin-bottom: 8px;
+        }
+
+        .video-lead-card .form-subtitle {
+            font-size: 15px;
+            color: #666;
+        }
+
+        .video-form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+            align-items: end;
+        }
+
+        .phone-progress {
+            display: flex;
+            justify-content: center;
+            gap: 7px;
+            margin: 8px 0 12px;
+            flex-wrap: wrap;
+        }
+
+        .phone-digit {
+            width: 34px;
+            height: 38px;
+            border: 2px solid #d8e1f1;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            color: #003087;
+            background: #f8fbff;
+        }
+
+        .phone-digit.filled {
+            border-color: #003087;
+            background: rgba(0, 48, 135, 0.08);
+        }
+
+        .autosave-status {
+            min-height: 22px;
+            text-align: center;
+            font-size: 13px;
+            font-weight: 700;
+            color: #777;
+            margin: 4px 0 16px;
+        }
+
+        .autosave-status.saved {
+            color: #28a745;
+        }
+
+        .autosave-status.saving {
+            color: #003087;
+        }
+
+        .autosave-status.error {
+            color: #d93025;
+        }
+
         /* Benefits Section */
         .benefits-section {
             background: #f5f7fa;
@@ -471,7 +556,7 @@
             min-width: 120px;
         }
         
-        .zoom-btn {
+        .info-link-btn {
             display: block;
             background: #50a351;
             color: #003087;
@@ -486,39 +571,10 @@
             box-shadow: 0 5px 20px rgba(255, 215, 0, 0.4);
         }
         
-        .zoom-btn:hover {
+        .info-link-btn:hover {
             background: #FFC700;
             transform: translateY(-2px);
             box-shadow: 0 8px 25px rgba(255, 215, 0, 0.5);
-        }
-        
-        .calendar-buttons {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-top: 25px;
-        }
-        
-        .calendar-btn {
-            padding: 16px 20px;
-            background: white;
-            color: #003087;
-            border: none;
-            border-radius: 10px;
-            font-size: 16px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-        
-        .calendar-btn:hover {
-            background: #f0f0f0;
-            transform: translateY(-2px);
         }
         
         .required-badge {
@@ -576,10 +632,23 @@
                 padding: 30px 25px;
             }
             
-            .calendar-buttons {
-                grid-template-columns: 1fr;
+
+
+            .video-lead-card {
+                padding: 24px 18px;
             }
-            
+
+            .video-form-grid {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+
+            .phone-digit {
+                width: 28px;
+                height: 34px;
+                font-size: 14px;
+            }
+
             .header-badge {
                 display: none;
             }
@@ -622,23 +691,78 @@
     </section>
     
     <!-- Video Section -->
-    <section class="video-section">
+    <section class="video-section" id="applySection">
         <div class="container">
             <h2 class="section-title">Watch: Company Overview</h2>
             <p class="section-subtitle">
                 Who we are, What we do, How we get paid
             </p>
-            
+
+            <div id="applicationForm" class="video-lead-card">
+                <div class="form-header">
+                    <h3 class="form-title">Start Your Application</h3>
+                    <p class="form-subtitle">Enter your name and number. Your number saves live while you type.</p>
+                </div>
+
+                <form id="applyForm" onsubmit="handleSubmit(event)" autocomplete="on">
+                    <div class="video-form-grid">
+                        <div class="form-group">
+                            <label for="name">Full Name *</label>
+                            <input 
+                                type="text" 
+                                id="name" 
+                                name="name" 
+                                required 
+                                autocomplete="name"
+                                placeholder="Enter your full name"
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="phone">Phone Number *</label>
+                            <input 
+                                type="tel" 
+                                id="phone" 
+                                name="phone" 
+                                required 
+                                inputmode="numeric"
+                                autocomplete="tel"
+                                placeholder="(555) 123-4567"
+                            >
+                        </div>
+                    </div>
+
+                    <div class="phone-progress" aria-label="Phone number progress">
+                        <span class="phone-digit" id="phoneDigit1"></span>
+                        <span class="phone-digit" id="phoneDigit2"></span>
+                        <span class="phone-digit" id="phoneDigit3"></span>
+                        <span class="phone-digit" id="phoneDigit4"></span>
+                        <span class="phone-digit" id="phoneDigit5"></span>
+                        <span class="phone-digit" id="phoneDigit6"></span>
+                        <span class="phone-digit" id="phoneDigit7"></span>
+                        <span class="phone-digit" id="phoneDigit8"></span>
+                        <span class="phone-digit" id="phoneDigit9"></span>
+                        <span class="phone-digit" id="phoneDigit10"></span>
+                    </div>
+
+                    <p id="autosaveStatus" class="autosave-status">Start typing — phone digits save live.</p>
+
+                    <button type="submit" class="submit-btn" id="submitBtn">
+                        Submit Application
+                    </button>
+
+                    <p class="privacy-note">
+                        We respect your privacy. Your information is secure and will never be shared.
+                    </p>
+                </form>
+            </div>
+
             <div class="video-container">
                 <video controls controlsList="nodownload">
                     <source src="video.mp4" type="video/mp4">
                     Your browser does not support the video tag.
                 </video>
             </div>
-            
-            <button onclick="scrollToApplication()" class="apply-now-btn">
-                🚀 APPLY NOW
-            </button>
         </div>
     </section>
     
@@ -729,92 +853,35 @@
         </div>
     </section>
     
-    <!-- Form Section -->
+    <!-- Success Section -->
     <section class="form-section" id="formSection">
         <div class="form-container">
-            <div id="applicationForm">
-                <div class="form-header">
-                    <h3 class="form-title">Start Your Application</h3>
-                    <p class="form-subtitle">Join hundreds of successful agents building their future</p>
-                </div>
-                
-                <form id="applyForm" onsubmit="handleSubmit(event)">
-                    <div class="form-group">
-                        <label for="name">Full Name *</label>
-                        <input 
-                            type="text" 
-                            id="name" 
-                            name="name" 
-                            required 
-                            placeholder="Enter your full name"
-                        >
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="phone">Phone Number *</label>
-                        <input 
-                            type="tel" 
-                            id="phone" 
-                            name="phone" 
-                            required 
-                            placeholder="(555) 123-4567"
-                        >
-                    </div>
-                    
-                    <button type="submit" class="submit-btn" id="submitBtn">
-                        Submit Application
-                    </button>
-                    
-                    <p class="privacy-note">
-                        We respect your privacy. Your information is secure and will never be shared.
-                    </p>
-                </form>
-            </div>
-            
-            <!-- Success Page -->
             <div id="successPage" class="success-page">
                 <div class="success-checkmark">✓</div>
-                
+
                 <h3 class="success-title">Application Received!</h3>
                 <p class="success-message">
                     Thank you, <strong id="submittedName"></strong>! We're excited to have you join our team.
                 </p>
-                
+
                 <div class="meeting-box">
-                    <h4 class="meeting-title">🎯 NEXT STEP: Join Our Team Meeting</h4>
-                    
+                    <h4 class="meeting-title">🎯 NEXT STEP: Complete Your Additional Information</h4>
+
                     <div class="meeting-info">
-                        <div class="meeting-info-item">
-                            <span class="meeting-label">📅 When:</span>
-                            <span>Every Monday & Tuesday at 7:00 PM EST</span>
-                        </div>
-                        <div class="meeting-info-item">
-                            <span class="meeting-label">🔢 Meeting ID:</span>
-                            <span>381 170 8278</span>
-                        </div>
-                        <div class="meeting-info-item">
-                            <span class="meeting-label">🔐 Passcode:</span>
-                            <span>rz123</span>
-                        </div>
+                        <p style="font-size: 18px; font-weight: 600; line-height: 1.6; text-align: center; margin: 0;">
+                            Your application was received. Please fill out the additional information form below so we can continue your onboarding.
+                        </p>
                     </div>
-                    
-                    <a href="https://us06web.zoom.us/j/3811708278?pwd=eEI4b2VBU2lmNktRS0ZCTlNYdW9yUT09" 
+
+                    <a href="https://my.demio.com/ref/ChBDCRHXKA2vncbH" 
                        target="_blank" 
-                       class="zoom-btn">
-                        🎥 JOIN ZOOM MEETING
+                       rel="noopener"
+                       class="info-link-btn">
+                        📝 FILL OUT ADDITIONAL INFORMATION
                     </a>
-                    
-                    <div class="calendar-buttons">
-                        <a href="#" id="googleCalendarLink" class="calendar-btn" target="_blank">
-                            📅 Add to Google Calendar
-                        </a>
-                        <a href="#" id="appleCalendarLink" class="calendar-btn" download="team-meeting.ics">
-                            🍎 Add to Apple Calendar
-                        </a>
-                    </div>
-                    
+
                     <div class="required-badge">
-                        ⚠️ ATTENDANCE REQUIRED: This meeting is mandatory!
+                        ⚠️ REQUIRED NEXT STEP: Complete this form after submitting your application.
                     </div>
                 </div>
             </div>
@@ -837,56 +904,176 @@
     <script>
         // Smooth scroll to application form
         function scrollToApplication() {
-            document.getElementById('formSection').scrollIntoView({ 
+            document.getElementById('applySection').scrollIntoView({ 
                 behavior: 'smooth', 
                 block: 'start' 
             });
         }
+
         // Get recruiter reference from URL
         const urlParams = new URLSearchParams(window.location.search);
         const recruiterRef = urlParams.get('ref') || 'direct';
-        
+
         // API endpoint
         const API_URL = APPDB;
-        
-        async function handleSubmit(event) {
-            event.preventDefault();
-            
-            const submitBtn = document.getElementById('submitBtn');
-            const name = document.getElementById('name').value.trim();
-            const phone = document.getElementById('phone').value.trim();
-            
-            if (!name || !phone) {
-                alert('Please fill in all fields');
-                return;
+
+        // One draft ID per visitor/recruiter so live digit updates keep updating the same row
+        const LEAD_STORAGE_KEY = `ailLeadDraftId:${recruiterRef}`;
+        let leadDraftId = localStorage.getItem(LEAD_STORAGE_KEY);
+        if (!leadDraftId) {
+            leadDraftId = `${recruiterRef}-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+            localStorage.setItem(LEAD_STORAGE_KEY, leadDraftId);
+        }
+
+        let autosaveTimer = null;
+        let autosaveInFlight = false;
+        let autosaveQueued = false;
+        let lastSavedSnapshot = '';
+
+        const nameInput = document.getElementById('name');
+        const phoneInput = document.getElementById('phone');
+        const autosaveStatus = document.getElementById('autosaveStatus');
+
+        function setAutosaveStatus(message, state) {
+            if (!autosaveStatus) return;
+            autosaveStatus.textContent = message;
+            autosaveStatus.className = `autosave-status ${state || ''}`.trim();
+        }
+
+        function getPhoneDigits() {
+            return phoneInput.value.replace(/\D/g, '').slice(0, 10);
+        }
+
+        function formatPhoneFromDigits(digits) {
+            if (digits.length >= 6) {
+                return `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6)}`;
             }
-            
-            submitBtn.disabled = true;
-            submitBtn.textContent = 'Submitting...';
-            
+            if (digits.length >= 3) {
+                return `(${digits.slice(0, 3)}) ${digits.slice(3)}`;
+            }
+            return digits;
+        }
+
+        function updatePhoneDigitDisplay(digits) {
+            for (let i = 1; i <= 10; i++) {
+                const box = document.getElementById(`phoneDigit${i}`);
+                if (!box) continue;
+                const digit = digits[i - 1] || '';
+                box.textContent = digit;
+                box.classList.toggle('filled', Boolean(digit));
+            }
+        }
+
+        function buildLeadPayload(finalized) {
+            const phoneDigits = getPhoneDigits();
+            return {
+                action: 'upsertLead',
+                recruiterRef: recruiterRef,
+                leadId: leadDraftId,
+                prospectName: nameInput.value.trim(),
+                name: nameInput.value.trim(),
+                phone: formatPhoneFromDigits(phoneDigits),
+                phoneDigits: phoneDigits,
+                finalized: Boolean(finalized)
+            };
+        }
+
+        function scheduleAutosave() {
+            clearTimeout(autosaveTimer);
+            autosaveTimer = setTimeout(() => {
+                autosaveLead(false);
+            }, 250);
+        }
+
+        async function autosaveLead(finalized) {
+            const payload = buildLeadPayload(finalized);
+
+            // Do not create a sheet row until at least one real field exists.
+            if (!payload.prospectName && !payload.phoneDigits) {
+                setAutosaveStatus('Start typing — phone digits save live.', '');
+                return { success: true };
+            }
+
+            const snapshot = JSON.stringify({
+                prospectName: payload.prospectName,
+                phoneDigits: payload.phoneDigits
+            });
+
+            if (!finalized && snapshot === lastSavedSnapshot) {
+                return { success: true };
+            }
+
+            if (autosaveInFlight) {
+                autosaveQueued = true;
+                return { success: true, queued: true };
+            }
+
+            autosaveInFlight = true;
+            setAutosaveStatus(finalized ? 'Submitting...' : 'Saving live...', 'saving');
+
             try {
                 const response = await fetch(API_URL, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'text/plain',
                     },
-                    body: JSON.stringify({
-                        action: 'addLead',
-                        recruiterRef: recruiterRef,
-                        prospectName: name,
-                        phone: phone
-                    })
+                    body: JSON.stringify(payload)
                 });
-                
+
                 const result = await response.json();
-                
+
+                if (!result.success) {
+                    throw new Error(result.message || 'Save failed');
+                }
+
+                lastSavedSnapshot = snapshot;
+                setAutosaveStatus(finalized ? 'Submitted.' : 'Saved live.', 'saved');
+                return result;
+            } catch (error) {
+                console.error('Autosave error:', error);
+                setAutosaveStatus('Could not live-save. Final submit will still try.', 'error');
+                return { success: false, message: error.message };
+            } finally {
+                autosaveInFlight = false;
+                if (autosaveQueued && !finalized) {
+                    autosaveQueued = false;
+                    autosaveLead(false);
+                }
+            }
+        }
+
+        async function handleSubmit(event) {
+            event.preventDefault();
+
+            const submitBtn = document.getElementById('submitBtn');
+            const name = nameInput.value.trim();
+            const phoneDigits = getPhoneDigits();
+
+            if (!name || !phoneDigits) {
+                alert('Please fill in your name and phone number.');
+                return;
+            }
+
+            if (phoneDigits.length !== 10) {
+                alert('Please enter a full 10-digit phone number.');
+                phoneInput.focus();
+                return;
+            }
+
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Submitting...';
+
+            try {
+                const result = await autosaveLead(true);
+
                 if (result.success) {
                     document.getElementById('applicationForm').style.display = 'none';
                     document.getElementById('successPage').classList.add('active');
                     document.getElementById('submittedName').textContent = name;
-                    
-                    generateCalendarLinks(name);
-                    
+
+                    // Clear the finished draft so the next visitor/form attempt gets a fresh row.
+                    localStorage.removeItem(LEAD_STORAGE_KEY);
+
                     // Scroll to success message
                     setTimeout(() => {
                         document.getElementById('formSection').scrollIntoView({ 
@@ -906,117 +1093,18 @@
                 submitBtn.textContent = 'Submit Application';
             }
         }
-        
-        function generateCalendarLinks(name) {
-            const zoomLink = 'https://us06web.zoom.us/j/3811708278?pwd=eEI4b2VBU2lmNktRS0ZCTlNYdW9yUT09';
-            const meetingId = '381 170 8278';
-            const passcode = 'rz123';
-            
-            const nextMonday = getNextWeekday(1);
-            nextMonday.setHours(19, 0, 0, 0);
-            
-            const googleCalendarUrl = generateGoogleCalendarUrl(nextMonday, zoomLink, meetingId, passcode);
-            document.getElementById('googleCalendarLink').href = googleCalendarUrl;
-            
-            const icsContent = generateICSFile(nextMonday, zoomLink, meetingId, passcode);
-            const blob = new Blob([icsContent], { type: 'text/calendar' });
-            const url = URL.createObjectURL(blob);
-            document.getElementById('appleCalendarLink').href = url;
-        }
-        
-        function getNextWeekday(dayOfWeek) {
-            const today = new Date();
-            const currentDay = today.getDay();
-            let daysToAdd = dayOfWeek - currentDay;
-            
-            if (daysToAdd <= 0) {
-                daysToAdd += 7;
-            }
-            
-            const nextDate = new Date(today);
-            nextDate.setDate(today.getDate() + daysToAdd);
-            return nextDate;
-        }
-        
-        function formatDateForCalendar(date) {
-            const year = date.getFullYear();
-            const month = String(date.getMonth() + 1).padStart(2, '0');
-            const day = String(date.getDate()).padStart(2, '0');
-            const hours = String(date.getHours()).padStart(2, '0');
-            const minutes = String(date.getMinutes()).padStart(2, '0');
-            const seconds = String(date.getSeconds()).padStart(2, '0');
-            
-            return `${year}${month}${day}T${hours}${minutes}${seconds}`;
-        }
-        
-        function generateGoogleCalendarUrl(startDate, zoomLink, meetingId, passcode) {
-            const endDate = new Date(startDate);
-            endDate.setHours(startDate.getHours() + 1);
-            
-            const title = encodeURIComponent('Globe Life - Required Team Meeting');
-            const details = encodeURIComponent(
-                `REQUIRED MEETING: Complete your onboarding by joining this team meeting!\n\n` +
-                `Zoom Link: ${zoomLink}\n` +
-                `Meeting ID: ${meetingId}\n` +
-                `Passcode: ${passcode}\n\n` +
-                `This meeting occurs every Monday and Tuesday at 7:00 PM EST.\n\n` +
-                `What to expect:\n` +
-                `• Overview of Globe Life and our products\n` +
-                `• Training schedule and next steps\n` +
-                `• Q&A with successful agents\n` +
-                `• Licensing information`
-            );
-            const location = encodeURIComponent(zoomLink);
-            const dates = `${formatDateForCalendar(startDate)}/${formatDateForCalendar(endDate)}`;
-            const recurrence = encodeURIComponent('RRULE:FREQ=WEEKLY;BYDAY=MO,TU');
-            
-            return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&details=${details}&location=${location}&dates=${dates}&recur=${recurrence}`;
-        }
-        
-        function generateICSFile(startDate, zoomLink, meetingId, passcode) {
-            const endDate = new Date(startDate);
-            endDate.setHours(startDate.getHours() + 1);
-            
-            const icsStart = formatDateForCalendar(startDate);
-            const icsEnd = formatDateForCalendar(endDate);
-            const timestamp = formatDateForCalendar(new Date());
-            
-            return `BEGIN:VCALENDAR
-VERSION:2.0
-PRODID:-//Globe Life American Income Life//EN
-BEGIN:VEVENT
-UID:${timestamp}@globelife
-DTSTAMP:${timestamp}
-DTSTART:${icsStart}
-DTEND:${icsEnd}
-SUMMARY:Globe Life - Required Team Meeting
-DESCRIPTION:REQUIRED MEETING: Complete your onboarding by joining this team meeting!\\n\\nZoom Link: ${zoomLink}\\nMeeting ID: ${meetingId}\\nPasscode: ${passcode}\\n\\nThis meeting occurs every Monday and Tuesday at 7:00 PM EST.\\n\\nWhat to expect:\\n• Overview of Globe Life and our products\\n• Training schedule and next steps\\n• Q&A with successful agents\\n• Licensing information
-LOCATION:${zoomLink}
-RRULE:FREQ=WEEKLY;BYDAY=MO,TU
-STATUS:CONFIRMED
-SEQUENCE:0
-BEGIN:VALARM
-TRIGGER:-PT15M
-ACTION:DISPLAY
-DESCRIPTION:Reminder: Globe Life Team Meeting in 15 minutes
-END:VALARM
-END:VEVENT
-END:VCALENDAR`;
-        }
-        
-        // Phone number formatting
-        document.getElementById('phone').addEventListener('input', function(e) {
-            let value = e.target.value.replace(/\D/g, '');
-            if (value.length > 10) value = value.slice(0, 10);
-            
-            if (value.length >= 6) {
-                e.target.value = `(${value.slice(0,3)}) ${value.slice(3,6)}-${value.slice(6)}`;
-            } else if (value.length >= 3) {
-                e.target.value = `(${value.slice(0,3)}) ${value.slice(3)}`;
-            } else {
-                e.target.value = value;
-            }
+
+        // Phone number formatting + live digit autosave
+        phoneInput.addEventListener('input', function(e) {
+            const digits = e.target.value.replace(/\D/g, '').slice(0, 10);
+            e.target.value = formatPhoneFromDigits(digits);
+            updatePhoneDigitDisplay(digits);
+            scheduleAutosave();
         });
+
+        nameInput.addEventListener('input', scheduleAutosave);
+
+        updatePhoneDigitDisplay(getPhoneDigits());
     </script>
 </body>
 </html>
