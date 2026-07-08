@@ -123,6 +123,7 @@
   }
   .btn:hover{background:var(--navy-dark);}
   .btn:active{transform:translateY(1px);}
+  .btn-top{display:block;width:100%;text-align:center;margin:6px 0 46px;}
 
   /* Form view */
   .form-section{padding:56px 0;min-height:100vh;display:none;}
@@ -217,6 +218,8 @@
       <span>Warm lead system</span>
     </div>
 
+    <button class="btn btn-top js-to-form" id="to-form-top" type="button">Apply Now</button>
+
     <p class="video-label">Watch this first</p>
     <h3 class="video-title">A short, straight-up message from our organization's owner.</h3>
     <!-- VIDEO: self-hosted. The file "video.mp4" sits next to this page. Keep them together when hosting. -->
@@ -297,7 +300,7 @@
     <p class="qualifier">If you're hungry, reliable, and ready to put in the work, this could be a serious opportunity.</p>
     <p class="hand">Drop your name and number and the hiring team will reach out with the official inquiry link and next steps.</p>
 
-    <button class="btn" id="to-form" type="button">Apply Now</button>
+    <button class="btn js-to-form" id="to-form" type="button">Apply Now</button>
   </div>
 </header>
 
@@ -356,12 +359,13 @@
 <script src="/config.js"></script>
 <script>
   (function(){
-    // ---- View switching (APPLY NOW opens the form as its own screen) ----
-    var toForm  = document.getElementById('to-form');
+    // ---- View switching (any APPLY NOW button opens the form as its own screen) ----
+    var toFormBtns = document.querySelectorAll('.js-to-form');
     var toInfo  = document.getElementById('to-info');
     var vInfo   = document.getElementById('view-info');
     var vForm   = document.getElementById('view-form');
-    if(toForm){ toForm.addEventListener('click', function(){ vInfo.style.display='none'; vForm.style.display='block'; window.scrollTo(0,0); }); }
+    function openForm(){ vInfo.style.display='none'; vForm.style.display='block'; window.scrollTo(0,0); }
+    for (var b = 0; b < toFormBtns.length; b++) { toFormBtns[b].addEventListener('click', openForm); }
     if(toInfo){ toInfo.addEventListener('click', function(){ vForm.style.display='none'; vInfo.style.display='block'; window.scrollTo(0,0); }); }
 
     // ---- Branded video cover: click to play ----
@@ -375,9 +379,69 @@
     }
 
     // ================= LIVE-UPDATE LEAD PIPELINE =================
-    // Get recruiter reference from URL
-    var urlParams = new URLSearchParams(window.location.search);
-    var recruiterRef = urlParams.get('ref') || 'direct';
+    // ---- Robust recruiter ref resolution ----
+    // Handles Instagram bio links that tack on utm_/igsh params, links that
+    // stash params in the #hash, odd double-encoding, AND redirects that drop
+    // the query string entirely (by remembering the last good ref per browser).
+    var REF_STORAGE_KEY = 'ailRecruiterRef';
+
+    function cleanRef(v) {
+      if (!v) return '';
+      try { v = decodeURIComponent(v); } catch (e) {}
+      // If the value got polluted (e.g. "NameAIL&utm_source=instagram"), keep the first token only
+      v = String(v).split(/[&?#\s]/)[0];
+      // Allow only safe ref characters
+      v = v.replace(/[^A-Za-z0-9._-]/g, '');
+      return v.trim();
+    }
+
+    function resolveRecruiterRef() {
+      // 1) Normal query string  ?ref=FirstLastAIL  (utm_/igsh params don't interfere here)
+      var ref = cleanRef(new URLSearchParams(window.location.search).get('ref'));
+
+      // 2) Some link tools push params into the hash: #ref=... or #?ref=...
+      if (!ref && window.location.hash) {
+        var h = window.location.hash.replace(/^#\/?/, '').replace(/^\?/, '');
+        ref = cleanRef(new URLSearchParams(h).get('ref'));
+      }
+
+      // 3) Last-resort raw scan of the full URL (catches weird encodings Instagram introduces)
+      if (!ref) {
+        var m = window.location.href.match(/[?&#]ref=([^&#]+)/i);
+        if (m) ref = cleanRef(m[1]);
+      }
+
+      // 4) Found one in the URL -> remember it (survives a later redirect that strips the query)
+      if (ref) {
+        try { localStorage.setItem(REF_STORAGE_KEY, ref); } catch (e) {}
+        return ref;
+      }
+
+      // 5) No ref in URL -> reuse the last good one this browser saw
+      try {
+        var stored = cleanRef(localStorage.getItem(REF_STORAGE_KEY));
+        if (stored) return stored;
+      } catch (e) {}
+
+      // 6) Genuinely nothing
+      return 'direct';
+    }
+
+    var recruiterRef = resolveRecruiterRef();
+
+    // ---- Traffic source (utm_source, or detect the Instagram in-app browser) ----
+    function resolveTrafficSource() {
+      var p = new URLSearchParams(window.location.search);
+      var src = (p.get('utm_source') || '').toLowerCase();
+      if (src) return src;
+      var ua = navigator.userAgent || '';
+      if (/Instagram/i.test(ua)) return 'instagram';
+      if (/\bFBAN|FBAV|FB_IAB\b/i.test(ua)) return 'facebook';
+      return '';
+    }
+    var trafficSource = resolveTrafficSource();
+    var utmMedium = (new URLSearchParams(window.location.search).get('utm_medium') || '');
+    var utmCampaign = (new URLSearchParams(window.location.search).get('utm_campaign') || '');
 
     // API endpoint (from /config.js)
     var API_URL = (typeof APPDB !== 'undefined') ? APPDB : '';
@@ -443,6 +507,9 @@
         name: nameInput.value.trim(),
         phone: formatPhoneStandard(phoneDigits),
         phoneDigits: phoneDigits,
+        trafficSource: trafficSource,
+        utmMedium: utmMedium,
+        utmCampaign: utmCampaign,
         finalized: Boolean(finalized)
       };
     }
