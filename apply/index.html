@@ -443,8 +443,8 @@
     var utmMedium = (new URLSearchParams(window.location.search).get('utm_medium') || '');
     var utmCampaign = (new URLSearchParams(window.location.search).get('utm_campaign') || '');
 
-    // API endpoint (from /config.js)
-    var API_URL = (typeof APPDB !== 'undefined') ? APPDB : '';
+    // API endpoint (hardwired — no longer depends on APPDB/config.js)
+    var API_URL = 'https://script.google.com/macros/s/AKfycbzSBPcJsdYunQnbuvWnxqqK4oRyeCfegu2M53bRDkNsR5P_HyqPR2Oeew3_JWp84Lue/exec';
 
     // One draft ID per visitor/recruiter so live digit updates keep updating the same row
     var LEAD_STORAGE_KEY = 'ailLeadDraftId:' + recruiterRef;
